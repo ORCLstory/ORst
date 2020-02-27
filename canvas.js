@@ -14,7 +14,6 @@ function createCircle(x, y, radius){
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI,true);
     context.stroke();
-
 }
 
 function drawCommandWindow(){
@@ -45,11 +44,10 @@ function drawFightScene(){
         status_window_x += status_window_w;
     }
 
-
     // 下の方
     const COMMAND_LINE_RATIO = 4;
     const COMMAND_LINE_HEIGHT = WINDOW_HEIGHT / COMMAND_LINE_RATIO;
-    const START_COMMAND_LINE_HEIGHT = COMMAND_LINE_HEIGHT * (COMMAND_LINE_RATIO - 1); 
+    const START_COMMAND_LINE_HEIGHT = COMMAND_LINE_HEIGHT * (COMMAND_LINE_RATIO - 1);
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH,COMMAND_LINE_HEIGHT);
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH / 5 ,COMMAND_LINE_HEIGHT);
     var fight_command = ["たたかう", "まほう" , "どうぐ", "にげる"];
@@ -61,7 +59,7 @@ function drawFightScene(){
         context.fillText(fight_command[i],10,START_COMMAND_LINE_HEIGHT + 20 + (15*i) , WINDOW_WIDTH / 4);
     }
     // 魔法を選んだ時の表示
-    
+
     const ONE_ROW_COUNT = 3;
     for(var i = 0; i < magic_list.length; i++){
         context.fillText(magic_list[i], 150 + (i%3)*100, START_COMMAND_LINE_HEIGHT + 20 +(15 * Math.floor(i / 3)))
@@ -71,7 +69,7 @@ function drawFightScene(){
     createCircle(50, 120, 20);
     createCircle(50, 170, 20);
     createCircle(50, 220, 20);
-    
+
     for(var i = 0; i < 4; i++){
         createCircle(430, 120 + (i * 40) ,15);
     }
