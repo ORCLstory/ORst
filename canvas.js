@@ -77,4 +77,26 @@ function drawFightScene(){
     }
 }
 
+
+function operatable_arrow(){
+
+
+    // 大きい三角形を書くコード
+    let p1 = {x:200,y:200};
+    let p2 = {x:373, y:300}
+    let p3 = {x:200,y:400};
+
+    context.beginPath();
+    context.moveTo(p1.x,p1.y);
+    context.lineTo(p2.x,p2.y);
+    context.lineTo(p3.x,p3.y);
+
+    context.closePath();
+    context.stroke();
+    
+
+
+}
+
 drawFightScene();
+operatable_arrow();
