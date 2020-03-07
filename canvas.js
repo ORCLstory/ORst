@@ -1,5 +1,4 @@
-// 画面の位置を百分率で表示する
-
+// 画面の位置を割合で表示する
 
 let canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
@@ -19,9 +18,6 @@ function createCircle(x, y, radius){
     context.stroke();
 }
 
-function drawCommandWindow(){
-}
-
 function drawFightScene(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     createWindow(0,0, WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -37,9 +33,6 @@ function drawFightScene(){
         {"name":"miku","HP":2,"MP":400,"Lv":4},
         {"name":"tojo","HP":20000,"MP":400,"Lv":4}
     ];
-
-// const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
-
     const START_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.041;
     const INTERVALS_OF_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.04;
     const STATUS_LIST = ["name","HP","MP","Lv"];
@@ -57,8 +50,6 @@ function drawFightScene(){
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH,COMMAND_LINE_HEIGHT);
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25 ,COMMAND_LINE_HEIGHT);
     let fight_command = ["たたかう", "まほう" , "どうぐ", "にげる"];
-    // TODO:コマンドの左に△を置く
-
     let magic_list = ["DUMAPIC","HARITO","KATINO","MOGREF","MERITO","MORLIS","SOPIC","CALIFIC"];
 
     // 戦闘コマンド表示
@@ -66,8 +57,6 @@ function drawFightScene(){
         context.fillText(fight_command[i],WINDOW_WIDTH * 0.05,WINDOW_HEIGHT * 0.8+ (15*i) , WINDOW_WIDTH *0.25);
     }
     // 魔法を選んだ時の表示
-
-// const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
     const ONE_ROW_COUNT = 3;
     const INTERVAL_OF_MAGIC_LIST_WORD_WIDTH = WINDOW_WIDTH * 0.25;
     const INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT = WINDOW_HEIGHT * 0.05;
@@ -87,13 +76,13 @@ function drawFightScene(){
     }
 }
 
-function operatable_arrow(){
+function drawArrow(height){
     const LENGTH_OF_A_SIDE = 10;
-    const START_ARROW_HEIGHT = 280;
     const START_ARROW_WIDTH = 5;
+    let start_arrow_height = 280 + height;
 
     // 大きい三角形を書くコード
-    let p1 = {x:START_ARROW_WIDTH, y:START_ARROW_HEIGHT};
+    let p1 = {x:START_ARROW_WIDTH, y:start_arrow_height};
     let p2 = {x:START_ARROW_WIDTH, y:p1.y + LENGTH_OF_A_SIDE};
     // 正三角形の三平方の定理
     let p3 = {x:START_ARROW_WIDTH+LENGTH_OF_A_SIDE * 0.865, y:p1.y + LENGTH_OF_A_SIDE/2};
@@ -107,5 +96,14 @@ function operatable_arrow(){
     context.stroke();
 }
 
+canvas.addEventListener("keydown",moveArrow);
+
+function moveArrow(e){
+    if(e.KeyCode === 83){
+      drawArrow(20);
+      console.log("Sが入力されたよ");
+    }
+}
+
 drawFightScene();
-operatable_arrow();
+drawArrow(0);
