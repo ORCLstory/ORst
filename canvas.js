@@ -56,7 +56,7 @@ function drawFightScene(){
     var magic_list = ["DUMAPIC","HARITO","KATINO","MOGREF","MERITO","MORLIS","SOPIC","CALIFIC"];
 
     for(var i = 0; i < 4; i++){
-        context.fillText(fight_command[i],10,START_COMMAND_LINE_HEIGHT + 20 + (15*i) , WINDOW_WIDTH / 4);
+        context.fillText(fight_command[i],20,START_COMMAND_LINE_HEIGHT + 20 + (15*i) , WINDOW_WIDTH / 4);
     }
     // 魔法を選んだ時の表示
 
@@ -75,4 +75,24 @@ function drawFightScene(){
     }
 }
 
+function operatable_arrow(){
+    const LENGTH_OF_A_SIDE = 10;
+    const START_ARROW_HEIGHT = 280;
+    const START_ARROW_WIDTH = 5;
+
+    // 大きい三角形を書くコード
+    let p1 = {x:START_ARROW_WIDTH, y:START_ARROW_HEIGHT};
+    let p2 = {x:START_ARROW_WIDTH, y:p1.y + LENGTH_OF_A_SIDE};
+    let p3 = {x:START_ARROW_WIDTH+LENGTH_OF_A_SIDE/2*1.73, y:p1.y + LENGTH_OF_A_SIDE/2};
+
+    context.beginPath();
+    context.moveTo(p1.x,p1.y);
+    context.lineTo(p2.x,p2.y);
+    context.lineTo(p3.x,p3.y);
+
+    context.closePath();
+    context.stroke();
+}
+
 drawFightScene();
+operatable_arrow();
