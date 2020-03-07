@@ -77,6 +77,7 @@ function drawFightScene(){
 }
 
 function drawArrow(height){
+    context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
     const LENGTH_OF_A_SIDE = 10;
     const START_ARROW_WIDTH = 5;
     let start_arrow_height = 280 + height;
@@ -96,14 +97,22 @@ function drawArrow(height){
     context.stroke();
 }
 
-canvas.addEventListener("keydown",moveArrow);
+document.addEventListener("keydown",moveArrow);
+
+var g_arrow_position = 0;
+const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
 
 function moveArrow(e){
-    if(e.KeyCode === 83){
-      drawArrow(20);
-      console.log("Sが入力されたよ");
+    //var is_good_position  = g_arrow_position >= 0 && g_arrow_position < 45;
+    if( g_arrow_position < 45 &&  e.keyCode == 83){
+        g_arrow_position += 15;
+        drawArrow(g_arrow_position);
     }
+    if(g_arrow_position > 0 && e.keyCode == 87){
+        g_arrow_position -= 15;
+        drawArrow(g_arrow_position);
+    }
+    console.log(g_arrow_position);
 }
-
 drawFightScene();
 drawArrow(0);
