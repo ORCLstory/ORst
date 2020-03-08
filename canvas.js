@@ -103,8 +103,7 @@ var g_arrow_position = 0;
 const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
 
 function moveArrow(e){
-    //var is_good_position  = g_arrow_position >= 0 && g_arrow_position < 45;
-    if( g_arrow_position < 45 &&  e.keyCode == 83){
+    if(g_arrow_position < 45 &&  e.keyCode == 83){
         g_arrow_position += 15;
         drawArrow(g_arrow_position);
     }
