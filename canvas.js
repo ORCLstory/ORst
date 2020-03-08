@@ -28,17 +28,17 @@ function drawFightScene(){
 
     // 上のほう
     let status_content = [
-        {"name":"kaya","HP":200000,"MP":4000,"Lv":4},
-        {"name":"kudo","HP":200,"MP":4000,"Lv":400},
-        {"name":"miku","HP":2,"MP":400,"Lv":4},
-        {"name":"tojo","HP":20000,"MP":400,"Lv":4}
+        {'name':'kaya','HP':200000,'MP':4000,'Lv':4},
+        {'name':'kudo','HP':200,'MP':4000,'Lv':400},
+        {'name':'miku','HP':2,'MP':400,'Lv':4},
+        {'name':'tojo','HP':20000,'MP':400,'Lv':4}
     ];
     const START_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.041;
     const INTERVALS_OF_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.04;
-    const STATUS_LIST = ["name","HP","MP","Lv"];
+    const STATUS_LIST = ['name','HP','MP','Lv'];
     for(let i = 0; i < 4; i++){
         for(let j = 0; j < 4; j++){
-            context.fillText(STATUS_LIST[j]+ ":" + status_content[i][STATUS_LIST[j]],status_window_x + (status_window_w *0.33), START_STATUS_ROW_HEIGHT +  j*INTERVALS_OF_STATUS_ROW_HEIGHT , WINDOW_WIDTH * 0.25);
+            context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]],status_window_x + (status_window_w *0.33), START_STATUS_ROW_HEIGHT +  j*INTERVALS_OF_STATUS_ROW_HEIGHT , WINDOW_WIDTH * 0.25);
         }
     createWindow(status_window_x,status_window_y,status_window_w,status_window_h);
         status_window_x += status_window_w;
@@ -49,8 +49,8 @@ function drawFightScene(){
     const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH,COMMAND_LINE_HEIGHT);
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25 ,COMMAND_LINE_HEIGHT);
-    let fight_command = ["たたかう", "まほう" , "どうぐ", "にげる"];
-    let magic_list = ["DUMAPIC","HARITO","KATINO","MOGREF","MERITO","MORLIS","SOPIC","CALIFIC"];
+    let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
+    let magic_list = ['DUMAPIC','HARITO','KATINO','MOGREF','MERITO','MORLIS','SOPIC','CALIFIC'];
 
     // 戦闘コマンド表示
     for(let i = 0; i < 4; i++){
@@ -97,21 +97,29 @@ function drawArrow(height){
     context.stroke();
 }
 
-document.addEventListener("keydown",moveArrow);
+document.addEventListener('keydown',moveArrow);
 
 var g_arrow_position = 0;
+let g_now_command_number = 0;
 const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
+const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
 
 function moveArrow(e){
-    if(g_arrow_position < 45 &&  e.keyCode == 83){
-        g_arrow_position += 15;
+    if(g_arrow_position < INTERVALS_OF_ARROW_ROW_HEIGHT*3 &&  e.keyCode == 83){
+        g_arrow_position += INTERVALS_OF_ARROW_ROW_HEIGHT;
+        g_now_command_number++;
         drawArrow(g_arrow_position);
     }
-    if(g_arrow_position > 0 && e.keyCode == 87){
-        g_arrow_position -= 15;
+    if(g_arrow_position > 1 && e.keyCode == 87){
+        g_arrow_position -= INTERVALS_OF_ARROW_ROW_HEIGHT;
+        g_now_command_number--;
         drawArrow(g_arrow_position);
     }
-    console.log(g_arrow_position);
+    let log = document.getElementById('debug');
+    log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_now_command_number: ' + g_now_command_number;
 }
+
+
+
 drawFightScene();
 drawArrow(0);
