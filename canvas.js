@@ -1,10 +1,16 @@
 // 画面の位置を割合で表示する
-
 let canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
 
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
+
+// 各種グローバル変数・定数置き場
+let g_current_cursor = 'first_decision_place';
+var g_arrow_position = 0;
+var g_choice_current_enemy  = 0;
+let g_current_command_number = 0;
+const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
 
 function createWindow(x,y,w,h){
     context.beginPath();
@@ -46,7 +52,6 @@ function drawFightScene(){
 
     // 下の方
     const COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.25;
-    const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH,COMMAND_LINE_HEIGHT);
     createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25 ,COMMAND_LINE_HEIGHT);
     let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
@@ -70,86 +75,59 @@ function drawFightScene(){
     createCircle(50, 120, 20);
     createCircle(50, 170, 20);
     createCircle(50, 220, 20);
-
     for(let i = 0; i < 4; i++){
         createCircle(430, 120 + (i * 40) ,15);
     }
 }
 
-function drawArrow(height){
-    context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
-    const LENGTH_OF_A_SIDE = 10;
-    const START_ARROW_WIDTH = 5;
-    let start_arrow_height = 280 + height;
-
-    // 大きい三角形を書くコード
-    let p1 = {x:START_ARROW_WIDTH, y:start_arrow_height};
-    let p2 = {x:START_ARROW_WIDTH, y:p1.y + LENGTH_OF_A_SIDE};
-    // 正三角形の三平方の定理
-    let p3 = {x:START_ARROW_WIDTH+LENGTH_OF_A_SIDE * 0.865, y:p1.y + LENGTH_OF_A_SIDE/2};
-
+function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,is_reverse){
     context.beginPath();
-    context.moveTo(p1.x,p1.y);
-    context.lineTo(p2.x,p2.y);
-    context.lineTo(p3.x,p3.y);
-
+    context.moveTo(start_arrow_width, start_arrow_height);
+    context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
+    if (is_reverse){
+        context.lineTo(start_arrow_width - length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
+    }
+    else {
+        context.lineTo(start_arrow_width + length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
+    }
     context.closePath();
     context.stroke();
 }
+
+function drawFirstDicisionPlaceArrow(height){
+    context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
+    createTriangle(5, 280 + height, 10, false);
+}
+
 function drawEnemyArrow(height){
     // TODO:マジックナンバーを消す
-    const LENGTH_OF_A_SIDE = 10;
-    const START_ARROW_WIDTH = 90;
-    let start_arrow_height = 112 + height;
     context.clearRect(79,100,20,140);
-
-    // 大きい三角形を書くコード
-    let p1 = {x:START_ARROW_WIDTH, y:start_arrow_height};
-    let p2 = {x:START_ARROW_WIDTH, y:p1.y + LENGTH_OF_A_SIDE};
-    // 正三角形の三平方の定理
-    let p3 = {x:START_ARROW_WIDTH - LENGTH_OF_A_SIDE * 0.865, y:p1.y + LENGTH_OF_A_SIDE/2};
-
-    context.beginPath();
-    context.moveTo(p1.x,p1.y);
-    context.lineTo(p2.x,p2.y);
-    context.lineTo(p3.x,p3.y);
-
-    context.closePath();
-    context.stroke();
+    createTriangle(90, 112 + height, 10, true);
 }
 
 document.addEventListener('keydown',controller);
 
-let g_current_cursor = 'first_decision_place';
-var g_arrow_position = 0;
-var g_choice_current_enemy  = 0;
-let g_current_command_number = 0;
-const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
-const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
-
-//let g_log = document.getElementById('debug');
-
 function controller(e){
     let g_log = document.getElementById('debug');
     if(g_current_cursor == 'first_decision_place'){
+        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
         // Sキー
         if(g_current_command_number < 3 &&  e.keyCode == 83){
-            g_arrow_position += INTERVALS_OF_ARROW_ROW_HEIGHT;
             g_current_command_number++;
-            drawArrow(g_arrow_position);
+            drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
         if(g_current_command_number > 0 && e.keyCode == 87){
-            g_arrow_position -= INTERVALS_OF_ARROW_ROW_HEIGHT;
             g_current_command_number--;
-            drawArrow(g_arrow_position);
+            drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキー
         if(e.keyCode == 68){
             if(g_current_command_number === 0){
                 console.log("敵を選んでね");
                 g_current_cursor = 'enemy';
-            }    
+                drawEnemyArrow(0);
+            }
             if(g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
             }
@@ -157,16 +135,19 @@ function controller(e){
 
         g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
+
     if(g_current_cursor == 'enemy'){
-        // Sキー 
-        if(g_choice_current_enemy < 2 && e.keyCode == 83){
+        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
+        const NUMBER_OF_ENEMYS = 3
+        // Sキー
+        if(g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode == 83){
             g_choice_current_enemy++;
-            drawEnemyArrow(g_choice_current_enemy*50);
+            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
         if(g_choice_current_enemy > 0 && e.keyCode == 87){
             g_choice_current_enemy--;
-            drawEnemyArrow(g_choice_current_enemy*50);
+            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキー
         if(e.keyCode == 68){
@@ -174,11 +155,11 @@ function controller(e){
         // Aキー
         if(e.keyCode == 65){
             g_current_cursor = 'first_decision_place';
+            context.clearRect(79,100,20,140);
         }
     }
 }
 
-
 // drawFightScene関数ですべての画面を初期化するため、最初に呼び出してください
 drawFightScene();
-drawArrow(0);
+drawFirstDicisionPlaceArrow(0);
