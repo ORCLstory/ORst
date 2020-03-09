@@ -1,6 +1,9 @@
 // 画面の位置を割合で表示する
-let canvas = document.getElementById('canvas'),
-    context = canvas.getContext('2d');
+let bg_canvas = document.getElementById('background-layer'),
+    bg_context = bg_canvas.getContext('2d');
+
+let gc_canvas = document.getElementById('game-cursor-layer'),
+    gc_context = gc_canvas.getContext('2d');
 
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
@@ -13,19 +16,19 @@ let g_current_command_number = 0;
 const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
 
 function createWindow(x,y,w,h){
-    context.beginPath();
-    context.rect(x, y, w, h);
-    context.stroke();
+    bg_context.beginPath();
+    bg_context.rect(x, y, w, h);
+    bg_context.stroke();
 }
 
 function createCircle(x, y, radius){
-    context.beginPath();
-    context.arc(x, y, radius, 0, 2 * Math.PI,true);
-    context.stroke();
+    bg_context.beginPath();
+    bg_context.arc(x, y, radius, 0, 2 * Math.PI,true);
+    bg_context.stroke();
 }
 
 function drawFightScene(){
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
     createWindow(0,0, WINDOW_WIDTH,WINDOW_HEIGHT);
     let status_window_x = 0;
     let status_window_y = 0;
@@ -44,7 +47,7 @@ function drawFightScene(){
     const STATUS_LIST = ['name','HP','MP','Lv'];
     for(let i = 0; i < 4; i++){
         for(let j = 0; j < 4; j++){
-            context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]],status_window_x + (status_window_w *0.33), START_STATUS_ROW_HEIGHT +  j*INTERVALS_OF_STATUS_ROW_HEIGHT , WINDOW_WIDTH * 0.25);
+            bg_context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]],status_window_x + (status_window_w *0.33), START_STATUS_ROW_HEIGHT +  j*INTERVALS_OF_STATUS_ROW_HEIGHT , WINDOW_WIDTH * 0.25);
         }
     createWindow(status_window_x,status_window_y,status_window_w,status_window_h);
         status_window_x += status_window_w;
@@ -59,7 +62,7 @@ function drawFightScene(){
 
     // 戦闘コマンド表示
     for(let i = 0; i < 4; i++){
-        context.fillText(fight_command[i],WINDOW_WIDTH * 0.05,WINDOW_HEIGHT * 0.8+ (15*i) , WINDOW_WIDTH *0.25);
+        bg_context.fillText(fight_command[i],WINDOW_WIDTH * 0.05,WINDOW_HEIGHT * 0.8+ (15*i) , WINDOW_WIDTH *0.25);
     }
     // 魔法を選んだ時の表示
     const ONE_ROW_COUNT = 3;
@@ -68,7 +71,7 @@ function drawFightScene(){
     const START_MAGIC_LIST_WORD_WIDTH = WINDOW_WIDTH * 0.30;
     const START_MAGIC_LIST_WORD_HEIGHT = START_COMMAND_LINE_HEIGHT + WINDOW_HEIGHT * 0.05;
     for(let i = 0; i < magic_list.length; i++){
-        context.fillText(magic_list[i], START_MAGIC_LIST_WORD_WIDTH + (i%3)*INTERVAL_OF_MAGIC_LIST_WORD_WIDTH, START_MAGIC_LIST_WORD_HEIGHT +(INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT * Math.floor(i / 3)))
+        bg_context.fillText(magic_list[i], START_MAGIC_LIST_WORD_WIDTH + (i%3)*INTERVAL_OF_MAGIC_LIST_WORD_WIDTH, START_MAGIC_LIST_WORD_HEIGHT +(INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT * Math.floor(i / 3)))
     }
 
     // モンスターっぽい丸を生成する
@@ -81,27 +84,27 @@ function drawFightScene(){
 }
 
 function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,is_reverse){
-    context.beginPath();
-    context.moveTo(start_arrow_width, start_arrow_height);
-    context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
+    gc_context.beginPath();
+    gc_context.moveTo(start_arrow_width, start_arrow_height);
+    gc_context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
     if (is_reverse){
-        context.lineTo(start_arrow_width - length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
+        gc_context.lineTo(start_arrow_width - length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
     }
     else {
-        context.lineTo(start_arrow_width + length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
+        gc_context.lineTo(start_arrow_width + length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
     }
-    context.closePath();
-    context.stroke();
+    gc_context.closePath();
+    gc_context.stroke();
 }
 
 function drawFirstDicisionPlaceArrow(height){
-    context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
+    gc_context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
     createTriangle(5, 280 + height, 10, false);
 }
 
 function drawEnemyArrow(height){
     // TODO:マジックナンバーを消す
-    context.clearRect(79,100,20,140);
+    gc_context.clearRect(79,100,20,140);
     createTriangle(90, 112 + height, 10, true);
 }
 
@@ -136,7 +139,7 @@ function controller(e){
         g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
 
-    if(g_current_cursor == 'enemy'){
+    else if(g_current_cursor == 'enemy'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
         const NUMBER_OF_ENEMYS = 3
         // Sキー
@@ -155,7 +158,7 @@ function controller(e){
         // Aキー
         if(e.keyCode == 65){
             g_current_cursor = 'first_decision_place';
-            context.clearRect(79,100,20,140);
+            gc_context.clearRect(79,100,20,140);
         }
     }
 }

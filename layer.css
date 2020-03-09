@@ -1,0 +1,18 @@
+#stage{
+    /* htmlのwidth,heightに準拠する*/
+    width:768px;
+    height:432px;
+    position: relative;
+}
+
+canvas{
+    position: absolute;
+}
+
+#background-layer{
+    z-index:1;
+}
+
+#game-cursor-layer{
+    z-index:2;
+}
