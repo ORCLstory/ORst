@@ -132,21 +132,24 @@ const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
 function controller(e){
     let g_log = document.getElementById('debug');
     if(g_current_cursor == 'first_decision_place'){
-        if(g_arrow_position < INTERVALS_OF_ARROW_ROW_HEIGHT*3 &&  e.keyCode == 83){
+        // Sキー
+        if(g_current_command_number < 3 &&  e.keyCode == 83){
             g_arrow_position += INTERVALS_OF_ARROW_ROW_HEIGHT;
             g_current_command_number++;
             drawArrow(g_arrow_position);
         }
-        if(g_arrow_position > 1 && e.keyCode == 87){
+        // Wキー
+        if(g_current_command_number > 0 && e.keyCode == 87){
             g_arrow_position -= INTERVALS_OF_ARROW_ROW_HEIGHT;
             g_current_command_number--;
             drawArrow(g_arrow_position);
         }
+        // Dキー
         if(e.keyCode == 68){
             if(g_current_command_number === 0){
                 console.log("敵を選んでね");
                 g_current_cursor = 'enemy';
-            }
+            }    
             if(g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
             }
@@ -155,7 +158,7 @@ function controller(e){
         g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
     if(g_current_cursor == 'enemy'){
-        // Sキー
+        // Sキー 
         if(g_choice_current_enemy < 2 && e.keyCode == 83){
             g_choice_current_enemy++;
             drawEnemyArrow(g_choice_current_enemy*50);
