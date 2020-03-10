@@ -170,12 +170,47 @@ function battleSystem(){
     let situation = 'encount';
     drawFightScene();
     battleMessage(situation);
+    //while (true){ 
+    
+    let battlequeue = [];
+    battleMessage('decision');
+    battleMessage('decision');
+    battleMessage('decision');
+    battleMessage('decision');
+
+    battlequeue.push('テオ');
+    battlequeue.push('グラール');
+    battlequeue.push('リン');
+    battlequeue.push('アリシア');
+    battlequeue.push('スライム');
+    battlequeue.push('スライム');
+    battlequeue.push('スライム');
+    
+    for(let i = 0; i < battlequeue.length; i++){
+        if(battlequeue[i] === 'スライム'){
+            battleMessage('enemy');
+        }
+        else{
+            battleMessage('ally');
+        }
+    }
+
 }
 
 function battleMessage(situation) {
     let battleLog = document.getElementById('battleLog');
+    console.log(battleLog);
     if (situation === 'encount'){
-        battleLog.innerHTML = '敵が現れた！';
+        battleLog.innerHTML += '敵が現れた！<br>';
+    }
+    else if(situation === 'ally'){
+        battleLog.innerHTML += '味方が敵を攻撃した！<br>';
+    }
+    else if(situation === 'enemy'){
+        battleLog.innerHTML += '敵が味方を攻撃した！<br>';
+    }
+    else if(situation === 'decision'){
+        battleLog.innerHTML += '味方がコマンドを選択した！<br>';
     }
 }
 
