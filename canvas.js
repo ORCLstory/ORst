@@ -37,10 +37,10 @@ function drawFightScene(){
 
     // 上のほう
     let status_content = [
-        {'name':'kaya','HP':200000,'MP':4000,'Lv':4},
-        {'name':'kudo','HP':200,'MP':4000,'Lv':400},
-        {'name':'miku','HP':2,'MP':400,'Lv':4},
-        {'name':'tojo','HP':20000,'MP':400,'Lv':4}
+        {'name':'テオ','HP':25,'MP':20,'Lv':1},
+        {'name':'グラール','HP':30,'MP':10,'Lv':1},
+        {'name':'リン','HP':25,'MP':25,'Lv':1},
+        {'name':'アリシア','HP':25,'MP':30,'Lv':1}
     ];
     const START_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.041;
     const INTERVALS_OF_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.04;
@@ -70,9 +70,9 @@ function drawFightScene(){
     const INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT = WINDOW_HEIGHT * 0.05;
     const START_MAGIC_LIST_WORD_WIDTH = WINDOW_WIDTH * 0.30;
     const START_MAGIC_LIST_WORD_HEIGHT = START_COMMAND_LINE_HEIGHT + WINDOW_HEIGHT * 0.05;
-    for(let i = 0; i < magic_list.length; i++){
-        bg_context.fillText(magic_list[i], START_MAGIC_LIST_WORD_WIDTH + (i%3)*INTERVAL_OF_MAGIC_LIST_WORD_WIDTH, START_MAGIC_LIST_WORD_HEIGHT +(INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT * Math.floor(i / 3)))
-    }
+    // for(let i = 0; i < magic_list.length; i++){
+    //     bg_context.fillText(magic_list[i], START_MAGIC_LIST_WORD_WIDTH + (i%3)*INTERVAL_OF_MAGIC_LIST_WORD_WIDTH, START_MAGIC_LIST_WORD_HEIGHT +(INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT * Math.floor(i / 3)))
+    // }
 
     // モンスターっぽい丸を生成する
     createCircle(50, 120, 20);
@@ -130,6 +130,7 @@ function controller(e){
                 console.log("敵を選んでね");
                 g_current_cursor = 'enemy';
                 drawEnemyArrow(0);
+                gc_context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
             }
             if(g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
@@ -159,10 +160,25 @@ function controller(e){
         if(e.keyCode == 65){
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(79,100,20,140);
+            drawFirstDicisionPlaceArrow(0);
         }
     }
 }
 
+// 戦闘処理
+function battleSystem(){
+    let situation = 'encount';
+    drawFightScene();
+    battleMessage(situation);
+}
+
+function battleMessage(situation) {
+    let battleLog = document.getElementById('battleLog');
+    if (situation === 'encount'){
+        battleLog.innerHTML = '敵が現れた！';
+    }
+}
+
 // drawFightScene関数ですべての画面を初期化するため、最初に呼び出してください
-drawFightScene();
-drawFirstDicisionPlaceArrow(0);
+// drawFirstDicisionPlaceArrow(0);
+battleSystem();
