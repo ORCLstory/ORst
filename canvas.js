@@ -219,9 +219,9 @@ function* battleSystem(){
     battleMessage('decision');
     commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
 
-    commandQueue.push({'player':enemyList[0],'target':0});
-    commandQueue.push({'player':enemyList[1],'target':0});
-    commandQueue.push({'player':enemyList[2],'target':0});
+    commandQueue.push({'player':enemyList[0],'target':Math.floor(Math.random() * 4)});
+    commandQueue.push({'player':enemyList[1],'target':Math.floor(Math.random() * 4)});
+    commandQueue.push({'player':enemyList[2],'target':Math.floor(Math.random() * 4)});
 
     for(let i = 0; i < commandQueue.length; i++){
         if(commandQueue[i].player.team === 'ally'){
@@ -229,7 +229,8 @@ function* battleSystem(){
             battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
         }
         else{
-            battleMessage('attack', commandQueue[i].player, allyList[0]);
+            console.log(commandQueue[i].target);
+            battleMessage('attack', commandQueue[i].player, allyList[commandQueue[i].target]);
         }
     }
 }
