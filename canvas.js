@@ -167,33 +167,57 @@ function controller(e){
 
 // 戦闘処理
 function battleSystem(){
+    // 味方の情報を定義
+    const teo = new AllyStatus('テオ');
+    const graal = new AllyStatus('グラール');
+    const lin = new AllyStatus('リン');
+    const alycia = new AllyStatus('アリシア');
+
+    // 敵の情報を定義
+    const slime1 = new EnemyStatus('スライム');
+    const slime2 = new EnemyStatus('スライム');
+    const slime3 = new EnemyStatus('スライム');
+
+    // 味方の情報をリストに格納
+    let allyList = [];
+    allyList.push(teo);
+    allyList.push(graal);
+    allyList.push(lin);
+    allyList.push(alycia);
+
+    // 敵の情報をリストに格納
+    let enemyList = [];
+    enemyList.push(slime1);
+    enemyList.push(slime2);
+    enemyList.push(slime3);
+
     let situation = 'encount';
     drawFightScene();
     battleMessage(situation);
-    //while (true){ 
-    
-    let battlequeue = [];
+    //while (true){
+
+    let commandQueue = [];
     battleMessage('decision');
     battleMessage('decision');
     battleMessage('decision');
     battleMessage('decision');
 
-    battlequeue.push('テオ');
-    battlequeue.push('グラール');
-    battlequeue.push('リン');
-    battlequeue.push('アリシア');
-    battlequeue.push('スライム');
-    battlequeue.push('スライム');
-    battlequeue.push('スライム');
-    
-    for(let i = 0; i < battlequeue.length; i++){
-        if(battlequeue[i] === 'スライム'){
-            battleMessage('enemy');
-        }
-        else{
-            battleMessage('ally');
-        }
-    }
+    commandQueue.push(allyList[0]);
+    commandQueue.push(allyList[1]);
+    commandQueue.push(allyList[2]);
+    commandQueue.push(allyList[3]);
+    commandQueue.push(enemyList[0]);
+    commandQueue.push(enemyList[1]);
+    commandQueue.push(enemyList[2]);
+
+    // for(let i = 0; i < commandQueue.length; i++){
+    //     if(commandQueue[i]. === ){
+    //         battleMessage('enemy');
+    //     }
+    //     else{
+    //         battleMessage('ally');
+    //     }
+    // }
 
 }
 
@@ -214,6 +238,4 @@ function battleMessage(situation) {
     }
 }
 
-// drawFightScene関数ですべての画面を初期化するため、最初に呼び出してください
-// drawFirstDicisionPlaceArrow(0);
 battleSystem();
