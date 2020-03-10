@@ -208,27 +208,28 @@ function* battleSystem(){
     yield 0;
     let commandQueue = [];
     battleMessage('decision');
+    commandQueue.push({'player':allyList[0],'target':g_choice_current_enemy});
     yield 0;
     battleMessage('decision');
+    commandQueue.push({'player':allyList[1],'target':g_choice_current_enemy});
     yield 0;
     battleMessage('decision');
+    commandQueue.push({'player':allyList[2],'target':g_choice_current_enemy});
     yield 0;
     battleMessage('decision');
+    commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
 
-    commandQueue.push(allyList[0]);
-    commandQueue.push(allyList[1]);
-    commandQueue.push(allyList[2]);
-    commandQueue.push(allyList[3]);
-    commandQueue.push(enemyList[0]);
-    commandQueue.push(enemyList[1]);
-    commandQueue.push(enemyList[2]);
+    commandQueue.push({'player':enemyList[0],'target':0});
+    commandQueue.push({'player':enemyList[1],'target':0});
+    commandQueue.push({'player':enemyList[2],'target':0});
 
     for(let i = 0; i < commandQueue.length; i++){
-        if(commandQueue[i].team === 'ally'){
-            battleMessage('attack', commandQueue[i], enemyList[0]);
+        if(commandQueue[i].player.team === 'ally'){
+            console.log(commandQueue[i].target);
+            battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
         }
         else{
-            battleMessage('attack', commandQueue[i], allyList[0]);
+            battleMessage('attack', commandQueue[i].player, allyList[0]);
         }
     }
 }
@@ -243,6 +244,7 @@ function battleMessage(situation) {
     }
     // 戦闘処理時の表示メッセージ
     else if(situation === 'attack'){
+        console.log(arguments[1]);
         battleLog.innerHTML += arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！<br>';
         let calculateDamage = arguments[1].atk - arguments[2].def;
         if (calculateDamage < 0){
