@@ -37,14 +37,6 @@ class AllyStatus{
         return {'NAME':this.name,'HP':this.hp,'MP':this.mp,'LV':this.lv};
     }
 
-    // get team(){
-    //     return this.
-    // }
-
-    // getStatusByName(){
-    //     return {'NAME':this.name,'HP':this.hp,'MP':this.mp,'LV':this.lv};
-    // }
-
     set levelUp(num){
         this.lv += num;
     }

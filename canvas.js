@@ -124,8 +124,8 @@ function controller(e){
             g_current_command_number--;
             drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
-        // Dキー
-        if(e.keyCode == 68){
+        // Dキーまたはエンターキー
+        if(e.keyCode == 68 || e.keyCode == 13){
             if(g_current_command_number === 0){
                 console.log("敵を選んでね");
                 g_current_cursor = 'enemy';
@@ -153,8 +153,8 @@ function controller(e){
             g_choice_current_enemy--;
             drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
-        // Dキー
-        if(e.keyCode == 68){
+        // Dキーまたはエンターキー
+        if(e.keyCode == 68 || e.keyCode == 13){
         }
         // Aキー
         if(e.keyCode == 65){
@@ -167,6 +167,8 @@ function controller(e){
 
 // 戦闘処理
 function battleSystem(){
+    drawFirstDicisionPlaceArrow(0);
+
     // 味方の情報を定義
     const teo = new AllyStatus('テオ');
     const graal = new AllyStatus('グラール');
@@ -191,6 +193,7 @@ function battleSystem(){
     enemyList.push(slime2);
     enemyList.push(slime3);
 
+    // エンカウント時の処理
     let situation = 'encount';
     drawFightScene();
     battleMessage(situation);
@@ -210,29 +213,35 @@ function battleSystem(){
     commandQueue.push(enemyList[1]);
     commandQueue.push(enemyList[2]);
 
-    // for(let i = 0; i < commandQueue.length; i++){
-    //     if(commandQueue[i]. === ){
-    //         battleMessage('enemy');
-    //     }
-    //     else{
-    //         battleMessage('ally');
-    //     }
-    // }
-
+    for(let i = 0; i < commandQueue.length; i++){
+        if(commandQueue[i].team === 'ally'){
+            battleMessage('attack', commandQueue[i], enemyList[0]);
+        }
+        else{
+            battleMessage('attack', commandQueue[i], allyList[0]);
+        }
+    }
 }
 
 function battleMessage(situation) {
     let battleLog = document.getElementById('battleLog');
     console.log(battleLog);
+
+    // エンカウント時の表示メッセージ
     if (situation === 'encount'){
         battleLog.innerHTML += '敵が現れた！<br>';
     }
-    else if(situation === 'ally'){
-        battleLog.innerHTML += '味方が敵を攻撃した！<br>';
+    // 戦闘処理時の表示メッセージ
+    else if(situation === 'attack'){
+        battleLog.innerHTML += arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！<br>';
+        let calculateDamage = arguments[1].atk - arguments[2].def;
+        if (calculateDamage < 0){
+            calculateDamage = 1;
+        }
+        battleLog.innerHTML += arguments[2].name + 'に' + calculateDamage + 'ダメージ！<br>';
     }
-    else if(situation === 'enemy'){
-        battleLog.innerHTML += '敵が味方を攻撃した！<br>';
-    }
+
+    // テスト用だぞ
     else if(situation === 'decision'){
         battleLog.innerHTML += '味方がコマンドを選択した！<br>';
     }

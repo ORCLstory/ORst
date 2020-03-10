@@ -17,12 +17,9 @@ class EnemyStatus{
             this.def = 10;
             this.lv = 1;
         }
+    }
 
         get open(){
-            return this.getStatusByName();
-        }
-
-        getStatusByName(){
             return {'NAME':this.name,'HP':this.hp,'MP':this.mp,'LV':this.lv};
         }
 
@@ -30,4 +27,3 @@ class EnemyStatus{
             this.lv += num;
         }
     }
-}
