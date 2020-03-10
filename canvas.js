@@ -110,6 +110,7 @@ function drawEnemyArrow(height){
 
 document.addEventListener('keydown',controller);
 
+
 function controller(e){
     let g_log = document.getElementById('debug');
     if(g_current_cursor == 'first_decision_place'){
@@ -155,6 +156,12 @@ function controller(e){
         }
         // Dキーまたはエンターキー
         if(e.keyCode == 68 || e.keyCode == 13){
+            g_choice_current_enemy = 0;
+            g_current_command_number = 0;
+            g_current_cursor = 'first_decision_place';
+            gc_context.clearRect(79,100,20,140);
+            drawFirstDicisionPlaceArrow(0);
+            iterator.next();
         }
         // Aキー
         if(e.keyCode == 65){
@@ -166,8 +173,7 @@ function controller(e){
 }
 
 // 戦闘処理
-function battleSystem(){
-    drawFirstDicisionPlaceArrow(0);
+function* battleSystem(){
 
     // 味方の情報を定義
     const teo = new AllyStatus('テオ');
@@ -199,10 +205,14 @@ function battleSystem(){
     battleMessage(situation);
     //while (true){
 
+    yield 0;
     let commandQueue = [];
     battleMessage('decision');
+    yield 0;
     battleMessage('decision');
+    yield 0;
     battleMessage('decision');
+    yield 0;
     battleMessage('decision');
 
     commandQueue.push(allyList[0]);
@@ -246,5 +256,6 @@ function battleMessage(situation) {
         battleLog.innerHTML += '味方がコマンドを選択した！<br>';
     }
 }
-
-battleSystem();
+var iterator = battleSystem();
+iterator.next();
+drawFirstDicisionPlaceArrow(0);
