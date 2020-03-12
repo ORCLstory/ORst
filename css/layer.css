@@ -16,3 +16,6 @@ canvas{
 #game-cursor-layer{
     z-index:2;
 }
+#text-layer{
+    z-index:2;
+}
