@@ -245,11 +245,13 @@ function battleMessage(situation) {
     // エンカウント時の表示メッセージ
     if (situation === 'encount'){
         battleLog.innerHTML += '敵が現れた！<br>';
+        createTextTest('敵が現れた！');
     }
     // 戦闘処理時の表示メッセージ
     else if(situation === 'attack'){
         console.log(arguments[1]);
         battleLog.innerHTML += arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！<br>';
+        createTextTest(arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！');
         let calculateDamage = arguments[1].atk - arguments[2].def;
         if (calculateDamage < 0){
             calculateDamage = 1;
@@ -263,10 +265,10 @@ function battleMessage(situation) {
     }
 }
 
-function createTextTest(){
+function createTextTest(text){
     txt_context.clearRect(0,0,480,360);
-    txt_context.font = "30px 'MS ゴシック'";
-    txt_context.fillText('敵が現れた！！',200,200,100);
+    txt_context.font = "15px 'MS ゴシック'";
+    txt_context.fillText(text,125,290,180);
 
 }
 var iterator = battleSystem();
