@@ -5,6 +5,9 @@ let bg_canvas = document.getElementById('background-layer'),
 let gc_canvas = document.getElementById('game-cursor-layer'),
     gc_context = gc_canvas.getContext('2d');
 
+let txt_canvas = document.getElementById('text-layer'),
+    txt_context = txt_canvas.getContext('2d');
+
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 
@@ -258,6 +261,13 @@ function battleMessage(situation) {
     else if(situation === 'decision'){
         battleLog.innerHTML += '味方がコマンドを選択した！<br>';
     }
+}
+
+function createTextTest(){
+    txt_context.clearRect(0,0,480,360);
+    txt_context.font = "30px 'MS ゴシック'";
+    txt_context.fillText('敵が現れた！！',200,200,100);
+
 }
 var iterator = battleSystem();
 iterator.next();
