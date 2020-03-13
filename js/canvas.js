@@ -137,13 +137,18 @@ function controller(e){
         // Dキーまたはエンターキー
         if (e.keyCode === 68 || e.keyCode === 13){
             if (g_current_command_number === 0){
-                console.log("敵を選んでね");
                 g_current_cursor = 'select_enemy';
                 gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
                 drawEnemyArrow(0);
             }
             if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
+            }
+            if (g_current_command_number === 2){
+                console.log("多分、道具の画面にいくよ");
+            }
+            if (g_current_command_number === 3){
+                console.log("多分、逃げられるよ");
             }
         }
 
@@ -218,8 +223,10 @@ function* battleSystem(){
     battleMessage(situation);
 
     while (true){
-        yield 0;
         let commandQueue = [];
+        // 味方が攻撃対象を選択
+        // battle_logを初期化
+        battle_log_list = [];
         battleMessage('decision', allyList[0]);
         commandQueue.push({'player':allyList[0],'target':g_choice_current_enemy});
         yield 0;
@@ -231,63 +238,89 @@ function* battleSystem(){
         yield 0;
         battleMessage('decision', allyList[3]);
         commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
+        yield 0;
 
+        // 敵AIの攻撃対象選択
         commandQueue.push({'player':enemyList[0],'target':Math.floor(Math.random() * 4)});
         commandQueue.push({'player':enemyList[1],'target':Math.floor(Math.random() * 4)});
         commandQueue.push({'player':enemyList[2],'target':Math.floor(Math.random() * 4)});
 
+        // コマンド入力終了時の処理
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-        createTriangle(WINDOW_WIDTH * 0.625, WINDOW_HEIGHT * 0.95, 10, 'down');
+        //createTriangle(WINDOW_WIDTH * 0.625, WINDOW_HEIGHT * 0.95, 10, 'down');
         g_current_cursor = 'read_message';
+        // battle_logを初期化
+        battle_log_list = [];
+
+        // ここまで
         for(let i = 0; i < commandQueue.length; i++){
             if (commandQueue[i].player.team === 'ally'){
-                console.log(commandQueue[i].target);
                 battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
                 yield 0;
             }
             else{
-                console.log(commandQueue[i].target);
                 battleMessage('attack', commandQueue[i].player, allyList[commandQueue[i].target]);
                 yield 0;
             }
         }
         g_current_cursor = 'first_decision_place';
         drawFirstDicisionPlaceArrow(0);
-        battleMessage('decision', allyList[0]);
     }
 }
 
+let battle_log_list = [];
 function battleMessage(situation) {
     let battleLog = document.getElementById('battleLog');
-    console.log(battleLog);
+    let log = '';
 
     // エンカウント時の表示メッセージ
     if (situation === 'encount'){
-        battleLog.innerHTML += '敵が現れた！<br>';
-        createBattleLog('敵が現れた！');
+        log = '敵が現れた！';
+        battleLog.innerHTML += log +  '<br>';
+        battle_log_list = show_tail_log(battle_log_list,log);
+        createBattleLog();
     }
     // 戦闘処理時の表示メッセージ
     else if (situation === 'attack'){
-        console.log(arguments[1]);
-        battleLog.innerHTML += arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！<br>';
-        createBattleLog(arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！');
+        log = arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！'
+        battleLog.innerHTML += log + '<br>';
+        battle_log_list = show_tail_log(battle_log_list,log);
+        createBattleLog();
         let calculateDamage = arguments[1].atk - arguments[2].def;
         if (calculateDamage < 0){
             calculateDamage = 1;
         }
-        battleLog.innerHTML += arguments[2].name + 'に' + calculateDamage + 'ダメージ！<br>';
+        log = arguments[2].name + 'に' + calculateDamage + 'ダメージ！';
+        battleLog.innerHTML += log + '<br>';
+        battle_log_list = show_tail_log(battle_log_list,log);
+        createBattleLog();
     }
 
     else if (situation === 'decision'){
-        battleLog.innerHTML += arguments[1].name + 'はどうする？<br>';
-        createBattleLog(arguments[1].name + 'はどうする？');
+        log = arguments[1].name + 'はどうする？';
+        battleLog.innerHTML += log + '<br>';
+        battle_log_list = show_tail_log(battle_log_list,log);
+        createBattleLog();
     }
 }
 
-function createBattleLog(text){
+function show_tail_log(log_list, log){
+    if (log_list.length < 4){
+        log_list.push(log);
+    }
+    else if(log_list.length === 4){
+        log_list.shift();
+        log_list.push(log);
+    }
+    return log_list;
+}
+
+function createBattleLog(){
     txt_context.clearRect(0,0,480,360);
     txt_context.font = "15px 'MS ゴシック'";
-    txt_context.fillText(text,125,290,200);
+    for(let i = 0; i < battle_log_list.length; i++){
+        txt_context.fillText(battle_log_list[i],125,290 + (i*20),300);
+    }
 }
 
 var iterator = battleSystem();
