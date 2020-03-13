@@ -58,8 +58,8 @@ function drawFightScene(){
 
     // 下の方
     const COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.25;
-    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH,COMMAND_LINE_HEIGHT);
-    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25 ,COMMAND_LINE_HEIGHT);
+    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH, COMMAND_LINE_HEIGHT);
+    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25, COMMAND_LINE_HEIGHT);
     let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
     let magic_list = ['DUMAPIC','HARITO','KATINO','MOGREF','MERITO','MORLIS','SOPIC','CALIFIC'];
 
@@ -86,29 +86,35 @@ function drawFightScene(){
     }
 }
 
-function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,is_reverse){
+function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,angle){
     gc_context.beginPath();
     gc_context.moveTo(start_arrow_width, start_arrow_height);
-    gc_context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
-    if (is_reverse){
+
+    if (angle === 'left'){
+        gc_context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
         gc_context.lineTo(start_arrow_width - length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
     }
-    else {
+    else if (angle === 'right') {
+        gc_context.lineTo(start_arrow_width, start_arrow_height + length_of_a_side);
         gc_context.lineTo(start_arrow_width + length_of_a_side * 0.865, start_arrow_height + length_of_a_side / 2);
+    }
+    else if (angle === 'down'){
+        gc_context.lineTo(start_arrow_width + length_of_a_side, start_arrow_height);
+        gc_context.lineTo(start_arrow_width + length_of_a_side / 2, start_arrow_height + length_of_a_side * 0.865);
     }
     gc_context.closePath();
     gc_context.stroke();
 }
 
 function drawFirstDicisionPlaceArrow(height){
-    gc_context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
-    createTriangle(5, 280 + height, 10, false);
+    gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    createTriangle(5, 280 + height, 10, 'right');
 }
 
 function drawEnemyArrow(height){
     // TODO:マジックナンバーを消す
-    gc_context.clearRect(79,100,20,140);
-    createTriangle(90, 112 + height, 10, true);
+    gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    createTriangle(90, 112 + height, 10, 'left');
 }
 
 document.addEventListener('keydown',controller);
@@ -116,27 +122,27 @@ document.addEventListener('keydown',controller);
 
 function controller(e){
     let g_log = document.getElementById('debug');
-    if(g_current_cursor == 'first_decision_place'){
+    if (g_current_cursor === 'first_decision_place'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
         // Sキー
-        if(g_current_command_number < 3 &&  e.keyCode == 83){
+        if (g_current_command_number < 3 &&  e.keyCode === 83){
             g_current_command_number++;
             drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
-        if(g_current_command_number > 0 && e.keyCode == 87){
+        if (g_current_command_number > 0 && e.keyCode === 87){
             g_current_command_number--;
             drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキーまたはエンターキー
-        if(e.keyCode == 68 || e.keyCode == 13){
-            if(g_current_command_number === 0){
+        if (e.keyCode === 68 || e.keyCode === 13){
+            if (g_current_command_number === 0){
                 console.log("敵を選んでね");
-                g_current_cursor = 'enemy';
+                g_current_cursor = 'select_enemy';
+                gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
                 drawEnemyArrow(0);
-                gc_context.clearRect(2,START_COMMAND_LINE_HEIGHT+2,13,80);
             }
-            if(g_current_command_number === 1){
+            if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
             }
         }
@@ -144,40 +150,44 @@ function controller(e){
         g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
 
-    else if(g_current_cursor == 'enemy'){
+    else if (g_current_cursor === 'select_enemy'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
         const NUMBER_OF_ENEMYS = 3
         // Sキー
-        if(g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode == 83){
+        if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
             g_choice_current_enemy++;
             drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
-        if(g_choice_current_enemy > 0 && e.keyCode == 87){
+        if (g_choice_current_enemy > 0 && e.keyCode === 87){
             g_choice_current_enemy--;
             drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキーまたはエンターキー
-        if(e.keyCode == 68 || e.keyCode == 13){
+        if (e.keyCode === 68 || e.keyCode === 13){
             g_choice_current_enemy = 0;
             g_current_command_number = 0;
             g_current_cursor = 'first_decision_place';
-            gc_context.clearRect(79,100,20,140);
+            gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
             iterator.next();
         }
         // Aキー
-        if(e.keyCode == 65){
+        if (e.keyCode === 65){
             g_current_cursor = 'first_decision_place';
-            gc_context.clearRect(79,100,20,140);
+            gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
+        }
+    }
+    else if (g_current_cursor === 'read_message'){
+        if (e.keyCode === 83 || e.keyCode === 13){
+            iterator.next();
         }
     }
 }
 
 // 戦闘処理
 function* battleSystem(){
-
     // 味方の情報を定義
     const teo = new AllyStatus('テオ');
     const graal = new AllyStatus('グラール');
@@ -206,35 +216,44 @@ function* battleSystem(){
     let situation = 'encount';
     drawFightScene();
     battleMessage(situation);
-    //while (true){
 
-    yield 0;
-    let commandQueue = [];
-    battleMessage('decision');
-    commandQueue.push({'player':allyList[0],'target':g_choice_current_enemy});
-    yield 0;
-    battleMessage('decision');
-    commandQueue.push({'player':allyList[1],'target':g_choice_current_enemy});
-    yield 0;
-    battleMessage('decision');
-    commandQueue.push({'player':allyList[2],'target':g_choice_current_enemy});
-    yield 0;
-    battleMessage('decision');
-    commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
+    while (true){
+        yield 0;
+        let commandQueue = [];
+        battleMessage('decision', allyList[0]);
+        commandQueue.push({'player':allyList[0],'target':g_choice_current_enemy});
+        yield 0;
+        battleMessage('decision', allyList[1]);
+        commandQueue.push({'player':allyList[1],'target':g_choice_current_enemy});
+        yield 0;
+        battleMessage('decision', allyList[2]);
+        commandQueue.push({'player':allyList[2],'target':g_choice_current_enemy});
+        yield 0;
+        battleMessage('decision', allyList[3]);
+        commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
 
-    commandQueue.push({'player':enemyList[0],'target':Math.floor(Math.random() * 4)});
-    commandQueue.push({'player':enemyList[1],'target':Math.floor(Math.random() * 4)});
-    commandQueue.push({'player':enemyList[2],'target':Math.floor(Math.random() * 4)});
+        commandQueue.push({'player':enemyList[0],'target':Math.floor(Math.random() * 4)});
+        commandQueue.push({'player':enemyList[1],'target':Math.floor(Math.random() * 4)});
+        commandQueue.push({'player':enemyList[2],'target':Math.floor(Math.random() * 4)});
 
-    for(let i = 0; i < commandQueue.length; i++){
-        if(commandQueue[i].player.team === 'ally'){
-            console.log(commandQueue[i].target);
-            battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
+        gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+        createTriangle(WINDOW_WIDTH * 0.625, WINDOW_HEIGHT * 0.95, 10, 'down');
+        g_current_cursor = 'read_message';
+        for(let i = 0; i < commandQueue.length; i++){
+            if (commandQueue[i].player.team === 'ally'){
+                console.log(commandQueue[i].target);
+                battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
+                yield 0;
+            }
+            else{
+                console.log(commandQueue[i].target);
+                battleMessage('attack', commandQueue[i].player, allyList[commandQueue[i].target]);
+                yield 0;
+            }
         }
-        else{
-            console.log(commandQueue[i].target);
-            battleMessage('attack', commandQueue[i].player, allyList[commandQueue[i].target]);
-        }
+        g_current_cursor = 'first_decision_place';
+        drawFirstDicisionPlaceArrow(0);
+        battleMessage('decision', allyList[0]);
     }
 }
 
@@ -245,13 +264,13 @@ function battleMessage(situation) {
     // エンカウント時の表示メッセージ
     if (situation === 'encount'){
         battleLog.innerHTML += '敵が現れた！<br>';
-        createTextTest('敵が現れた！');
+        createBattleLog('敵が現れた！');
     }
     // 戦闘処理時の表示メッセージ
-    else if(situation === 'attack'){
+    else if (situation === 'attack'){
         console.log(arguments[1]);
         battleLog.innerHTML += arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！<br>';
-        createTextTest(arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！');
+        createBattleLog(arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！');
         let calculateDamage = arguments[1].atk - arguments[2].def;
         if (calculateDamage < 0){
             calculateDamage = 1;
@@ -259,18 +278,18 @@ function battleMessage(situation) {
         battleLog.innerHTML += arguments[2].name + 'に' + calculateDamage + 'ダメージ！<br>';
     }
 
-    // テスト用だぞ
-    else if(situation === 'decision'){
-        battleLog.innerHTML += '味方がコマンドを選択した！<br>';
+    else if (situation === 'decision'){
+        battleLog.innerHTML += arguments[1].name + 'はどうする？<br>';
+        createBattleLog(arguments[1].name + 'はどうする？');
     }
 }
 
-function createTextTest(text){
+function createBattleLog(text){
     txt_context.clearRect(0,0,480,360);
     txt_context.font = "15px 'MS ゴシック'";
-    txt_context.fillText(text,125,290,180);
-
+    txt_context.fillText(text,125,290,200);
 }
+
 var iterator = battleSystem();
 iterator.next();
 drawFirstDicisionPlaceArrow(0);
