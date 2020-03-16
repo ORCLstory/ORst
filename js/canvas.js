@@ -10,13 +10,13 @@ let txt_canvas = document.getElementById('text-layer'),
 
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
+const wp = new windowProperty(480, 360);
 
 // 各種グローバル変数・定数置き場
 let g_current_cursor = 'first_decision_place';
 var g_arrow_position = 0;
 var g_choice_current_enemy  = 0;
 let g_current_command_number = 0;
-const START_COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.75;
 
 function createWindow(x,y,w,h){
     bg_context.beginPath();
@@ -32,11 +32,7 @@ function createCircle(x, y, radius){
 
 function drawFightScene(){
     bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
-    createWindow(0,0, WINDOW_WIDTH,WINDOW_HEIGHT);
-    let status_window_x = 0;
-    let status_window_y = 0;
-    let status_window_w = WINDOW_WIDTH * 0.25;
-    let status_window_h = WINDOW_HEIGHT * 0.22;
+    createWindow(0,0, wp.width,wp.height);
 
     // 上のほう
     let status_content = [
@@ -45,37 +41,26 @@ function drawFightScene(){
         {'name':'リン','HP':25,'MP':25,'Lv':1},
         {'name':'アリシア','HP':25,'MP':30,'Lv':1}
     ];
-    const START_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.041;
-    const INTERVALS_OF_STATUS_ROW_HEIGHT = WINDOW_HEIGHT * 0.04;
     const STATUS_LIST = ['name','HP','MP','Lv'];
     for(let i = 0; i < 4; i++){
         for(let j = 0; j < 4; j++){
-            bg_context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]],status_window_x + (status_window_w *0.33), START_STATUS_ROW_HEIGHT +  j*INTERVALS_OF_STATUS_ROW_HEIGHT , WINDOW_WIDTH * 0.25);
+            bg_context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]], wp.start_status_row.x, wp.start_status_row.y +  j * wp.intervals_of_status_row_height, wp.status_window.w);
         }
-    createWindow(status_window_x,status_window_y,status_window_w,status_window_h);
-        status_window_x += status_window_w;
+    createWindow(wp.status_window.x, wp.status_window.y, wp.status_window.w, wp.status_window.h);
+        wp.status_window.x += wp.status_window.w;
     }
 
     // 下の方
-    const COMMAND_LINE_HEIGHT = WINDOW_HEIGHT * 0.25;
-    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH, COMMAND_LINE_HEIGHT);
-    createWindow(0, START_COMMAND_LINE_HEIGHT, WINDOW_WIDTH * 0.25, COMMAND_LINE_HEIGHT);
+    // コマンドラインの枠全体の描画
+    createWindow(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
+    // fightコマンドの枠の描画
+    createWindow(wp.fight_command_window.x,wp.fight_command_window.y,wp.fight_command_window.w, wp.fight_command_window.h);
     let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
-    let magic_list = ['DUMAPIC','HARITO','KATINO','MOGREF','MERITO','MORLIS','SOPIC','CALIFIC'];
 
     // 戦闘コマンド表示
     for(let i = 0; i < 4; i++){
-        bg_context.fillText(fight_command[i],WINDOW_WIDTH * 0.05,WINDOW_HEIGHT * 0.8+ (15*i) , WINDOW_WIDTH *0.25);
+        bg_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
     }
-    // 魔法を選んだ時の表示
-    const ONE_ROW_COUNT = 3;
-    const INTERVAL_OF_MAGIC_LIST_WORD_WIDTH = WINDOW_WIDTH * 0.25;
-    const INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT = WINDOW_HEIGHT * 0.05;
-    const START_MAGIC_LIST_WORD_WIDTH = WINDOW_WIDTH * 0.30;
-    const START_MAGIC_LIST_WORD_HEIGHT = START_COMMAND_LINE_HEIGHT + WINDOW_HEIGHT * 0.05;
-    // for(let i = 0; i < magic_list.length; i++){
-    //     bg_context.fillText(magic_list[i], START_MAGIC_LIST_WORD_WIDTH + (i%3)*INTERVAL_OF_MAGIC_LIST_WORD_WIDTH, START_MAGIC_LIST_WORD_HEIGHT +(INTERVAL_OF_MAGIC_LIST_WORD_HEIGHT * Math.floor(i / 3)))
-    // }
 
     // モンスターっぽい丸を生成する
     createCircle(50, 120, 20);
@@ -245,7 +230,6 @@ function* battleSystem(){
 
         // コマンド入力終了時の処理
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-        //createTriangle(WINDOW_WIDTH * 0.625, WINDOW_HEIGHT * 0.95, 10, 'down');
         g_current_cursor = 'read_message';
         // battle_logを初期化
         battle_log_list = [];
