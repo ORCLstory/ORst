@@ -193,6 +193,8 @@ function controller(e){
 
 // 戦闘処理
 function* battleSystem(){
+    const battlelog = new BattleLog();
+
     // 味方の情報を定義
     const teo = new AllyStatus('テオ');
     const graal = new AllyStatus('グラール');
@@ -218,32 +220,28 @@ function* battleSystem(){
     enemyList.push(slime3);
 
     // エンカウント時の処理
-    let situation = 'encount';
     drawFightScene();
-    battleMessage(situation);
+    battlelog.encount();
 
     while (true){
         let commandQueue = [];
+
         // 味方が攻撃対象を選択
-        // battle_logを初期化
-        battle_log_list = [];
-        battleMessage('decision', allyList[0]);
-        commandQueue.push({'player':allyList[0],'target':g_choice_current_enemy});
-        yield 0;
-        battleMessage('decision', allyList[1]);
-        commandQueue.push({'player':allyList[1],'target':g_choice_current_enemy});
-        yield 0;
-        battleMessage('decision', allyList[2]);
-        commandQueue.push({'player':allyList[2],'target':g_choice_current_enemy});
-        yield 0;
-        battleMessage('decision', allyList[3]);
-        commandQueue.push({'player':allyList[3],'target':g_choice_current_enemy});
-        yield 0;
+        let i = 0;
+        while (true){
+            battlelog.decision(allyList[i]);
+            commandQueue.push({'player':allyList[i],'target':g_choice_current_enemy});
+            yield 0;
+            i++;
+            if (i >= allyList.length){
+                break;
+            }
+        }
 
         // 敵AIの攻撃対象選択
-        commandQueue.push({'player':enemyList[0],'target':Math.floor(Math.random() * 4)});
-        commandQueue.push({'player':enemyList[1],'target':Math.floor(Math.random() * 4)});
-        commandQueue.push({'player':enemyList[2],'target':Math.floor(Math.random() * 4)});
+        for (let i = 0; i < enemyList.length; i++){
+            commandQueue.push({'player':enemyList[i],'target':Math.floor(Math.random() * 4)});
+        }
 
         // コマンド入力終了時の処理
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -255,71 +253,16 @@ function* battleSystem(){
         // ここまで
         for(let i = 0; i < commandQueue.length; i++){
             if (commandQueue[i].player.team === 'ally'){
-                battleMessage('attack', commandQueue[i].player, enemyList[commandQueue[i].target]);
+                battlelog.attack(commandQueue[i].player, enemyList[commandQueue[i].target], 1);
                 yield 0;
             }
             else{
-                battleMessage('attack', commandQueue[i].player, allyList[commandQueue[i].target]);
+                battlelog.attack(commandQueue[i].player, allyList[commandQueue[i].target], 1);
                 yield 0;
             }
         }
         g_current_cursor = 'first_decision_place';
         drawFirstDicisionPlaceArrow(0);
-    }
-}
-
-let battle_log_list = [];
-function battleMessage(situation) {
-    let battleLog = document.getElementById('battleLog');
-    let log = '';
-
-    // エンカウント時の表示メッセージ
-    if (situation === 'encount'){
-        log = '敵が現れた！';
-        battleLog.innerHTML += log +  '<br>';
-        battle_log_list = show_tail_log(battle_log_list,log);
-        createBattleLog();
-    }
-    // 戦闘処理時の表示メッセージ
-    else if (situation === 'attack'){
-        log = arguments[1].name + 'が' + arguments[2].name + 'を攻撃した！'
-        battleLog.innerHTML += log + '<br>';
-        battle_log_list = show_tail_log(battle_log_list,log);
-        createBattleLog();
-        let calculateDamage = arguments[1].atk - arguments[2].def;
-        if (calculateDamage < 0){
-            calculateDamage = 1;
-        }
-        log = arguments[2].name + 'に' + calculateDamage + 'ダメージ！';
-        battleLog.innerHTML += log + '<br>';
-        battle_log_list = show_tail_log(battle_log_list,log);
-        createBattleLog();
-    }
-
-    else if (situation === 'decision'){
-        log = arguments[1].name + 'はどうする？';
-        battleLog.innerHTML += log + '<br>';
-        battle_log_list = show_tail_log(battle_log_list,log);
-        createBattleLog();
-    }
-}
-
-function show_tail_log(log_list, log){
-    if (log_list.length < 4){
-        log_list.push(log);
-    }
-    else if(log_list.length === 4){
-        log_list.shift();
-        log_list.push(log);
-    }
-    return log_list;
-}
-
-function createBattleLog(){
-    txt_context.clearRect(0,0,480,360);
-    txt_context.font = "15px 'MS ゴシック'";
-    for(let i = 0; i < battle_log_list.length; i++){
-        txt_context.fillText(battle_log_list[i],125,290 + (i*20),300);
     }
 }
 
