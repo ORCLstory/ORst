@@ -227,7 +227,7 @@ function* battleSystem(){
         let i = 0;
         while (true){
             battlelog.decision(allyList[i]);
-            commandQueue.push({'player':allyList[i],'target':g_choice_current_enemy});
+            commandQueue.push({'player':allyList[i],'target':enemyList[g_choice_current_enemy]});
             yield 0;
             i++;
             if (i >= allyList.length){
@@ -237,7 +237,7 @@ function* battleSystem(){
 
         // 敵AIの攻撃対象選択
         for (let i = 0; i < enemyList.length; i++){
-            commandQueue.push({'player':enemyList[i],'target':Math.floor(Math.random() * 4)});
+            commandQueue.push({'player':enemyList[i],'target':allyList[Math.floor(Math.random() * allyList.length)]});
         }
 
         // コマンド入力終了時の処理
@@ -248,21 +248,27 @@ function* battleSystem(){
 
         // ここまで
         for(let i = 0; i < commandQueue.length; i++){
-            if (commandQueue[i].player.team === 'ally'){
-                battlelog.attack(commandQueue[i].player, enemyList[commandQueue[i].target], 1);
-                enemyList[commandQueue[i].target].hp -= 1;
-                yield 0;
-            }
-            else{
-                battlelog.attack(commandQueue[i].player, allyList[commandQueue[i].target], 1);
-                allyList[commandQueue[i].target].now_hp -= 1;
-                showStatus(allyList);
-                yield 0;
-            }
+            damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
+            battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
+            commandQueue[i].target.dealDamage = damage;
+            showStatus(allyList);
+            yield 0;
         }
+
         g_current_cursor = 'first_decision_place';
         drawFirstDicisionPlaceArrow(0);
     }
+}
+
+function calcurateDamage(attacker, defender){
+    let damage = (attacker.atk - defender.def);
+    if (damage <= 0){
+        damage = 1;
+    }
+    else {
+        damage += Math.floor(Math.random() * (damage / 2));
+    }
+    return damage;
 }
 
 var iterator = battleSystem();
