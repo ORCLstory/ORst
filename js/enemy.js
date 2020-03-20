@@ -2,6 +2,7 @@ class EnemyStatus{
     constructor(name){
         this.name = name;
         this.team = 'enemy';
+        this.status = [];
 
         if (this.name === 'スライム'){
             this.max_hp = 50;

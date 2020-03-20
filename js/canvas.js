@@ -220,6 +220,9 @@ function* battleSystem(){
     drawFightScene();
     battlelog.encount();
 
+
+
+
     while (true){
         let commandQueue = [];
 
@@ -247,7 +250,15 @@ function* battleSystem(){
         battle_log_list = [];
 
         // ここまで
+        // TODO:対象が選択不能な場合、対象を変える
+        //      プレイヤーが行動不能な場合、処理を行わず次のプレイヤーに行動させる
         for(let i = 0; i < commandQueue.length; i++){
+            if (commandQueue[i].player.status.some(status => status === 'dead')){
+                console.log(commandQueue[i]);
+                continue;
+            }else if(commandQueue[i].target.status.some(status => status === 'dead')){
+                // hoge
+            }
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
             battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
             commandQueue[i].target.dealDamage = damage;
