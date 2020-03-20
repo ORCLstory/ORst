@@ -37,4 +37,18 @@ class BattleLog{
         this.createBattleLog();
         this.deleteBattleLogList();
     }
+
+    defeat(){
+        this.addBattleLogList('パーティは全滅してしまった……。');
+        this.addBattleLogList('もう一度挑戦する場合はF5キーを押してね！');
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
+
+    victory(){
+        this.addBattleLogList('敵を全て倒した！');
+        this.addBattleLogList('もう一度挑戦する場合はF5キーを押してね！');
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
 }

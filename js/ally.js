@@ -2,7 +2,7 @@ class AllyStatus{
     constructor(name){
         this.name = name;
         this.team = 'ally';
-        this.status = [];
+        this.status = ['alive'];
 
         if (this.name === 'テオ'){
             this.max_hp = 25;
