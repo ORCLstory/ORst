@@ -129,7 +129,8 @@ function controller(e){
 
     else if (g_current_cursor === 'select_enemy'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
-        const NUMBER_OF_ENEMYS = 3
+        const NUMBER_OF_ENEMYS = 3;
+
         // Sキー
         if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
             g_choice_current_enemy++;
@@ -142,12 +143,12 @@ function controller(e){
         }
         // Dキーまたはエンターキー
         if (e.keyCode === 68 || e.keyCode === 13){
-            g_choice_current_enemy = 0;
             g_current_command_number = 0;
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
             iterator.next();
+            g_choice_current_enemy = 0;
         }
         // Aキー
         if (e.keyCode === 65){
@@ -185,7 +186,6 @@ function showStatus(ally_status_list){
     }
 }
 
-
 // 戦闘処理
 function* battleSystem(){
     const battlelog = new BattleLog();
@@ -197,9 +197,9 @@ function* battleSystem(){
     const alycia = new AllyStatus('アリシア');
 
     // 敵の情報を定義
-    const slime1 = new EnemyStatus('スライム');
-    const slime2 = new EnemyStatus('スライム');
-    const slime3 = new EnemyStatus('スライム');
+    const slime1 = new EnemyStatus('スライム1');
+    const slime2 = new EnemyStatus('スライム2');
+    const slime3 = new EnemyStatus('スライム3');
 
     // 味方の情報をリストに格納
     let allyList = [];
@@ -220,27 +220,41 @@ function* battleSystem(){
     drawFightScene();
     battlelog.encount();
 
-
-
-
     while (true){
         let commandQueue = [];
+
+        // 行動可能な味方をリストに格納
+        let actionableAllyList = allyList.filter(target => target.status.some(status => status === 'alive'));
+        // 行動可能な敵をリストに格納
+        let actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
+
+        // 全滅しているかどうかを判定
+        if (actionableAllyList.length === 0){
+            battlelog.defeat();
+            g_current_cursor = 'end';
+            yield 0;
+        }
+        else if (actionableEnemyList.length === 0){
+            battlelog.victory();
+            g_current_cursor = 'end';
+            yield 0;
+        }
 
         // 味方が攻撃対象を選択
         let i = 0;
         while (true){
-            battlelog.decision(allyList[i]);
-            commandQueue.push({'player':allyList[i],'target':enemyList[g_choice_current_enemy]});
+            battlelog.decision(actionableAllyList[i]);
             yield 0;
+            commandQueue.push({'player':actionableAllyList[i],'target':enemyList[g_choice_current_enemy]});
             i++;
-            if (i >= allyList.length){
+            if (i >= actionableAllyList.length){
                 break;
             }
         }
 
         // 敵AIの攻撃対象選択
-        for (let i = 0; i < enemyList.length; i++){
-            commandQueue.push({'player':enemyList[i],'target':allyList[Math.floor(Math.random() * allyList.length)]});
+        for (let i = 0; i < actionableEnemyList.length; i++){
+            commandQueue.push({'player':actionableEnemyList[i],'target':actionableAllyList[select_target(actionableAllyList)]});
         }
 
         // コマンド入力終了時の処理
@@ -249,16 +263,37 @@ function* battleSystem(){
         // battle_logを初期化
         battle_log_list = [];
 
-        // ここまで
-        // TODO:対象が選択不能な場合、対象を変える
-        //      プレイヤーが行動不能な場合、処理を行わず次のプレイヤーに行動させる
         for(let i = 0; i < commandQueue.length; i++){
+
+            // プレイヤーが行動不能な場合、処理を行わず次のプレイヤーに行動させる
             if (commandQueue[i].player.status.some(status => status === 'dead')){
-                console.log(commandQueue[i]);
                 continue;
+            // 対象が選択不能な場合、対象を変える
             }else if(commandQueue[i].target.status.some(status => status === 'dead')){
-                // hoge
+                console.log('変更前:', commandQueue[i].target);
+                if (commandQueue[i].player.team === 'ally'){
+                    actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
+                    commandQueue[i].target = actionableEnemyList[select_target(actionableEnemyList)];
+                }
+                else {
+                    actionableAllyList = allyList.filter(target => target.status.some(status => status === 'alive'));
+                    commandQueue[i].target = actionableAllyList[select_target(actionableAllyList)];
+                }
+                console.log('変更後:', commandQueue[i].target);
             }
+
+            // 全滅しているかどうかを判定
+            if (actionableAllyList.length === 0){
+                battlelog.defeat();
+                g_current_cursor = 'end';
+                yield 0;
+            }
+            else if (actionableEnemyList.length === 0){
+                battlelog.victory();
+                g_current_cursor = 'end';
+                yield 0;
+            }
+
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
             battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
             commandQueue[i].target.dealDamage = damage;
@@ -280,6 +315,10 @@ function calcurateDamage(attacker, defender){
         damage += Math.floor(Math.random() * (damage / 2));
     }
     return damage;
+}
+
+function select_target(targetList){
+    return Math.floor(Math.random() * targetList.length);
 }
 
 var iterator = battleSystem();
