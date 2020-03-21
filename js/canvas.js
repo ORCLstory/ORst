@@ -48,14 +48,6 @@ function drawFightScene(){
     for(let i = 0; i < 4; i++){
         bg_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
     }
-
-    // モンスターっぽい丸を生成する
-    createCircle(50, 120, 20);
-    createCircle(50, 170, 20);
-    createCircle(50, 220, 20);
-    for(let i = 0; i < 4; i++){
-        createCircle(430, 120 + (i * 40) ,15);
-    }
 }
 
 function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,angle){
@@ -215,10 +207,19 @@ function* battleSystem(){
     enemyList.push(slime1);
     enemyList.push(slime2);
     enemyList.push(slime3);
+    
+
+
 
     // エンカウント時の処理
     drawFightScene();
     battlelog.encount();
+    
+    //敵と味方を出す
+    //draw_character.ally(allyList);
+    let dc = new DrawCharacter();
+    dc.enemy(enemyList);
+    dc.ally(allyList);
 
     while (true){
         let commandQueue = [];
