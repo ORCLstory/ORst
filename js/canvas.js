@@ -305,8 +305,13 @@ function* battleSystem(){
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
-            battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
             commandQueue[i].target.dealDamage = damage;
+            if (commandQueue[i].target.status.some(status => status === 'dead')){
+                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+            }
+            else {
+                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
+            }
             showStatus(allyList);
             yield 0;
         }
