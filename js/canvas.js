@@ -17,9 +17,11 @@ const wp = new WindowProperty(480, 360);
 
 // 各種グローバル変数・定数置き場
 let g_current_cursor = 'first_decision_place';
-var g_arrow_position = 0;
-var g_choice_current_enemy  = 0;
+let g_arrow_position = 0;
+let g_choice_current_enemy  = 0;
 let g_current_command_number = 0;
+
+let g_draw_character_instance;
 
 function createWindow(x,y,w,h){
     bg_context.beginPath();
@@ -123,16 +125,18 @@ function controller(e){
     }
 
     else if (g_current_cursor === 'select_enemy'){
-        // const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
+        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
         let NUMBER_OF_ENEMYS = 3;
 
         // Sキー
         if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
+            console.log(g_draw_character_instance);
             g_choice_current_enemy++;
-            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
+            drawEnemyArrow(g_draw_character_instance.points[g_choice_current_enemy]);
         }
         // Wキー
         if (g_choice_current_enemy > 0 && e.keyCode === 87){
+            console.log(g_draw_character_instance);
             g_choice_current_enemy--;
             drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
@@ -216,10 +220,9 @@ function* battleSystem(){
     battlelog.encount();
 
     //敵と味方を出す
-    //draw_character.ally(allyList);
-    let dc = new DrawCharacter();
-    dc.enemy(enemyList);
-    dc.ally(allyList);
+    g_draw_character_instance = new DrawCharacter();
+    g_draw_character_instance.enemy(enemyList);
+    g_draw_character_instance.ally(allyList);
 
     while (true){
         let commandQueue = [];
@@ -297,8 +300,8 @@ function* battleSystem(){
 
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
-            dc.enemy(actionableEnemyList);
-            dc.ally(allyList);
+            g_draw_character_instance.enemy(actionableEnemyList);
+            g_draw_character_instance.ally(allyList);
             battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
             commandQueue[i].target.dealDamage = damage;
             showStatus(allyList);

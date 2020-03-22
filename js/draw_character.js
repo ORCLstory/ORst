@@ -1,5 +1,6 @@
 class DrawCharacter{
     constructor(){
+        this.points = [];
     }
 
     enemy(enemyList){
