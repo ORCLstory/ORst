@@ -80,10 +80,10 @@ function drawFirstDicisionPlaceArrow(height){
     createTriangle(5, 280 + height, 10, 'right');
 }
 
-function drawEnemyArrow(height){
+function drawEnemyArrow(width, height){
     // TODO:マジックナンバーを消す
     gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-    createTriangle(90, 112 + height, 10, 'left');
+    createTriangle(width + 40, height - 5, 10, 'left');
 }
 
 document.addEventListener('keydown',controller);
@@ -108,7 +108,8 @@ function controller(e){
             if (g_current_command_number === 0){
                 g_current_cursor = 'select_enemy';
                 gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-                drawEnemyArrow(0);
+                let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+                drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
             }
             if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
@@ -126,19 +127,21 @@ function controller(e){
 
     else if (g_current_cursor === 'select_enemy'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
-        let NUMBER_OF_ENEMYS = 3;
+        let NUMBER_OF_ENEMYS = g_draw_character_instance.enemy_points.length;
 
         // Sキー
         if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
             console.log(g_draw_character_instance);
             g_choice_current_enemy++;
-            drawEnemyArrow(g_draw_character_instance.points[g_choice_current_enemy]);
+            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Wキー
         if (g_choice_current_enemy > 0 && e.keyCode === 87){
             console.log(g_draw_character_instance);
             g_choice_current_enemy--;
-            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
+            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Dキーまたはエンターキー
         if (e.keyCode === 68 || e.keyCode === 13){
@@ -302,7 +305,7 @@ function* battleSystem(){
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
-            battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
+            battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
             commandQueue[i].target.dealDamage = damage;
             showStatus(allyList);
             yield 0;
