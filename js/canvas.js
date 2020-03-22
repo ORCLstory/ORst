@@ -8,9 +8,12 @@ let gc_canvas = document.getElementById('game-cursor-layer'),
 let txt_canvas = document.getElementById('text-layer'),
     txt_context = txt_canvas.getContext('2d');
 
+let character_canvas = document.getElementById('character-layer'),
+    character_context = character_canvas.getContext('2d');
+
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
-const wp = new windowProperty(480, 360);
+const wp = new WindowProperty(480, 360);
 
 // 各種グローバル変数・定数置き場
 let g_current_cursor = 'first_decision_place';
@@ -25,9 +28,9 @@ function createWindow(x,y,w,h){
 }
 
 function createCircle(x, y, radius){
-    bg_context.beginPath();
-    bg_context.arc(x, y, radius, 0, 2 * Math.PI,true);
-    bg_context.stroke();
+    character_context.beginPath();
+    character_context.arc(x, y, radius, 0, 2 * Math.PI,true);
+    character_context.stroke();
 }
 
 function drawFightScene(){
@@ -120,8 +123,8 @@ function controller(e){
     }
 
     else if (g_current_cursor === 'select_enemy'){
-        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
-        const NUMBER_OF_ENEMYS = 3;
+        // const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
+        let NUMBER_OF_ENEMYS = 3;
 
         // Sキー
         if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
@@ -207,14 +210,11 @@ function* battleSystem(){
     enemyList.push(slime1);
     enemyList.push(slime2);
     enemyList.push(slime3);
-    
-
-
 
     // エンカウント時の処理
     drawFightScene();
     battlelog.encount();
-    
+
     //敵と味方を出す
     //draw_character.ally(allyList);
     let dc = new DrawCharacter();
@@ -296,6 +296,9 @@ function* battleSystem(){
             }
 
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
+            actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
+            dc.enemy(actionableEnemyList);
+            dc.ally(allyList);
             battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
             commandQueue[i].target.dealDamage = damage;
             showStatus(allyList);

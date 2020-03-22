@@ -1,14 +1,10 @@
-function createWindow(x,y,w,h){
-    bg_context.beginPath();
-    bg_context.rect(x, y, w, h);
-    bg_context.stroke();
-}
 class DrawCharacter{
     constructor(){
     }
 
     enemy(enemyList){
         const dcp = new DrawCharacterProperty();
+        character_context.clearRect(0, 0, character_canvas.width, character_canvas.height);
         let points = dcp.drawEnemyCoordinate(enemyList.length);
         for(let i = 0; i < enemyList.length; i++){
             createCircle(points[i]["x"],points[i]["y"], 20);
