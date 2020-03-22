@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/layer.css">
-    <title>CanvasTest</title>
+    <title>OracleStory</title>
     </head>
     <body>
         <div id="stage">
             <canvas id='background-layer' width='768' height='432'></canvas>
             <canvas id='game-cursor-layer' width='768' height='432'></canvas>
             <canvas id='text-layer' width='768' height='432'></canvas>
+            <canvas id='character-layer' width='768' height='432'></canvas>            
         </div>
         <p id='debug'></p>
         <p id='battleLog'></p>
         <script src='js/property.js'></script>
+        <script src='js/draw_character.js'></script>
         <script src='js/battlelog.js'></script>
         <script src='js/ally.js'></script>
         <script src='js/enemy.js'></script>

@@ -8,15 +8,20 @@ let gc_canvas = document.getElementById('game-cursor-layer'),
 let txt_canvas = document.getElementById('text-layer'),
     txt_context = txt_canvas.getContext('2d');
 
+let character_canvas = document.getElementById('character-layer'),
+    character_context = character_canvas.getContext('2d');
+
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
-const wp = new windowProperty(480, 360);
+const wp = new WindowProperty(480, 360);
 
 // 各種グローバル変数・定数置き場
 let g_current_cursor = 'first_decision_place';
-var g_arrow_position = 0;
-var g_choice_current_enemy  = 0;
+let g_arrow_position = 0;
+let g_choice_current_enemy  = 0;
 let g_current_command_number = 0;
+
+let g_draw_character_instance;
 
 function createWindow(x,y,w,h){
     bg_context.beginPath();
@@ -25,9 +30,9 @@ function createWindow(x,y,w,h){
 }
 
 function createCircle(x, y, radius){
-    bg_context.beginPath();
-    bg_context.arc(x, y, radius, 0, 2 * Math.PI,true);
-    bg_context.stroke();
+    character_context.beginPath();
+    character_context.arc(x, y, radius, 0, 2 * Math.PI,true);
+    character_context.stroke();
 }
 
 function drawFightScene(){
@@ -47,14 +52,6 @@ function drawFightScene(){
     // 戦闘コマンド表示
     for(let i = 0; i < 4; i++){
         bg_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
-    }
-
-    // モンスターっぽい丸を生成する
-    createCircle(50, 120, 20);
-    createCircle(50, 170, 20);
-    createCircle(50, 220, 20);
-    for(let i = 0; i < 4; i++){
-        createCircle(430, 120 + (i * 40) ,15);
     }
 }
 
@@ -83,10 +80,10 @@ function drawFirstDicisionPlaceArrow(height){
     createTriangle(5, 280 + height, 10, 'right');
 }
 
-function drawEnemyArrow(height){
+function drawEnemyArrow(width, height){
     // TODO:マジックナンバーを消す
     gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-    createTriangle(90, 112 + height, 10, 'left');
+    createTriangle(width + 40, height - 5, 10, 'left');
 }
 
 document.addEventListener('keydown',controller);
@@ -111,7 +108,8 @@ function controller(e){
             if (g_current_command_number === 0){
                 g_current_cursor = 'select_enemy';
                 gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-                drawEnemyArrow(0);
+                let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+                drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
             }
             if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
@@ -129,17 +127,21 @@ function controller(e){
 
     else if (g_current_cursor === 'select_enemy'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
-        const NUMBER_OF_ENEMYS = 3;
+        let NUMBER_OF_ENEMYS = g_draw_character_instance.enemy_points.length;
 
         // Sキー
         if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
+            console.log(g_draw_character_instance);
             g_choice_current_enemy++;
-            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
+            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Wキー
         if (g_choice_current_enemy > 0 && e.keyCode === 87){
+            console.log(g_draw_character_instance);
             g_choice_current_enemy--;
-            drawEnemyArrow(g_choice_current_enemy * INTERVALS_OF_ARROW_ROW_HEIGHT);
+            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Dキーまたはエンターキー
         if (e.keyCode === 68 || e.keyCode === 13){
@@ -220,6 +222,11 @@ function* battleSystem(){
     drawFightScene();
     battlelog.encount();
 
+    //敵と味方を出す
+    g_draw_character_instance = new DrawCharacter();
+    g_draw_character_instance.enemy(enemyList);
+    g_draw_character_instance.ally(allyList);
+
     while (true){
         let commandQueue = [];
 
@@ -295,8 +302,16 @@ function* battleSystem(){
             }
 
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
-            battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage);
+            actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
+            g_draw_character_instance.enemy(actionableEnemyList);
+            g_draw_character_instance.ally(allyList);
             commandQueue[i].target.dealDamage = damage;
+            if (commandQueue[i].target.status.some(status => status === 'dead')){
+                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+            }
+            else {
+                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
+            }
             showStatus(allyList);
             yield 0;
         }
