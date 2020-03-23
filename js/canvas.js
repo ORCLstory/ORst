@@ -126,6 +126,7 @@ function controller(e){
         // Aキー
         if (e.keyCode === key_config.left || e.keyCode === key_config.back){
             g_current_select_character--;
+            iterator.next();
         }
 
 
@@ -156,6 +157,8 @@ function controller(e){
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
+            //tmp
+            g_current_select_character++;
             iterator.next();
             g_choice_current_enemy = 0;
         }
@@ -254,18 +257,26 @@ function* battleSystem(){
             yield 0;
         }
 
+        g_current_select_character = 0;
         // 味方が攻撃対象を選択
         while (true){
             battlelog.decision(actionableAllyList[g_current_select_character]);
-            console.log(g_current_select_character);
+            let current_select_character = g_current_select_character;
             yield 0;
-            commandQueue.push({'player':actionableAllyList[g_current_select_character],'target':enemyList[g_choice_current_enemy]});
-            g_current_select_character++;
+            // もし増えてたら決定してるよ
+            if (current_select_character < g_current_select_character){
+                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[g_choice_current_enemy]});
+            }
+            // もし増えてたら決定してるよ
+            else if ( current_select_character > g_current_select_character) {
+                commandQueue.pop();
+            }
             if (g_current_select_character >= actionableAllyList.length){
-                g_current_select_character = 0;
+                console.log(g_current_select_character);
                 break;
             }
         }
+        console.log(commandQueue);
 
         // 敵AIの攻撃対象選択
         for (let i = 0; i < actionableEnemyList.length; i++){
