@@ -72,5 +72,6 @@ class KeyConfig{
         this.right = 68;
         this.left  = 65;
         this.enter = 13;
+        this.back = 88;
     }
 }

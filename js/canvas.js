@@ -20,6 +20,7 @@ let g_current_cursor = 'first_decision_place';
 let g_arrow_position = 0;
 let g_choice_current_enemy  = 0;
 let g_current_command_number = 0;
+let g_current_select_character = 0;
 
 let g_draw_character_instance;
 
@@ -122,6 +123,11 @@ function controller(e){
                 console.log("多分、逃げられるよ");
             }
         }
+        // Aキー
+        if (e.keyCode === key_config.left || e.keyCode === key_config.back){
+            g_current_select_character--;
+        }
+
 
         g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
@@ -154,7 +160,7 @@ function controller(e){
             g_choice_current_enemy = 0;
         }
         // Aキー
-        if (e.keyCode === key_config.left){
+        if (e.keyCode === key_config.left || e.keyCode === key_config.back){
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
@@ -249,13 +255,14 @@ function* battleSystem(){
         }
 
         // 味方が攻撃対象を選択
-        let i = 0;
         while (true){
-            battlelog.decision(actionableAllyList[i]);
+            battlelog.decision(actionableAllyList[g_current_select_character]);
+            console.log(g_current_select_character);
             yield 0;
-            commandQueue.push({'player':actionableAllyList[i],'target':enemyList[g_choice_current_enemy]});
-            i++;
-            if (i >= actionableAllyList.length){
+            commandQueue.push({'player':actionableAllyList[g_current_select_character],'target':enemyList[g_choice_current_enemy]});
+            g_current_select_character++;
+            if (g_current_select_character >= actionableAllyList.length){
+                g_current_select_character = 0;
                 break;
             }
         }
