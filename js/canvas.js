@@ -308,18 +308,6 @@ function* battleSystem(){
                 console.log('変更後:', commandQueue[i].target);
             }
 
-            // 全滅しているかどうかを判定
-            if (actionableAllyList.length === 0){
-                battlelog.defeat();
-                g_current_cursor = 'end';
-                yield 0;
-            }
-            else if (actionableEnemyList.length === 0){
-                battlelog.victory();
-                g_current_cursor = 'end';
-                yield 0;
-            }
-
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
@@ -332,6 +320,22 @@ function* battleSystem(){
                 battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
             }
             showStatus(allyList);
+            actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
+            g_draw_character_instance.enemy(actionableEnemyList);
+            g_draw_character_instance.ally(allyList);
+            
+            // 全滅しているかどうかを判定
+            if (actionableAllyList.length === 0){
+                battlelog.defeat();
+                g_current_cursor = 'end';
+                yield 0;
+            }
+            else if (actionableEnemyList.length === 0){
+                battlelog.victory();
+                g_current_cursor = 'end';
+                yield 0;
+            }
+
             yield 0;
         }
 
