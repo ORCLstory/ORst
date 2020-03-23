@@ -90,21 +90,22 @@ document.addEventListener('keydown',controller);
 
 
 function controller(e){
+    const key_config = new KeyConfig();
     let g_log = document.getElementById('debug');
     if (g_current_cursor === 'first_decision_place'){
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
         // Sキー
-        if (g_current_command_number < 3 &&  e.keyCode === 83){
+        if (g_current_command_number < 3 &&  e.keyCode === key_config.down){
             g_current_command_number++;
             drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
-        if (g_current_command_number > 0 && e.keyCode === 87){
+        if (g_current_command_number > 0 && e.keyCode === key_config.up){
             g_current_command_number--;
             drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキーまたはエンターキー
-        if (e.keyCode === 68 || e.keyCode === 13){
+        if (e.keyCode === key_config.right || e.keyCode === key_config.enter){
             if (g_current_command_number === 0){
                 g_current_cursor = 'select_enemy';
                 gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -130,21 +131,21 @@ function controller(e){
         let NUMBER_OF_ENEMYS = g_draw_character_instance.enemy_points.length;
 
         // Sキー
-        if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === 83){
+        if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === key_config.down){
             console.log(g_draw_character_instance);
             g_choice_current_enemy++;
             let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
             drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Wキー
-        if (g_choice_current_enemy > 0 && e.keyCode === 87){
+        if (g_choice_current_enemy > 0 && e.keyCode === key_config.up){
             console.log(g_draw_character_instance);
             g_choice_current_enemy--;
             let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
             drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // Dキーまたはエンターキー
-        if (e.keyCode === 68 || e.keyCode === 13){
+        if (e.keyCode === key_config.right || e.keyCode === key_config.enter){
             g_current_command_number = 0;
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -153,14 +154,14 @@ function controller(e){
             g_choice_current_enemy = 0;
         }
         // Aキー
-        if (e.keyCode === 65){
+        if (e.keyCode === key_config.left){
             g_current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
         }
     }
     else if (g_current_cursor === 'read_message'){
-        if (e.keyCode === 83 || e.keyCode === 13){
+        if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
             iterator.next();
         }
     }

@@ -65,3 +65,12 @@ class DrawCharacterProperty{
         }
     }
 }
+class KeyConfig{
+    constructor(){
+        this.up    = 87;
+        this.down  = 83;
+        this.right = 68;
+        this.left  = 65;
+        this.enter = 13;
+    }
+}
