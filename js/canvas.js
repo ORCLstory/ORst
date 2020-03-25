@@ -21,8 +21,11 @@ let g_arrow_position = 0;
 let g_choice_current_enemy  = 0;
 let g_current_command_number = 0;
 let g_current_select_character = 0;
+let g_current_select_magic = 0;
 
 let g_draw_character_instance;
+
+let magic = new Magic();
 
 function createWindow(x,y,w,h){
     bg_context.beginPath();
@@ -76,15 +79,20 @@ function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,an
     gc_context.stroke();
 }
 
+// TODO:マジックナンバーを消す
 function drawFirstDicisionPlaceArrow(height){
     gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
     createTriangle(5, 280 + height, 10, 'right');
 }
 
 function drawEnemyArrow(width, height){
-    // TODO:マジックナンバーを消す
     gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
     createTriangle(width + 40, height - 5, 10, 'left');
+}
+
+function drawMagicArrow(width, height){
+    gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    createTriangle(width + 125, height + 280, 10, 'right');
 }
 
 document.addEventListener('keydown',controller);
@@ -115,6 +123,8 @@ function controller(e){
             }
             if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
+                g_current_cursor = 'select_magic';
+                drawMagicArrow(0,0);
                 viewMagicList();
             }
             if (g_current_command_number === 2){
@@ -135,7 +145,6 @@ function controller(e){
     }
 
     else if (g_current_cursor === 'select_enemy'){
-        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.138);
         let NUMBER_OF_ENEMYS = g_draw_character_instance.enemy_points.length;
 
         // Sキー
@@ -170,6 +179,27 @@ function controller(e){
             drawFirstDicisionPlaceArrow(0);
         }
     }
+
+    else if (g_current_cursor === 'select_magic') {
+        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.05);
+        const NUMBER_OF_MAGIC = magic.allMagicList.length;
+
+        // 下
+        if (g_current_select_magic < NUMBER_OF_MAGIC - 1 && e.keyCode === key_config.down){
+            g_current_select_magic++;
+            console.log(g_current_select_magic);
+            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * g_current_select_magic);
+        }
+
+        // 上
+        if (g_current_select_magic > 0 && e.keyCode === key_config.up){
+            g_current_select_magic--;
+            console.log(g_current_select_magic);
+            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * g_current_select_magic);
+        }
+
+    }
+
     else if (g_current_cursor === 'read_message'){
         if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
             iterator.next();
@@ -207,9 +237,8 @@ function showStatus(ally_status_list){
 function viewMagicList(){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
-    let magic = new Magic();
     for(let i = 0; i < magic.allMagicList.length; i++){
-        txt_context.fillText(this.magic.allMagicList[i],125,290 + (i*20),300);
+        txt_context.fillText(magic.allMagicList[i].name,140,290 + (i*20),300);
     }
 
 }
