@@ -11,6 +11,8 @@ class EnemyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
+            this.emp = 0; // element magic power
+            this.hmp = 0; // heal magic power
             this.lv = 1;
         }
 
@@ -21,6 +23,8 @@ class EnemyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
+            this.emp = 0; // element magic power
+            this.hmp = 0; // heal magic power
             this.lv = 1;
         }
 
@@ -31,6 +35,8 @@ class EnemyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
+            this.emp = 0; // element magic power
+            this.hmp = 0; // heal magic power
             this.lv = 1;
         }
 
@@ -41,6 +47,8 @@ class EnemyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
+            this.emp = 0; // element magic power
+            this.hmp = 0; // heal magic power
             this.lv = 1;
         }
         this.now_hp = this.max_hp;
