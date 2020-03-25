@@ -7,29 +7,37 @@ class AllyStatus{
         if (this.name === 'テオ'){
             this.max_hp = 25;
             this.max_mp = 20;
-            this.atk = 15;
-            this.def = 5;
+            this.pad = 15; // phisycal attack damage
+            this.par = 5; // phisycal attack resist
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
         else if (this.name === 'グラール'){
             this.max_hp = 30;
             this.max_mp = 10;
-            this.atk = 20;
-            this.def = 10;
+            this.pad = 20;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
         else if (this.name === 'リン'){
             this.max_hp = 25;
             this.max_mp = 20;
-            this.atk = 5;
-            this.def = 10;
+            this.pad = 5;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
         else if (this.name === 'アリシア'){
             this.max_hp = 25;
             this.max_mp = 20;
-            this.atk = 5;
-            this.def = 5;
+            this.pad = 5;
+            this.par = 5;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
         this.now_hp = this.max_hp;

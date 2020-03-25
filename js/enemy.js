@@ -7,32 +7,40 @@ class EnemyStatus{
         if (this.name === 'スライム1'){
             this.max_hp = 50;
             this.max_mp = 0;
-            this.atk = 15;
-            this.def = 10;
+            this.pad = 15;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
 
         if (this.name === 'スライム2'){
             this.max_hp = 50;
             this.max_mp = 0;
-            this.atk = 15;
-            this.def = 10;
+            this.pad = 15;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
 
         if (this.name === 'スライム3'){
             this.max_hp = 50;
             this.max_mp = 0;
-            this.atk = 15;
-            this.def = 10;
+            this.pad = 15;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
 
         else if (this.name === 'ザコえもん'){
             this.max_hp = 40;
             this.max_mp = 10;
-            this.atk = 15;
-            this.def = 10;
+            this.pad = 15;
+            this.par = 10;
+            this.mad = 0; // magical attack damage
+            this.mar = 0; // magical attack resist
             this.lv = 1;
         }
         this.now_hp = this.max_hp;

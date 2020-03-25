@@ -391,7 +391,7 @@ function* battleSystem(){
 }
 
 function calcurateDamage(attacker, defender){
-    let damage = (attacker.atk - defender.def);
+    let damage = (attacker.pad + attacker.lv * 2 - defender.par);
     if (damage <= 0){
         damage = 1;
     }
