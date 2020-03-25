@@ -115,6 +115,7 @@ function controller(e){
             }
             if (g_current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
+                viewMagicList();
             }
             if (g_current_command_number === 2){
                 console.log("多分、道具の画面にいくよ");
@@ -200,6 +201,17 @@ function showStatus(ally_status_list){
             }
         }
     }
+}
+
+
+function viewMagicList(){
+    txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
+    txt_context.font = "15px 'MS ゴシック'";
+    let magic = new Magic();
+    for(let i = 0; i < magic.allMagicList.length; i++){
+        txt_context.fillText(this.magic.allMagicList[i],125,290 + (i*20),300);
+    }
+
 }
 
 // 戦闘処理
