@@ -193,7 +193,11 @@ function showStatus(ally_status_list){
     const STATUS_LIST = ['name','HP','MP','Lv'];
     for(let i = 0; i < 4; i++){
         for(let j = 0; j < 4; j++){
-            txt_context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]], wp.start_status_row.x + (i * wp.status_window.w), wp.start_status_row.y +  j * wp.intervals_of_status_row_height, wp.status_window.w);
+            if(j === 0){
+                txt_context.fillText(status_content[i][STATUS_LIST[j]], wp.start_status_row.x + (i * wp.status_window.w), wp.start_status_row.y +  j * wp.intervals_of_status_row_height, wp.status_window.w);
+            }else{
+                txt_context.fillText(STATUS_LIST[j]+ ':' + status_content[i][STATUS_LIST[j]], wp.start_status_row.x + (i * wp.status_window.w), wp.start_status_row.y +  j * wp.intervals_of_status_row_height, wp.status_window.w);
+            }
         }
     }
 }
