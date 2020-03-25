@@ -320,10 +320,11 @@ function* battleSystem(){
                 battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
             }
             showStatus(allyList);
+            actionableAllyList = allyList.filter(target => target.status.some(status => status === 'alive'));
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
-            
+
             // 全滅しているかどうかを判定
             if (actionableAllyList.length === 0){
                 battlelog.defeat();
