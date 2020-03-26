@@ -14,6 +14,8 @@ let character_canvas = document.getElementById('character-layer'),
 // 今回は画面を3:4として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 const wp = new WindowProperty(480, 360);
+const battlelog = new BattleLog();
+let magic = new Magic();
 
 // 各種グローバル変数・定数置き場
 let g_current_cursor = 'first_decision_place';
@@ -24,8 +26,18 @@ let g_current_select_character = 0;
 let g_current_select_magic = 0;
 
 let g_draw_character_instance;
+// 味方の情報を定義
+const teo = new AllyStatus('テオ');
+const graal = new AllyStatus('グラール');
+const lin = new AllyStatus('リン');
+const alycia = new AllyStatus('アリシア');
 
-let magic = new Magic();
+let allyList = [];
+allyList.push(teo);
+allyList.push(graal);
+allyList.push(lin);
+allyList.push(alycia);
+
 
 function createWindow(x,y,w,h){
     bg_context.beginPath();
@@ -101,8 +113,8 @@ document.addEventListener('keydown',controller);
 function controller(e){
     const key_config = new KeyConfig();
     let g_log = document.getElementById('debug');
+    const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
     if (g_current_cursor === 'first_decision_place'){
-        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
         // Sキー
         if (g_current_command_number < 3 &&  e.keyCode === key_config.down){
             g_current_command_number++;
@@ -198,6 +210,12 @@ function controller(e){
             drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * g_current_select_magic);
         }
 
+        if (e.keyCode === key_config.back){
+            g_current_cursor = 'first_decision_place';
+            drawFirstDicisionPlaceArrow(INTERVALS_OF_ARROW_ROW_HEIGHT * 1);
+            battlelog.decision(allyList[g_current_select_character]);
+        }
+
     }
 
     else if (g_current_cursor === 'read_message'){
@@ -245,13 +263,7 @@ function viewMagicList(){
 
 // 戦闘処理
 function* battleSystem(){
-    const battlelog = new BattleLog();
 
-    // 味方の情報を定義
-    const teo = new AllyStatus('テオ');
-    const graal = new AllyStatus('グラール');
-    const lin = new AllyStatus('リン');
-    const alycia = new AllyStatus('アリシア');
 
     // 敵の情報を定義
     const slime1 = new EnemyStatus('スライム1');
@@ -259,11 +271,6 @@ function* battleSystem(){
     const slime3 = new EnemyStatus('スライム3');
 
     // 味方の情報をリストに格納
-    let allyList = [];
-    allyList.push(teo);
-    allyList.push(graal);
-    allyList.push(lin);
-    allyList.push(alycia);
     // tmp
     showStatus(allyList);
 
