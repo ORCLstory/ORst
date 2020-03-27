@@ -15,15 +15,8 @@ let character_canvas = document.getElementById('character-layer'),
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 const wp = new WindowProperty(480, 360);
 const battlelog = new BattleLog();
+const cursor = new Cursor();
 let magic = new Magic();
-
-// 各種グローバル変数・定数置き場
-let g_current_cursor = 'first_decision_place';
-let g_arrow_position = 0;
-let g_choice_current_enemy  = 0;
-let g_current_command_number = 0;
-let g_current_select_character = 0;
-let g_current_select_magic = 0;
 
 let g_draw_character_instance;
 // 味方の情報を定義
@@ -114,117 +107,114 @@ function controller(e){
     const key_config = new KeyConfig();
     let g_log = document.getElementById('debug');
     const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
-    if (g_current_cursor === 'first_decision_place'){
+    if (cursor.current_cursor === 'first_decision_place'){
         // Sキー
-        if (g_current_command_number < 3 &&  e.keyCode === key_config.down){
-            g_current_command_number++;
-            drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
+        if (cursor.current_command_number < 3 &&  e.keyCode === key_config.down){
+            cursor.current_command_number++;
+            drawFirstDicisionPlaceArrow(cursor.current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Wキー
-        if (g_current_command_number > 0 && e.keyCode === key_config.up){
-            g_current_command_number--;
-            drawFirstDicisionPlaceArrow(g_current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
+        if (cursor.current_command_number > 0 && e.keyCode === key_config.up){
+            cursor.current_command_number--;
+            drawFirstDicisionPlaceArrow(cursor.current_command_number * INTERVALS_OF_ARROW_ROW_HEIGHT);
         }
         // Dキーまたはエンターキー
         if (e.keyCode === key_config.right || e.keyCode === key_config.enter){
-            if (g_current_command_number === 0){
-                g_current_cursor = 'select_enemy';
+            if (cursor.current_command_number === 0){
+                cursor.current_cursor = 'select_enemy';
                 gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-                let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+                let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
                 drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
             }
-            if (g_current_command_number === 1){
+            if (cursor.current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
-                g_current_cursor = 'select_magic';
+                cursor.current_cursor = 'select_magic';
                 drawMagicArrow(0,0);
                 viewMagicList();
             }
-            if (g_current_command_number === 2){
+            if (cursor.current_command_number === 2){
                 console.log("多分、道具の画面にいくよ");
             }
-            if (g_current_command_number === 3){
+            if (cursor.current_command_number === 3){
                 console.log("多分、逃げられるよ");
             }
         }
         // Aキー
         if (e.keyCode === key_config.left || e.keyCode === key_config.back){
-            g_current_select_character--;
+            cursor.current_select_character--;
             iterator.next();
         }
-
-
-        g_log.innerHTML = 'g_arrow_position: ' + g_arrow_position + '<br>g_current_command_number: ' + g_current_command_number;
     }
 
-    else if (g_current_cursor === 'select_enemy'){
+    else if (cursor.current_cursor === 'select_enemy'){
         let NUMBER_OF_ENEMYS = g_draw_character_instance.enemy_points.length;
 
         // 下キー
-        if (g_choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === key_config.down){
+        if (cursor.choice_current_enemy < NUMBER_OF_ENEMYS - 1 && e.keyCode === key_config.down){
             console.log(g_draw_character_instance);
-            g_choice_current_enemy++;
-            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            cursor.choice_current_enemy++;
+            let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
             drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // 上キー
-        if (g_choice_current_enemy > 0 && e.keyCode === key_config.up){
+        if (cursor.choice_current_enemy > 0 && e.keyCode === key_config.up){
             console.log(g_draw_character_instance);
-            g_choice_current_enemy--;
-            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            cursor.choice_current_enemy--;
+            let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
             drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
         }
         // 決定キー
         if (e.keyCode === key_config.enter){
-            g_current_command_number = 0;
-            g_current_cursor = 'first_decision_place';
+            cursor.current_command_number = 0;
+            cursor.current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
             //tmp
-            g_current_select_character++;
+            cursor.current_select_character++;
             iterator.next();
-            g_choice_current_enemy = 0;
+            cursor.choice_current_enemy = 0;
         }
         // キャンセルキー
         if (e.keyCode === key_config.back){
-            g_current_cursor = 'first_decision_place';
+            cursor.current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
-            battlelog.decision(allyList[g_current_select_character]);
+            battlelog.decision(allyList[cursor.current_select_character]);
         }
     }
 
-    else if (g_current_cursor === 'select_magic') {
+    else if (cursor.current_cursor === 'select_magic') {
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.05);
         const NUMBER_OF_MAGIC = magic.allMagicList.length;
         // 下キー
-        if (g_current_select_magic < NUMBER_OF_MAGIC - 1 && e.keyCode === key_config.down){
-            g_current_select_magic++;
-            console.log(g_current_select_magic);
-            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * g_current_select_magic);
+        if (cursor.current_select_magic < NUMBER_OF_MAGIC - 1 && e.keyCode === key_config.down){
+            cursor.current_select_magic++;
+            console.log(cursor.current_select_magic);
+            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
         }
         // 上キー
-        if (g_current_select_magic > 0 && e.keyCode === key_config.up){
-            g_current_select_magic--;
-            console.log(g_current_select_magic);
-            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * g_current_select_magic);
+        if (cursor.current_select_magic > 0 && e.keyCode === key_config.up){
+            cursor.current_select_magic--;
+            console.log(cursor.current_select_magic);
+            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
         }
         // キャンセルキー
         if (e.keyCode === key_config.back){
-            g_current_cursor = 'first_decision_place';
+            cursor.current_cursor = 'first_decision_place';
             drawFirstDicisionPlaceArrow(INTERVALS_OF_ARROW_ROW_HEIGHT * 1);
-            battlelog.decision(allyList[g_current_select_character]);
-            g_current_select_magic = 0;
+            battlelog.decision(allyList[cursor.current_select_character]);
+            cursor.current_select_magic = 0;
         }
         // 決定キー
         if (e.keyCode === key_config.enter){
-            g_current_cursor = 'select_enemy';
-            let current_enemy_points = g_draw_character_instance.enemy_points[g_choice_current_enemy];
+            cursor.current_cursor = 'select_enemy';
+            let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
             drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
 
         }
     }
 
-    else if (g_current_cursor === 'read_message'){
+    else if (cursor.current_cursor === 'read_message'){
         if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
             iterator.next();
         }
@@ -306,31 +296,31 @@ function* battleSystem(){
         // 全滅しているかどうかを判定
         if (actionableAllyList.length === 0){
             battlelog.defeat();
-            g_current_cursor = 'end';
+            cursor.current_cursor = 'end';
             yield 0;
         }
         else if (actionableEnemyList.length === 0){
             battlelog.victory();
-            g_current_cursor = 'end';
+            cursor.current_cursor = 'end';
             yield 0;
         }
 
-        g_current_select_character = 0;
+        cursor.current_select_character = 0;
         // 味方が攻撃対象を選択
         while (true){
-            battlelog.decision(actionableAllyList[g_current_select_character]);
-            let current_select_character = g_current_select_character;
+            battlelog.decision(actionableAllyList[cursor.current_select_character]);
+            let current_select_character = cursor.current_select_character;
             yield 0;
             // もし増えてたら決定してるよ
-            if (current_select_character < g_current_select_character){
-                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[g_choice_current_enemy]});
+            if (current_select_character < cursor.current_select_character){
+                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy]});
             }
             // もし増えてたら決定してるよ
-            else if ( current_select_character > g_current_select_character) {
+            else if ( current_select_character > cursor.current_select_character) {
                 commandQueue.pop();
             }
-            if (g_current_select_character >= actionableAllyList.length){
-                console.log(g_current_select_character);
+            if (cursor.current_select_character >= actionableAllyList.length){
+                console.log(cursor.current_select_character);
                 break;
             }
         }
@@ -343,7 +333,7 @@ function* battleSystem(){
 
         // コマンド入力終了時の処理
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-        g_current_cursor = 'read_message';
+        cursor.current_cursor = 'read_message';
         // battle_logを初期化
         battle_log_list = [];
 
@@ -386,19 +376,19 @@ function* battleSystem(){
             // 全滅しているかどうかを判定
             if (actionableAllyList.length === 0){
                 battlelog.defeat();
-                g_current_cursor = 'end';
+                cursor.current_cursor = 'end';
                 yield 0;
             }
             else if (actionableEnemyList.length === 0){
                 battlelog.victory();
-                g_current_cursor = 'end';
+                cursor.current_cursor = 'end';
                 yield 0;
             }
 
             yield 0;
         }
 
-        g_current_cursor = 'first_decision_place';
+        cursor.current_cursor = 'first_decision_place';
         drawFirstDicisionPlaceArrow(0);
     }
 }
