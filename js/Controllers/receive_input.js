@@ -81,13 +81,17 @@ function controller(e){
     }
 
     else if (cursor.current_cursor === 'select_magic') {
-        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.05);
+        const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.081);
         const NUMBER_OF_MAGIC = magic.allMagicList.length;
         // 下キー
-        if (cursor.current_select_magic < NUMBER_OF_MAGIC - 1 && e.keyCode === key_config.down){
-            cursor.current_select_magic++;
-            console.log(cursor.current_select_magic);
-            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
+        if (e.keyCode === key_config.down){
+            if (cursor.current_select_magic < 2){
+                cursor.current_select_magic++;
+                console.log(cursor.current_select_magic);
+                drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
+            }
+            else if(cursor.current_select_magic >= 2){
+            }
         }
         // 上キー
         if (cursor.current_select_magic > 0 && e.keyCode === key_config.up){
