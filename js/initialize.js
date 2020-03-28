@@ -31,8 +31,6 @@ allyList.push(graal);
 allyList.push(lin);
 allyList.push(alycia);
 
-
-
 var iterator = battleSystem();
 iterator.next();
 drawFirstDicisionPlaceArrow(0);
