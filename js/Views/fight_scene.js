@@ -33,8 +33,12 @@ function drawFightScene(){
 function viewMagicList(){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
-    for(let i = 0; i < magic.allMagicList.length; i++){
-        txt_context.fillText(magic.allMagicList[i].name,140,290 + (i*20),300);
+    let dmlp = new DrawMagicListProperty();
+    let magic_list_length = magic.allMagicList.length;
+    let magic_list_coordinate = dmlp.drawMagicListCoordinate(magic_list_length);
+    console.log(magic_list_coordinate);
+    for(let i = 0; i < magic_list_length; i++){
+        txt_context.fillText(magic.allMagicList[i].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 300);
     }
 }
 

@@ -65,6 +65,37 @@ class DrawCharacterProperty{
         }
     }
 }
+
+class DrawMagicListProperty{
+    constructor(){
+    }
+    drawMagicListCoordinate(num){
+        let coordinate_list = [];
+        let magic_row_count = Math.ceil(magic.allMagicList.length / 3);
+        let magic_row_remainder = magic.allMagicList.length % 3;
+        for(let i = 0; i < magic_row_count; i++){
+            //最後のループだけ余りの処理を行う
+            if (i === magic_row_count - 1){
+                for(let j = 0; j < magic_row_remainder; j++){
+                    coordinate_list.push({
+                        x: 140 + (j * 70),
+                        y: 290 + (i * 20)
+                    })
+                }
+            }
+            else{
+                for(let j = 0; j < 3; j++){
+                    coordinate_list.push({
+                        x: 140 + (j * 70),
+                        y: 290 + (i * 20)
+                    })
+                }
+            }
+        }
+        return coordinate_list;
+    }
+}
+
 class KeyConfig{
     constructor(){
         this.up    = 87;
