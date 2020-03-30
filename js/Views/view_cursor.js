@@ -10,7 +10,7 @@ function drawEnemyArrow(width, height){
 
 function drawMagicArrow(width, height){
     gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-    createTriangle(width + 125, height + 280, 10, 'right');
+    createTriangle(width, height, 10, 'right');
 }
 
 function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,angle){

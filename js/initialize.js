@@ -16,7 +16,8 @@ const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 const wp = new WindowProperty(480, 360);
 const battlelog = new BattleLog();
 const cursor = new Cursor();
-let magic = new Magic();
+const dmlp = new DrawMagicListProperty();
+const magic = new Magic();
 
 let g_draw_character_instance;
 // 味方の情報を定義

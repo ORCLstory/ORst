@@ -68,11 +68,31 @@ class DrawCharacterProperty{
 
 class DrawMagicListProperty{
     constructor(){
+        this.column_count = 3;
+    }
+    draw2dCursorListCoordinate(num){
+        // 渡された座標をカーソル用に2次元配列に置き換える関数
+        let basic_points = this.drawMagicListCoordinate(num);
+        let points_for_2d = [];
+        console.log(basic_points);
+        // そのまま区切るとpoints_coordinate["y"]["x"]の順に指定することになり
+        // 直感と反するため、転置を行う。
+        for(let i = 0; i < basic_points.length; i++){
+            let column_place_number = i % this.column_count;
+            if(i < this.column_count){
+                points_for_2d[i] = [];
+            }
+            // 元座標はテキスト表示用のためカーソル用に座標を微調整
+            basic_points[i]["x"] = basic_points[i]["x"] -= wp.width * 0.02;
+            basic_points[i]["y"] = basic_points[i]["y"] -= wp.height * 0.03;
+            points_for_2d[column_place_number].push(basic_points[i]);
+        }
+        return points_for_2d;
     }
     drawMagicListCoordinate(num){
         let coordinate_list = [];
-        let magic_row_count = Math.ceil(magic.allMagicList.length / 3);
-        let magic_row_remainder = magic.allMagicList.length % 3;
+        let magic_row_count = Math.ceil(num / 3);
+        let magic_row_remainder = num % 3;
         for(let i = 0; i < magic_row_count; i++){
             //最後のループだけ余りの処理を行う
             if (i === magic_row_count - 1 && magic_row_remainder != 0){

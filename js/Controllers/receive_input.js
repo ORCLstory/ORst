@@ -26,8 +26,11 @@ function controller(e){
             if (cursor.current_command_number === 1){
                 console.log("多分、魔法の画面にいくよ");
                 cursor.current_cursor = 'select_magic';
-                drawMagicArrow(0,0);
-                viewMagicList();
+                // 0番目の要素から8番目の要素までの魔法を表示する
+                viewMagicList(0, 9);
+                const points_data = dmlp.draw2dCursorListCoordinate(9);
+                let points_coordinate = points_data[0][0];
+                drawMagicArrow(points_coordinate["x"],points_coordinate["y"]);
             }
             if (cursor.current_command_number === 2){
                 console.log("多分、道具の画面にいくよ");
@@ -83,28 +86,50 @@ function controller(e){
     else if (cursor.current_cursor === 'select_magic') {
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.081);
         const NUMBER_OF_MAGIC = magic.allMagicList.length;
+        const points_data = dmlp.draw2dCursorListCoordinate(9);
         // 下キー
         if (e.keyCode === key_config.down){
-            if (cursor.current_select_magic < 2){
-                cursor.current_select_magic++;
-                console.log(cursor.current_select_magic);
-                drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
+            if (cursor.current_select_magic["y"] < 2){
+                cursor.current_select_magic["y"]++;
+                // xy座標を返す
+                let points_coordinate = points_data[cursor.current_select_magic["x"]][cursor.current_select_magic["y"]];
+                drawMagicArrow(points_coordinate["x"],points_coordinate["y"]);
+                console.log(points_coordinate);
             }
-            else if(cursor.current_select_magic >= 2){
+            else if(cursor.current_select_magic["y"] >= 2){
             }
         }
         // 上キー
-        if (cursor.current_select_magic > 0 && e.keyCode === key_config.up){
-            cursor.current_select_magic--;
-            console.log(cursor.current_select_magic);
-            drawMagicArrow(0,INTERVALS_OF_ARROW_ROW_HEIGHT * cursor.current_select_magic);
+        if (cursor.current_select_magic["y"] > 0 && e.keyCode === key_config.up){
+            cursor.current_select_magic["y"]--;
+            // xy座標を返す
+            let points_coordinate = points_data[cursor.current_select_magic["x"]][cursor.current_select_magic["y"]];
+            
+            drawMagicArrow(points_coordinate["x"],points_coordinate["y"]);
+            console.log(points_coordinate);
+        }
+        if (cursor.current_select_magic["x"] > 0 && e.keyCode === key_config.left){
+            cursor.current_select_magic["x"]--;
+            // xy座標を返す
+            let points_coordinate = points_data[cursor.current_select_magic["x"]][cursor.current_select_magic["y"]];
+            
+            drawMagicArrow(points_coordinate["x"],points_coordinate["y"]);
+
+        }
+        if (cursor.current_select_magic["x"] < 2 && e.keyCode === key_config.right){
+            cursor.current_select_magic["x"]++;
+            // xy座標を返す
+            console.log(cursor, points_data);
+            let points_coordinate = points_data[cursor.current_select_magic["x"]][cursor.current_select_magic["y"]];
+            
+            drawMagicArrow(points_coordinate["x"],points_coordinate["y"]);
         }
         // キャンセルキー
         if (e.keyCode === key_config.back){
             cursor.current_cursor = 'first_decision_place';
-            drawFirstDicisionPlaceArrow(INTERVALS_OF_ARROW_ROW_HEIGHT * 1);
             battlelog.decision(allyList[cursor.current_select_character]);
-            cursor.current_select_magic = 0;
+            drawFirstDicisionPlaceArrow(INTERVALS_OF_ARROW_ROW_HEIGHT * 0.5);
+            cursor.initialize_when_back_command_line(1);
         }
         // 決定キー
         if (e.keyCode === key_config.enter){
