@@ -51,7 +51,13 @@ function* battleSystem(){
             yield 0;
             // もし増えてたら決定してるよ
             if (current_select_character < cursor.current_select_character){
-                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy]});
+                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':cursor.current_command_number});
+                if (commandQueue.action === 0){
+                    console.log('戦うを選択したよ');
+                }
+                else if (commandQueue.action === 1){
+                    console.log('魔法を選択したよ');
+                }
             }
             // もし増えてたら決定してるよ
             else if ( current_select_character > cursor.current_select_character) {
@@ -145,4 +151,3 @@ function calcurateDamage(attacker, defender){
 function select_target(targetList){
     return Math.floor(Math.random() * targetList.length);
 }
-

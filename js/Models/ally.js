@@ -11,7 +11,7 @@ class AllyStatus{
             this.par = 5; // phisycal attack resist
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
+            this.emp = 10; // element magic power
             this.hmp = 0; // heal magic power
             this.lv = 1;
         }
@@ -22,7 +22,7 @@ class AllyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
+            this.emp = 10; // element magic power
             this.hmp = 0; // heal magic power
             this.lv = 1;
         }
@@ -33,7 +33,7 @@ class AllyStatus{
             this.par = 10;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
+            this.emp = 10; // element magic power
             this.hmp = 0; // heal magic power
             this.lv = 1;
         }
@@ -44,7 +44,7 @@ class AllyStatus{
             this.par = 5;
             this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
+            this.emp = 10; // element magic power
             this.hmp = 0; // heal magic power
             this.lv = 1;
         }
