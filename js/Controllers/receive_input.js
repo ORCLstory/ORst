@@ -64,14 +64,11 @@ function controller(e){
         }
         // 決定キー
         if (e.keyCode === key_config.enter){
-            cursor.current_command_number = 0;
             cursor.current_cursor = 'first_decision_place';
             gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
             drawFirstDicisionPlaceArrow(0);
-            //tmp
             cursor.current_select_character++;
             iterator.next();
-            cursor.choice_current_enemy = 0;
         }
         // キャンセルキー
         if (e.keyCode === key_config.back){
