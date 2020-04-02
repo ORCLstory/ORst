@@ -138,13 +138,9 @@ function* battleSystem(){
 }
 
 function calcurateDamage(attacker, defender){
-    let damage = (attacker.pad + attacker.lv * 2 - defender.par);
-    if (damage <= 0){
-        damage = 1;
-    }
-    else {
-        damage += Math.floor(Math.random() * (damage / 2));
-    }
+    let damage = attacker.pad / 2;
+    damage += Math.floor(Math.random() * ((attacker.pad / 16) + 1));
+    damage = Math.ceil(damage * ((100 - defender.par) / 100));
     return damage;
 }
 
