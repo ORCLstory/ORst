@@ -49,17 +49,18 @@ function* battleSystem(){
             battlelog.decision(actionableAllyList[cursor.current_select_character]);
             let current_select_character = cursor.current_select_character;
             yield 0;
-            // もし増えてたら決定してるよ
+            // もし増えてたら決定してます。
             if (current_select_character < cursor.current_select_character){
                 commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':cursor.current_command_number});
-                if (commandQueue.action === 0){
+                console.log(cursor.current_command_number);
+                if (commandQueue[commandQueue.length - 1].action === 0){
                     console.log('戦うを選択したよ');
                 }
-                else if (commandQueue.action === 1){
+                else if (commandQueue[commandQueue.length - 1].action === 1){
                     console.log('魔法を選択したよ');
                 }
             }
-            // もし増えてたら決定してるよ
+            // もし減っていたらキャンセルしたとみなします。
             else if ( current_select_character > cursor.current_select_character) {
                 commandQueue.pop();
             }
@@ -67,12 +68,14 @@ function* battleSystem(){
                 console.log(cursor.current_select_character);
                 break;
             }
+            // cursorの位置を初期化して、次のキャラクターに行動させます
+            cursor.initialize_when_choice_next_character();
         }
         console.log(commandQueue);
 
         // 敵AIの攻撃対象選択
         for (let i = 0; i < actionableEnemyList.length; i++){
-            commandQueue.push({'player':actionableEnemyList[i],'target':actionableAllyList[select_target(actionableAllyList)]});
+            commandQueue.push({'player':actionableEnemyList[i],'target':actionableAllyList[select_target(actionableAllyList)], 'action':0});
         }
 
         // コマンド入力終了時の処理
@@ -100,7 +103,7 @@ function* battleSystem(){
                 console.log('変更後:', commandQueue[i].target);
             }
 
-            damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target);
+            damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action);
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
@@ -137,11 +140,18 @@ function* battleSystem(){
     }
 }
 
-function calcurateDamage(attacker, defender){
-    let damage = attacker.pad / 2;
-    damage += Math.floor(Math.random() * ((attacker.pad / 16) + 1));
-    damage = Math.ceil(damage * ((100 - defender.par) / 100));
-    return damage;
+function calcurateDamage(attacker, defender, action){
+    // 戦うを選択したなら
+    if(action === 0){
+        let damage = (attacker.pad / 2) + Math.floor(Math.random() * ((attacker.pad / 16) + 1));
+        damage = Math.ceil(damage * (100 - defender.par) / 100);
+        return damage;
+    }
+    // 魔法を選択したなら
+    else if(action === 1){
+        let damage = 10;
+        return damage;
+    }
 }
 
 function select_target(targetList){

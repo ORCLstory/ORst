@@ -19,4 +19,10 @@ class Cursor{
         this.current_command_number = command_number;
         this.current_select_magic = {x:0, y:0};
     }
+    initialize_when_choice_next_character(){
+        this.current_cursor = 'first_decision_place';
+        this.choice_current_enemy  = 0;
+        this.current_command_number = 0;
+        this.current_select_magic = {x:0, y:0};
+    }
 }

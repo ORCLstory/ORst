@@ -30,6 +30,8 @@ class BattleLog{
         this.createBattleLog();
         this.deleteBattleLogList();
     }
+    cast_a_magic(){
+    }
 
     attack(attacker, target, damage, event){
         this.addBattleLogList(attacker.name + 'が' + target.name + 'を攻撃した！');
