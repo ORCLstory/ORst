@@ -74,7 +74,6 @@ class DrawMagicListProperty{
         // 渡された座標をカーソル用に2次元配列に置き換える関数
         let basic_points = this.drawMagicListCoordinate(num);
         let points_for_2d = [];
-        console.log(basic_points);
         // そのまま区切るとpoints_coordinate["y"]["x"]の順に指定することになり
         // 直感と反するため、転置を行う。
         for(let i = 0; i < basic_points.length; i++){

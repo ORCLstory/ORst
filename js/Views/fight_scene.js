@@ -33,9 +33,13 @@ function drawFightScene(){
 function viewMagicList(first, last){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
+    let all_magic_list_length = magic.allMagicList.length;
+    // 実際にある魔法のリストより後の要素は参照しない
+    if (all_magic_list_length < last){
+        last = all_magic_list_length;
+    }
     let magic_list_length = last - first;
     let magic_list_coordinate = dmlp.drawMagicListCoordinate(magic_list_length);
-    console.log(magic_list_coordinate);
     for(let i = 0; i < magic_list_length; i++){
         txt_context.fillText(magic.allMagicList[i + first].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 300);
     }

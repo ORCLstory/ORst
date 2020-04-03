@@ -85,6 +85,7 @@ function controller(e){
         const points_data = dmlp.draw2dCursorListCoordinate(9);
         // 下キー
         if (e.keyCode === key_config.down){
+            console.log("開始行:" + cursor.first_line_displayed_for_magic);
             if (cursor.current_select_magic['y'] < 2){
                 cursor.current_select_magic['y']++;
                 // xy座標を返す
@@ -92,17 +93,30 @@ function controller(e){
                 drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
                 console.log(points_coordinate);
             }
-            else if(cursor.current_select_magic['y'] >= 2){
+            // 下まで矢印が来た場合
+            else if(cursor.current_select_magic['y'] >= 2 && NUMBER_OF_MAGIC / 3 - 2 > cursor.first_line_displayed_for_magic){
+                cursor.first_line_displayed_for_magic++;
+                let start_magic_num = cursor.first_line_displayed_for_magic * 3;
+                viewMagicList(start_magic_num, start_magic_num + 9);
             }
         }
         // 上キー
-        if (cursor.current_select_magic['y'] > 0 && e.keyCode === key_config.up){
-            cursor.current_select_magic['y']--;
-            // xy座標を返す
-            let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
+        if (e.keyCode === key_config.up){
+            console.log("開始行:" + cursor.first_line_displayed_for_magic);
+            if(cursor.current_select_magic['y'] > 0){
+                cursor.current_select_magic['y']--;
+                // xy座標を返す
+                let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
 
-            drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
-            console.log(points_coordinate);
+                drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
+                console.log(points_coordinate);
+            }
+            else if(cursor.current_select_magic['y'] <= 0 && cursor.first_line_displayed_for_magic > 0){
+                cursor.first_line_displayed_for_magic--;
+                let start_magic_num = cursor.first_line_displayed_for_magic * 3;
+                viewMagicList(start_magic_num, start_magic_num + 9);
+                
+            }
         }
         // 左キー
         if (cursor.current_select_magic['x'] > 0 && e.keyCode === key_config.left){
