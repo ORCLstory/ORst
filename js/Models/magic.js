@@ -23,6 +23,10 @@ class Magic{
     }
 
     deelDamage(magic){
-        
+
+    }
+
+    searchMagic(num){
+        return this.allMagicList[num];
     }
 }

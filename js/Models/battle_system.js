@@ -135,7 +135,7 @@ function* battleSystem(){
             yield 0;
         }
 
-        cursor.current_cursor = 'first_decision_place';
+        cursor.initialize();
         drawFirstDicisionPlaceArrow(0);
     }
 }
