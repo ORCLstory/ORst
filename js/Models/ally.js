@@ -1,53 +1,23 @@
 class AllyStatus{
-    constructor(name){
-        this.name = name;
+    constructor(name, lv){
         this.team = 'ally';
         this.status = ['alive'];
 
-        if (this.name === 'テオ'){
-            this.max_hp = 25;
-            this.max_mp = 20;
-            this.pad = 15; // phisycal attack damage
-            this.par = 5; // phisycal attack resist
-            this.mad = 0; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 10; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
-        else if (this.name === 'グラール'){
-            this.max_hp = 30;
-            this.max_mp = 10;
-            this.pad = 20;
-            this.par = 10;
-            this.mad = 0; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 10; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
-        else if (this.name === 'リン'){
-            this.max_hp = 25;
-            this.max_mp = 20;
-            this.pad = 5;
-            this.par = 10;
-            this.mad = 0; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 10; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
-        else if (this.name === 'アリシア'){
-            this.max_hp = 25;
-            this.max_mp = 20;
-            this.pad = 5;
-            this.par = 5;
-            this.mad = 0; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 10; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
+        var request = new XMLHttpRequest();
+        request.open('GET', 'https://script.google.com/a/kaetsu.ac.jp/macros/s/AKfycbyI2RCqWSMvmkTS01tox8RbikfydspgwuvGGHzi/exec?lv=' + lv + '&name=' + name, true);
+        request.addEventListener('load', (event) => {
+            this.name = request.response.name;
+            this.lv = request.response.lv;
+            this.max_hp = request.response.max_hp;
+            this.max_mp = request.response.max_mp;
+            this.pad = request.response.pad;
+            this.par = request.response.par;
+            this.mad = request.response.mad;
+            this.mar = request.response.mar;
+            this.hmp = request.response.hmp;
+        });
+        request.send();
+
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;
     }
