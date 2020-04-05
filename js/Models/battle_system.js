@@ -5,7 +5,7 @@ function* battleSystem(){
     const slime3 = new EnemyStatus('スライム3');
 
     // 味方の情報をリストに格納
-    // tmp
+    console.log(allyList);
     showStatus(allyList);
 
     // 敵の情報をリストに格納

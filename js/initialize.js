@@ -21,20 +21,32 @@ const magic = new Magic();
 
 let g_draw_character_instance;
 
-// 味方の情報を定義
-const teo = new AllyStatus('テオ', 1);
-const graal = new AllyStatus('グラール', 1);
-const lin = new AllyStatus('リン', 1);
-const alycia = new AllyStatus('アリシア', 1);
-
 let allyList = [];
-allyList.push(teo);
-allyList.push(graal);
-allyList.push(lin);
-allyList.push(alycia);
 
-console.log(allyList);
+async function startBattle(){
+    // 味方の情報を定義
+    const teo    = new AllyStatus('テオ');
+    const graal  = new AllyStatus('グラール');
+    const lin    = new AllyStatus('リン');
+    const alycia = new AllyStatus('アリシア');
+    
+    // スプレッドシートから情報を非同期で取得するため、await文を使用
+    // AllyStatus.setStatusの引数はレベル
+    await teo.setStatus(3);
+    await graal.setStatus(1);
+    await lin.setStatus(1);
+    await alycia.setStatus(1);
 
-var iterator = battleSystem();
-iterator.next();
-drawFirstDicisionPlaceArrow(0);
+    allyList.push(teo);
+    allyList.push(graal);
+    allyList.push(lin);
+    allyList.push(alycia);
+
+    console.log(allyList);
+
+    var iterator = battleSystem();
+    iterator.next();
+    drawFirstDicisionPlaceArrow(0);
+}
+
+startBattle();
