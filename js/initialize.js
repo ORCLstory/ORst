@@ -22,6 +22,7 @@ const magic = new Magic();
 let g_draw_character_instance;
 
 let allyList = [];
+var iterator = battleSystem();
 
 async function startBattle(){
     // 味方の情報を定義
@@ -44,7 +45,6 @@ async function startBattle(){
 
     console.log(allyList);
 
-    var iterator = battleSystem();
     iterator.next();
     drawFirstDicisionPlaceArrow(0);
 }
