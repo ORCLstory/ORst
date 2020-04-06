@@ -31,17 +31,20 @@ async function startBattle(){
     const lin    = new AllyStatus('リン');
     const alycia = new AllyStatus('アリシア');
     
-    // スプレッドシートから情報を非同期で取得するため、await文を使用
-    // AllyStatus.setStatusの引数はレベル
-    await teo.setStatus(3);
-    await graal.setStatus(1);
-    await lin.setStatus(1);
-    await alycia.setStatus(1);
 
     allyList.push(teo);
     allyList.push(graal);
     allyList.push(lin);
     allyList.push(alycia);
+
+    let results = [];
+    for(let i = 0; i < allyList.length; i++){
+        // AllyStatus.setStatusの引数はレベル
+        results.push(allyList[i].setStatus(1));
+    }
+    // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
+    await Promise.all(results);
+
 
     console.log(allyList);
 
