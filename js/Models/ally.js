@@ -8,6 +8,7 @@ class AllyStatus{
     async setStatus(lv){
         this.lv = lv;
         let status_list = await this.getStatusForGoogleSpreadSheet(this.name,this.lv);
+        this.individual_name = this.name;
         this.max_hp = status_list.max_hp;
         this.max_mp = status_list.max_mp;
         this.pad    = status_list.pad;

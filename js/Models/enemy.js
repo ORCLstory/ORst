@@ -4,36 +4,13 @@ class EnemyStatus{
         this.team = 'enemy';
         this.status = ['alive'];
 
-        if (this.name === 'スライム1'){
+        if (this.name === 'スライム'){
+            this.individual_name = this.name;
             this.max_hp = 150;
             this.max_mp = 10;
             this.pad = 50;
             this.par = 10;
             this.mad = 10; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
-
-        if (this.name === 'スライム2'){
-            this.max_hp = 50;
-            this.max_mp = 0;
-            this.pad = 15;
-            this.par = 10;
-            this.mad = 0; // magical attack damage
-            this.mar = 0; // magical attack resist
-            this.emp = 0; // element magic power
-            this.hmp = 0; // heal magic power
-            this.lv = 1;
-        }
-
-        if (this.name === 'スライム3'){
-            this.max_hp = 50;
-            this.max_mp = 0;
-            this.pad = 15;
-            this.par = 10;
-            this.mad = 0; // magical attack damage
             this.mar = 0; // magical attack resist
             this.emp = 0; // element magic power
             this.hmp = 0; // heal magic power
