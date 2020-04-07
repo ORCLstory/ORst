@@ -42,6 +42,7 @@ async function startBattle(){
         // AllyStatus.setStatusの引数はレベル
         results.push(allyList[i].setStatus(1));
     }
+    results.push(magic.setAllMagicList());
     // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
     await Promise.all(results);
 
