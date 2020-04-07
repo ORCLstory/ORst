@@ -24,7 +24,8 @@ class AllyStatus{
     getStatusForGoogleSpreadSheet(name, lv){
     return new Promise(async (resolve,reject) =>{
         let request = new XMLHttpRequest();
-        request.open('GET', 'https://script.google.com/a/kaetsu.ac.jp/macros/s/AKfycbyI2RCqWSMvmkTS01tox8RbikfydspgwuvGGHzi/exec?lv=' + lv + '&name=' + name, true);
+        let category = 'ally_status';
+        request.open('GET', 'https://script.google.com/a/kaetsu.ac.jp/macros/s/AKfycbyI2RCqWSMvmkTS01tox8RbikfydspgwuvGGHzi/exec?category=' + category + '&lv=' + lv + '&name=' + name, true);
         request.onload =  function(){
             let status_string = request.response;
             let status_list = JSON.parse(status_string);
