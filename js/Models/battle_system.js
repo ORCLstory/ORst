@@ -52,12 +52,18 @@ function* battleSystem(){
             yield 0;
             // もし増えてたら決定してます。
             if (current_select_character < cursor.current_select_character){
-                commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':cursor.current_command_number});
+                if (cursor.current_command_number === 1){
+                    commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':magic.allMagicList[cursor.current_magic_cursor()]});
+                }
+                else {
+                    commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':null});
+                }
+
                 console.log(cursor.current_command_number);
-                if (commandQueue[commandQueue.length - 1].action === 0){
+                if (commandQueue[commandQueue.length - 1].action === null){
                     console.log('戦うを選択したよ');
                 }
-                else if (commandQueue[commandQueue.length - 1].action === 1){
+                else if (commandQueue[commandQueue.length - 1].action instanceof Magic){
                     console.log('魔法を選択したよ');
                     console.log(magic.allMagicList[cursor.current_magic_cursor()].name);
                 }
@@ -77,7 +83,7 @@ function* battleSystem(){
 
         // 敵AIの攻撃対象選択
         for (let i = 0; i < actionableEnemyList.length; i++){
-            commandQueue.push({'player':actionableEnemyList[i],'target':actionableAllyList[selectTarget(actionableAllyList)], 'action':0});
+            commandQueue.push({'player':actionableEnemyList[i],'target':actionableAllyList[selectTarget(actionableAllyList)], 'action':null});
         }
 
         // コマンド入力終了時の処理
@@ -110,12 +116,23 @@ function* battleSystem(){
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
             commandQueue[i].target.dealDamage = damage;
-            if (commandQueue[i].target.status.some(status => status === 'dead')){
-                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+            if (commandQueue[i].action === null){
+                if (commandQueue[i].target.status.some(status => status === 'dead')){
+                    battlelog.normalAttack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+                }
+                else {
+                    battlelog.normalAttack(commandQueue[i].player, commandQueue[i].target, damage, null);
+                }
             }
-            else {
-                battlelog.attack(commandQueue[i].player, commandQueue[i].target, damage, null);
+            else if (commandQueue[i].action instanceof Magic){
+                if (commandQueue[i].target.status.some(status => status === 'dead')){
+                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+                }
+                else {
+                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, damage, null);
+                }
             }
+
             showStatus(allyList);
             actionableAllyList = allyList.filter(target => target.status.some(status => status === 'alive'));
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
@@ -144,18 +161,18 @@ function* battleSystem(){
 
 function calcurateDamage(attacker, defender, action){
     // 戦うを選択したなら
-    if(action === 0){
+    if(action === null){
         let damage = (attacker.pad / 2) + Math.floor(Math.random() * ((attacker.pad / 16) + 1));
         damage = Math.ceil(damage * (100 - defender.par) / 100);
         return damage;
     }
     // 魔法を選択したなら
-    else if(action === 1){
-        let selectedMagic = magic.allMagicList[cursor.current_magic_cursor()];
-        let randomDamage = Math.ceil(Math.random() * selectedMagic.randomDamageWidth + 1);
-        randomDamage -= Math.ceil(Math.random() * selectedMagic.randomDamageWidth + 1);
+    else if(action === action instanceof Magic){
+        let selected_magic = magic.allMagicList[cursor.current_magic_cursor()];
+        let randomDamage = Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
+        randomDamage -= Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
         console.log(randomDamage);
-        let damage = Math.ceil((attacker.mad * selectedMagic.damageMagnification) + selectedMagic.guaranteeDamage + randomDamage);
+        let damage = Math.ceil((attacker.mad * selected_magic.damageMagnification) + selected_magic.guaranteeDamage + randomDamage);
         return damage;
     }
 }

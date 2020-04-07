@@ -41,7 +41,9 @@ function controller(e){
         }
         // Aキー
         if (e.keyCode === key_config.left || e.keyCode === key_config.back){
-            cursor.current_select_character--;
+            if (cursor.current_select_character > 0){
+                cursor.current_select_character--;
+            }
             iterator.next();
         }
     }
@@ -115,7 +117,7 @@ function controller(e){
                 cursor.first_line_displayed_for_magic--;
                 let start_magic_num = cursor.first_line_displayed_for_magic * 3;
                 viewMagicList(start_magic_num, start_magic_num + 9);
-                
+
             }
         }
         // 左キー

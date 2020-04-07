@@ -33,10 +33,24 @@ class BattleLog{
     cast_a_magic(){
     }
 
-    attack(attacker, target, damage, event){
+    normalAttack(attacker, target, damage, status_event){
         this.addBattleLogList(attacker.individual_name + 'が' + target.individual_name + 'を攻撃した！');
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
-        if (event === 'dead'){
+        this.isStatusEffect(attacker, target, status_event);
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
+
+    magicalAttack(attacker, target, damage, status_event){
+        this.addBattleLogList(attacker.individual_name + 'は' + magic.allMagicList[cursor.current_magic_cursor()].name + 'を唱えた！');
+        this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
+        this.isStatusEffect(attacker, target, status_event);
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
+
+    isStatusEffect(attacker, target, status_event){
+        if (status_event === 'dead'){
             if (attacker.team === 'ally'){
                 this.addBattleLogList(target.individual_name + 'を倒した！');
             }
@@ -44,8 +58,6 @@ class BattleLog{
                 this.addBattleLogList(target.name + 'が倒れた！');
             }
         }
-        this.createBattleLog();
-        this.deleteBattleLogList();
     }
 
     defeat(){
