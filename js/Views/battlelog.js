@@ -34,11 +34,11 @@ class BattleLog{
     }
 
     attack(attacker, target, damage, event){
-        this.addBattleLogList(attacker.name + 'が' + target.name + 'を攻撃した！');
-        this.addBattleLogList(target.name + 'に' + damage + 'ダメージ！');
+        this.addBattleLogList(attacker.individual_name + 'が' + target.individual_name + 'を攻撃した！');
+        this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
         if (event === 'dead'){
             if (attacker.team === 'ally'){
-                this.addBattleLogList(target.name + 'を倒した！');
+                this.addBattleLogList(target.individual_name + 'を倒した！');
             }
             else {
                 this.addBattleLogList(target.name + 'が倒れた！');
