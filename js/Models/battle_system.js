@@ -59,6 +59,7 @@ function* battleSystem(){
                 }
                 else if (commandQueue[commandQueue.length - 1].action === 1){
                     console.log('魔法を選択したよ');
+                    console.log(magic.allMagicList[cursor.current_magic_cursor()].name);
                 }
             }
             // もし減っていたらキャンセルしたとみなします。
@@ -150,7 +151,11 @@ function calcurateDamage(attacker, defender, action){
     }
     // 魔法を選択したなら
     else if(action === 1){
-        let damage = 10;
+        let selectedMagic = magic.allMagicList[cursor.current_magic_cursor()];
+        let randomDamage = Math.ceil(Math.random() * selectedMagic.randomDamageWidth + 1);
+        randomDamage -= Math.ceil(Math.random() * selectedMagic.randomDamageWidth + 1);
+        console.log(randomDamage);
+        let damage = Math.ceil((attacker.mad * selectedMagic.damageMagnification) + selectedMagic.guaranteeDamage + randomDamage);
         return damage;
     }
 }

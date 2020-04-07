@@ -1,7 +1,7 @@
 class Magic{
     constructor(){
     }
-    
+
     async setAllMagicList(){
         this.allMagicList = await this.getAllMagicListForGoogleSpreadSheet();
     }
