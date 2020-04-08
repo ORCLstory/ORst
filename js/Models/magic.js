@@ -14,15 +14,8 @@ class MagicList{
     }
 
     async setAllMagicList(){
-        // 値を一つずつ
-        //this.allMagicList = await this.getAllMagicListForGoogleSpreadSheet();
         let list = await this.getAllMagicListForGoogleSpreadSheet();
         this.allMagicList = list.map(x => new Magic(x));
-        //this.allMagicList = [];
-        //for(let i = 0; i < list.length; i++){
-        //    this.allMagicList.push(new Magic(list[i]));
-        //}
-
     }
 
     getAllMagicListForGoogleSpreadSheet(name, lv){
@@ -42,10 +35,6 @@ class MagicList{
             };
             request.send();
         });
-    }
-
-    deelDamage(magic){
-
     }
 
     searchMagic(num){

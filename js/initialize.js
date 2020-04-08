@@ -22,35 +22,8 @@ const magic_list = new MagicList();
 let g_draw_character_instance;
 
 let allyList = [];
+let enemyList = [];
 var iterator = battleSystem();
 
-async function startBattle(){
-    // 味方の情報を定義
-    const teo    = new AllyStatus('テオ');
-    const graal  = new AllyStatus('グラール');
-    const lin    = new AllyStatus('リン');
-    const alycia = new AllyStatus('アリシア');
-    
 
-    allyList.push(teo);
-    allyList.push(graal);
-    allyList.push(lin);
-    allyList.push(alycia);
-
-    let results = [];
-    for(let i = 0; i < allyList.length; i++){
-        // AllyStatus.setStatusの引数はレベル
-        results.push(allyList[i].setStatus(1));
-    }
-    results.push(magic_list.setAllMagicList());
-    // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
-    await Promise.all(results);
-
-
-    console.log(allyList);
-
-    iterator.next();
-    drawFirstDicisionPlaceArrow(0);
-}
-
-startBattle();
+startBattleSystem();

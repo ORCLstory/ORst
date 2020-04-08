@@ -1,18 +1,49 @@
-function* battleSystem(){
-    // 敵の情報を定義
+async function startBattleSystem(){
+    // 味方の情報を定義
+    const teo    = new AllyStatus('テオ');
+    const graal  = new AllyStatus('グラール');
+    const lin    = new AllyStatus('リン');
+    const alycia = new AllyStatus('アリシア');
+
+    allyList.push(teo);
+    allyList.push(graal);
+    allyList.push(lin);
+    allyList.push(alycia);
+
     const slime1 = new EnemyStatus('スライム');
     const slime2 = new EnemyStatus('スライム');
     const slime3 = new EnemyStatus('スライム');
 
-    // 味方の情報をリストに格納
-    console.log(allyList);
-    showStatus(allyList);
-
-    // 敵の情報をリストに格納
-    let enemyList = [];
     enemyList.push(slime1);
     enemyList.push(slime2);
     enemyList.push(slime3);
+
+    let results = [];
+    for(let i = 0; i < allyList.length; i++){
+        // AllyStatus.setStatusの引数はレベル
+        results.push(allyList[i].setStatus(1));
+    }
+
+    for(let i = 0; i < enemyList.length; i++){
+        results.push(enemyList[i].setStatus(1));
+    }
+    results.push(magic_list.setAllMagicList());
+    // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
+    await Promise.all(results);
+
+
+    console.log(allyList);
+
+    iterator.next();
+    drawFirstDicisionPlaceArrow(0);
+}
+function* battleSystem(){
+    // 敵の情報を定義
+
+    // 味方の情報をリストに格納
+    showStatus(allyList);
+
+    // 敵の情報をリストに格納
     enemyNumbering(enemyList);
 
     // エンカウント時の処理
