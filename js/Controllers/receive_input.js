@@ -83,7 +83,7 @@ function controller(e){
 
     else if (cursor.current_cursor === 'select_magic') {
         const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.081);
-        const NUMBER_OF_MAGIC = magic.allMagicList.length;
+        const NUMBER_OF_MAGIC = magic_list.allMagicList.length;
         const points_data = dmlp.draw2dCursorListCoordinate(9);
         // 下キー
         if (e.keyCode === key_config.down){

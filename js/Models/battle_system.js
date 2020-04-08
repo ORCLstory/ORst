@@ -53,7 +53,7 @@ function* battleSystem(){
             // もし増えてたら決定してます。
             if (current_select_character < cursor.current_select_character){
                 if (cursor.current_command_number === 1){
-                    commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':magic.allMagicList[cursor.current_magic_cursor()]});
+                    commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':magic_list.allMagicList[cursor.current_magic_cursor()]});
                 }
                 else {
                     commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':null});
@@ -65,7 +65,7 @@ function* battleSystem(){
                 }
                 else if (commandQueue[commandQueue.length - 1].action instanceof Magic){
                     console.log('魔法を選択したよ');
-                    console.log(magic.allMagicList[cursor.current_magic_cursor()].name);
+                    console.log(magic_list.allMagicList[cursor.current_magic_cursor()].name);
                 }
             }
             // もし減っていたらキャンセルしたとみなします。
@@ -91,9 +91,8 @@ function* battleSystem(){
         cursor.current_cursor = 'read_message';
         // battle_logを初期化
         battle_log_list = [];
-
+        // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
-
             // プレイヤーが行動不能な場合、処理を行わず次のプレイヤーに行動させる
             if (commandQueue[i].player.status.some(status => status === 'dead')){
                 continue;
@@ -112,6 +111,8 @@ function* battleSystem(){
             }
 
             damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action);
+            console.log("ダメージ計算");
+            console.log(commandQueue[i]);
             actionableEnemyList = enemyList.filter(target => target.status.some(status => status === 'alive'));
             g_draw_character_instance.enemy(actionableEnemyList);
             g_draw_character_instance.ally(allyList);
@@ -162,13 +163,15 @@ function* battleSystem(){
 function calcurateDamage(attacker, defender, action){
     // 戦うを選択したなら
     if(action === null){
+        console.log("戦うのダメージ計算");
         let damage = (attacker.pad / 2) + Math.floor(Math.random() * ((attacker.pad / 16) + 1));
         damage = Math.ceil(damage * (100 - defender.par) / 100);
         return damage;
     }
     // 魔法を選択したなら
-    else if(action === action instanceof Magic){
-        let selected_magic = magic.allMagicList[cursor.current_magic_cursor()];
+    else if(action instanceof Magic){
+        console.log("魔法のダメージ計算");
+        let selected_magic = magic_list.allMagicList[cursor.current_magic_cursor()];
         let randomDamage = Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
         randomDamage -= Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
         console.log(randomDamage);

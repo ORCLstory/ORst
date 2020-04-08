@@ -17,7 +17,7 @@ const wp = new WindowProperty(480, 360);
 const battlelog = new BattleLog();
 const cursor = new Cursor();
 const dmlp = new DrawMagicListProperty();
-const magic = new Magic();
+const magic_list = new MagicList();
 
 let g_draw_character_instance;
 
@@ -42,7 +42,7 @@ async function startBattle(){
         // AllyStatus.setStatusの引数はレベル
         results.push(allyList[i].setStatus(1));
     }
-    results.push(magic.setAllMagicList());
+    results.push(magic_list.setAllMagicList());
     // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
     await Promise.all(results);
 

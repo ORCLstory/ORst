@@ -1,9 +1,28 @@
 class Magic{
+    constructor(magic_dict){
+        this.name                = magic_dict.name;
+        this.mpCost              = magic_dict.mpCost;
+        this.damageMagnification = magic_dict.damageMagnification;
+        this.guaranteeDamage     = magic_dict.guaranteeDamage;
+        this.randomDamageWidth   = magic_dict.randomDamageWidth;
+        this.element             = magic_dict.element;
+    }
+}
+
+class MagicList{
     constructor(){
     }
 
     async setAllMagicList(){
-        this.allMagicList = await this.getAllMagicListForGoogleSpreadSheet();
+        // 値を一つずつ
+        //this.allMagicList = await this.getAllMagicListForGoogleSpreadSheet();
+        let list = await this.getAllMagicListForGoogleSpreadSheet();
+        this.allMagicList = list.map(x => new Magic(x));
+        //this.allMagicList = [];
+        //for(let i = 0; i < list.length; i++){
+        //    this.allMagicList.push(new Magic(list[i]));
+        //}
+
     }
 
     getAllMagicListForGoogleSpreadSheet(name, lv){
