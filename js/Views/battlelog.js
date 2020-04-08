@@ -41,8 +41,8 @@ class BattleLog{
         this.deleteBattleLogList();
     }
 
-    magicalAttack(attacker, target, damage, status_event){
-        this.addBattleLogList(attacker.individual_name + 'は' + magic_list.allMagicList[cursor.current_magic_cursor()].name + 'を唱えた！');
+    magicalAttack(attacker, target, action, damage, status_event){
+        this.addBattleLogList(attacker.individual_name + 'は' + action.name + 'を唱えた！');
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
         this.isStatusEffect(attacker, target, status_event);
         this.createBattleLog();

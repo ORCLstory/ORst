@@ -37,6 +37,7 @@ async function startBattleSystem(){
     iterator.next();
     drawFirstDicisionPlaceArrow(0);
 }
+
 function* battleSystem(){
     // 敵の情報を定義
 
@@ -158,10 +159,10 @@ function* battleSystem(){
             }
             else if (commandQueue[i].action instanceof Magic){
                 if (commandQueue[i].target.status.some(status => status === 'dead')){
-                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
+                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action, damage, 'dead');
                 }
                 else {
-                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, damage, null);
+                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action, damage, null);
                 }
             }
 
@@ -202,11 +203,10 @@ function calcurateDamage(attacker, defender, action){
     // 魔法を選択したなら
     else if(action instanceof Magic){
         console.log("魔法のダメージ計算");
-        let selected_magic = magic_list.allMagicList[cursor.current_magic_cursor()];
-        let randomDamage = Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
-        randomDamage -= Math.ceil(Math.random() * selected_magic.randomDamageWidth + 1);
+        let randomDamage = Math.ceil(Math.random() * action.randomDamageWidth + 1);
+        randomDamage -= Math.ceil(Math.random() * action.randomDamageWidth + 1);
         console.log(randomDamage);
-        let damage = Math.ceil((attacker.mad * selected_magic.damageMagnification) + selected_magic.guaranteeDamage + randomDamage);
+        let damage = Math.ceil((attacker.mad * action.damageMagnification) + action.guaranteeDamage + randomDamage);
         return damage;
     }
 }
