@@ -10,6 +10,7 @@ async function startBattleSystem(){
     allyList.push(lin);
     allyList.push(alycia);
 
+    // 敵の情報を定義
     const slime1 = new EnemyStatus('スライム');
     const slime2 = new EnemyStatus('スライム');
     const slime3 = new EnemyStatus('スライム');
@@ -28,7 +29,7 @@ async function startBattleSystem(){
         results.push(enemyList[i].setStatus(1));
     }
     results.push(magic_list.setAllMagicList());
-    // スプレッドシートから情報を非同期で取得するため、Promise.allで全部ステータスを取得するまで待つ
+    // スプレッドシートから情報を非同期で取得するため、全部ステータスを取得するまで待つ
     await Promise.all(results);
 
 
@@ -39,7 +40,6 @@ async function startBattleSystem(){
 }
 
 function* battleSystem(){
-    // 敵の情報を定義
 
     // 味方の情報をリストに格納
     showStatus(allyList);
