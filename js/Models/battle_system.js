@@ -41,10 +41,8 @@ async function startBattleSystem(){
 
 function* battleSystem(){
 
-    // 味方の情報をリストに格納
     showStatus(allyList);
 
-    // 敵の情報をリストに格納
     enemyNumbering(enemyList);
 
     // エンカウント時の処理
@@ -90,22 +88,12 @@ function* battleSystem(){
                 else {
                     commandQueue.push({'player':actionableAllyList[current_select_character],'target':enemyList[cursor.choice_current_enemy],'action':null});
                 }
-
-                console.log(cursor.current_command_number);
-                if (commandQueue[commandQueue.length - 1].action === null){
-                    console.log('戦うを選択したよ');
-                }
-                else if (commandQueue[commandQueue.length - 1].action instanceof Magic){
-                    console.log('魔法を選択したよ');
-                    console.log(magic_list.allMagicList[cursor.current_magic_cursor()].name);
-                }
             }
             // もし減っていたらキャンセルしたとみなします。
             else if ( current_select_character > cursor.current_select_character) {
                 commandQueue.pop();
             }
             if (cursor.current_select_character >= actionableAllyList.length){
-                console.log(cursor.current_select_character);
                 break;
             }
             // cursorの位置を初期化して、次のキャラクターに行動させます
