@@ -25,5 +25,4 @@ let allyList = [];
 let enemyList = [];
 var iterator = battleSystem();
 
-
 startBattleSystem();
