@@ -23,6 +23,6 @@ let g_draw_character_instance;
 
 let allyList = [];
 let enemyList = [];
-var iterator = battleSystem();
+var iterator = battleProcess();
 
 startBattleSystem();
