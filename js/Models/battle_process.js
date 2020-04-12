@@ -58,7 +58,7 @@ function* battleProcess(){
         system.refreshActionableList();
 
         // 各キャラクターの行動を初期化
-        let commandQueue = new CommandQueueClass();
+        let commandQueue = new CommandQueue();
 
         // 行動選択をするキャラクターを先頭に戻す
         cursor.current_select_character = 0;
@@ -102,14 +102,8 @@ function* battleProcess(){
             // 対象が選択不能な場合、対象を変える
             }else if (commandQueue[i].target.isDead){
                 console.log('変更前:', commandQueue[i].target);
-                if (commandQueue[i].player.team === 'ally'){
-                    system.refreshActionableList();
-                    commandQueue[i].target = system.actionableEnemyList[selectTarget(system.actionableEnemyList)];
-                }
-                else {
-                    system.refreshActionableList();
-                    commandQueue[i].target = system.actionableAllyList[selectTarget(system.actionableAllyList)];
-                }
+                system.refreshActionableList();
+                commandQueue.reselectTarget(i,system);
                 console.log('変更後:', commandQueue[i].target);
             }
 
@@ -163,13 +157,10 @@ function calcurateDamage(attacker, defender, action){
         let randomDamage = Math.ceil(Math.random() * action.randomDamageWidth + 1);
         randomDamage -= Math.ceil(Math.random() * action.randomDamageWidth + 1);
         let damage = Math.ceil((attacker.mad * action.damageMagnification) + action.guaranteeDamage + randomDamage);
-        return damage;
+       return damage;
     }
 }
 
-function selectTarget(targetList){
-    return Math.floor(Math.random() * targetList.length);
-}
 
 function enemyNumbering(enemyList){
     for (let i = 0; i < enemyList.length; i++){
@@ -184,4 +175,7 @@ function enemyNumbering(enemyList){
             enemyList[i].individual_name = enemyList[i].name + String.fromCharCode(65);
         }
     }
+}
+function selectTarget(targetList){
+    return Math.floor(Math.random() * targetList.length);
 }

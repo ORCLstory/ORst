@@ -8,6 +8,16 @@ class BattleSystem{
     get current_select_character(){
         return this.actionableAllyList[cursor.current_select_character];
     }
+    actionableList(target){
+        // 対象の陣営の行動可能な対象を最取得する関数。
+        // Characterクラスのインスタンスを引数に取り、.teamで判別する。
+        if (target.team === 'ally'){
+            return this.actionableAllyList;
+        }
+        else {
+            return this.actionableEnemyList;
+        }
+    }
 
     drawAllCharacter(){
         // 戦闘シーンにおける敵味方を描画するメソッド
