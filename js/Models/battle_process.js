@@ -101,31 +101,16 @@ function* battleProcess(){
                 continue;
             // 対象が選択不能な場合、対象を変える
             }else if (commandQueue[i].target.isDead){
-                console.log('変更前:', commandQueue[i].target);
                 system.refreshActionableList();
-                commandQueue.reselectTarget(i,system);
-                console.log('変更後:', commandQueue[i].target);
+                commandQueue[i].reselectTarget(system);
             }
-
-            damage = calcurateDamage(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action);
-            system.refreshActionableList();
-            system.drawAllCharacter();
-            commandQueue[i].target.dealDamage = damage;
-            if (commandQueue[i].action === null){
-                if (commandQueue[i].target.isDead){
-                    battlelog.normalAttack(commandQueue[i].player, commandQueue[i].target, damage, 'dead');
-                }
-                else {
-                    battlelog.normalAttack(commandQueue[i].player, commandQueue[i].target, damage, null);
-                }
+            // ダメージ計算
+            commandQueue[i].calcurateDamage();
+            if (commandQueue[i].target.isDead){
+                battlelog.actionLog(commandQueue[i], 'dead');
             }
-            else if (commandQueue[i].action instanceof Magic){
-                if (commandQueue[i].target.isDead){
-                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action, damage, 'dead');
-                }
-                else {
-                    battlelog.magicalAttack(commandQueue[i].player, commandQueue[i].target, commandQueue[i].action, damage, null);
-                }
+            else {
+                battlelog.actionLog(commandQueue[i], null);
             }
 
             showStatus(allyList);
@@ -135,7 +120,6 @@ function* battleProcess(){
 
             // 全滅しているかどうかを判定
             if (system.isWipe) break;
-            console.log(cursor.current_cursor);
         }
         if (system.isWipe) break;
         cursor.initialize();
@@ -143,23 +127,6 @@ function* battleProcess(){
     }
 }
 
-function calcurateDamage(attacker, defender, action){
-    // 戦うを選択したなら
-    if(action === null){
-        console.log("戦うのダメージ計算");
-        let damage = (attacker.pad / 2) + Math.floor(Math.random() * ((attacker.pad / 16) + 1));
-        damage = Math.ceil(damage * (100 - defender.par) / 100);
-        return damage;
-    }
-    // 魔法を選択したなら
-    else if(action instanceof Magic){
-        console.log("魔法のダメージ計算");
-        let randomDamage = Math.ceil(Math.random() * action.randomDamageWidth + 1);
-        randomDamage -= Math.ceil(Math.random() * action.randomDamageWidth + 1);
-        let damage = Math.ceil((attacker.mad * action.damageMagnification) + action.guaranteeDamage + randomDamage);
-       return damage;
-    }
-}
 
 
 function enemyNumbering(enemyList){

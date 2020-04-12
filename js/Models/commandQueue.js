@@ -8,8 +8,12 @@ class CommandQueue extends Array{
     }
 
     sortBySpd(){
-        this.sort((a,b) => b.player.spd - a.player.spd);
+        this.sort((a,b) => {
+            console.log(a,b);
+            b.player.spd - a.player.spd;
+        });
     }
+
     reselectTarget(number,system){
         let actionableList = system.actionableList(this[number].target);
         this[number].target = actionableList[selectTarget(actionableList)];
