@@ -40,6 +40,7 @@ class BattleLog{
         let damage = player_action.damage;
 
         this.addBattleLogList(player.individual_name + 'が' + target.individual_name + 'を攻撃した！');
+        this.isHappenCritical(player_action);
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
         this.isStatusEffect(player, target, status_event);
         this.createBattleLog();
@@ -55,6 +56,7 @@ class BattleLog{
         this.addBattleLogList(player.individual_name + 'は' + action.name + 'を唱えた！');
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
         this.isStatusEffect(player, target, status_event);
+        this.isHappenCritical(player_action);
         this.createBattleLog();
         this.deleteBattleLogList();
     }
@@ -69,6 +71,27 @@ class BattleLog{
             else {
                 this.addBattleLogList(target.name + 'が倒れた！');
             }
+        }
+    }
+
+    isHappenCritical(player_action){
+        let player = player_action.player;
+        let isCritical = player_action.isCritical;
+        let action = player_action.action;
+
+        console.log(isCritical);
+
+        if (action === null && isCritical){
+            if (player.team === 'ally'){
+                this.addBattleLogList('会心の一撃！！');
+            }
+            else{
+                this.addBattleLogList('痛恨の一撃！！');
+            }
+        }
+        else if (action instanceof Magic && isCritical){
+            console.log('魔力暴走！！')
+            this.addBattleLogList(player.name + 'の魔力が暴走した！');
         }
     }
 

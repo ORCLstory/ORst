@@ -11,10 +11,9 @@ class Character{
         this.max_hp = status_list.max_hp;
         this.max_mp = status_list.max_mp;
         this.pad    = status_list.pad;
-        this.par    = status_list.par;
         this.mad    = status_list.mad;
-        this.mar    = status_list.mar;
         this.spd    = status_list.spd;
+        this.def    = status_list.def;
 
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;

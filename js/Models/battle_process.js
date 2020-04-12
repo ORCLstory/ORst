@@ -104,19 +104,37 @@ function* battleProcess(){
                 system.refreshActionableList();
                 commandQueue[i].reselectTarget(system);
             }
-            // ダメージ計算
-            commandQueue[i].calcurateDamage();
-            if (commandQueue[i].target.isDead){
-                battlelog.actionLog(commandQueue[i], 'dead');
+            for (let j = 0; j < 1; j++) {
+                // ダメージ計算
+                commandQueue[i].calcurateDamage();
+                if (commandQueue[i].isCritical && commandQueue[i].action instanceof Magic){
+                    if (commandQueue[i].target.isDead){
+                        battlelog.actionLog(commandQueue[i], 'dead');
+                    }
+                    else {
+                        battlelog.actionLog(commandQueue[i], null);
+                    }
+                    showStatus(allyList);
+                    system.refreshActionableList();
+                    system.drawAllCharacter();
+                    yield 0;
+                    j--;
+                    console.log(j);
+                }
+                else {
+                    if (commandQueue[i].target.isDead){
+                        battlelog.actionLog(commandQueue[i], 'dead');
+                    }
+                    else {
+                        battlelog.actionLog(commandQueue[i], null);
+                    }
+                    showStatus(allyList);
+                    system.refreshActionableList();
+                    system.drawAllCharacter();
+                    yield 0;
+                    console.log(j);
+                }
             }
-            else {
-                battlelog.actionLog(commandQueue[i], null);
-            }
-
-            showStatus(allyList);
-            system.refreshActionableList();
-            system.drawAllCharacter();
-            yield 0;
 
             // 全滅しているかどうかを判定
             if (system.isWipe) break;
@@ -126,8 +144,6 @@ function* battleProcess(){
         drawFirstDicisionPlaceArrow(0);
     }
 }
-
-
 
 function enemyNumbering(enemyList){
     for (let i = 0; i < enemyList.length; i++){
