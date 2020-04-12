@@ -57,12 +57,8 @@ function* battleProcess(){
         // 行動できる敵・味方を更新
         system.refreshActionableList();
 
-        // どちらかが全滅しているかどうかを確認
-        system.isWipe();
-        //yield 0;
-
         // 各キャラクターの行動を初期化
-        let commandQueue = [];
+        let commandQueue = new CommandQueueClass();
 
         // 行動選択をするキャラクターを先頭に戻す
         cursor.current_select_character = 0;
@@ -95,6 +91,8 @@ function* battleProcess(){
         system.enemySelectTarget(commandQueue);
 
         // commandQueueを素早さ順で並び替え
+        commandQueue.sortBySpd();
+        console.log(commandQueue);
 
         // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
@@ -139,13 +137,13 @@ function* battleProcess(){
             showStatus(allyList);
             system.refreshActionableList();
             system.drawAllCharacter();
+            yield 0;
 
             // 全滅しているかどうかを判定
-            system.isWipe();
-
-            yield 0;
+            if (system.isWipe) break;
+            console.log(cursor.current_cursor);
         }
-
+        if (system.isWipe) break;
         cursor.initialize();
         drawFirstDicisionPlaceArrow(0);
     }
@@ -187,4 +185,3 @@ function enemyNumbering(enemyList){
         }
     }
 }
-

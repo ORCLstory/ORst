@@ -14,7 +14,7 @@ class Character{
         this.par    = status_list.par;
         this.mad    = status_list.mad;
         this.mar    = status_list.mar;
-        this.hmp    = status_list.hmp;
+        this.spd    = status_list.spd;
 
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;

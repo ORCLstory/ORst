@@ -4,7 +4,6 @@ class BattleSystem{
         this.enemyList = enemyList;
         this.actionableAllyList = this.allyList;
         this.actionableEnemyList = this.enemyList;
-        this.commandQueue;
     }
     get current_select_character(){
         return this.actionableAllyList[cursor.current_select_character];
@@ -23,15 +22,18 @@ class BattleSystem{
         this.actionableEnemyList = this.enemyList.filter(target => target.status.some(status => status === 'alive'));
     }
 
-    isWipe(){
+    get isWipe(){
         // 全滅しているかどうかを判定するメソッド
         if (this.actionableAllyList.length === 0){
             battlelog.defeat();
-            cursor.current_cursor = 'end';
+            return true;
         }
         else if (this.actionableEnemyList.length === 0){
             battlelog.victory();
-            cursor.current_cursor = 'end';
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
