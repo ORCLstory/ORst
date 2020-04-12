@@ -30,7 +30,7 @@ class Cursor{
         this.current_select_magic = {x:0, y:0};
     }
 
-    current_magic_cursor(){
+    get current_magic_cursor(){
         return (this.first_line_displayed_for_magic + this.current_select_magic.y) * 3 + this.current_select_magic.x;
     }
 }

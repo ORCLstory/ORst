@@ -54,9 +54,10 @@ class BattleSystem{
                 let player_action = new PlayerAction({
                     'player':this.actionableAllyList[current_select_character],
                     'target':this.enemyList[cursor.choice_current_enemy],
-                    'action':magic_list.allMagicList[cursor.current_magic_cursor()]
+                    'action':this.actionableAllyList[current_select_character].characterMagicList[cursor.current_magic_cursor]
                 });
                 commandQueue.push(player_action);
+                console.log(player_action);
             }
             else {
                 let player_action = new PlayerAction({
@@ -65,6 +66,7 @@ class BattleSystem{
                     'action':null
                 });
                 commandQueue.push(player_action);
+                console.log(player_action);
             }
         }
         // もし減っていたらキャンセルしたとみなします。

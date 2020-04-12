@@ -33,7 +33,8 @@ function drawFightScene(){
 function viewMagicList(first, last){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
-    let all_magic_list_length = magic_list.allMagicList.length;
+    let all_magic_list = allyList[cursor.current_select_character].characterMagicList;
+    let all_magic_list_length = all_magic_list.length;
     // 実際にある魔法のリストより後の要素は参照しない
     if (all_magic_list_length < last){
         last = all_magic_list_length;
@@ -41,7 +42,7 @@ function viewMagicList(first, last){
     let magic_list_length = last - first;
     let magic_list_coordinate = dmlp.drawMagicListCoordinate(magic_list_length);
     for(let i = 0; i < magic_list_length; i++){
-        txt_context.fillText(magic_list.allMagicList[i + first].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 70);
+        txt_context.fillText(all_magic_list[i + first].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 70);
     }
 }
 
