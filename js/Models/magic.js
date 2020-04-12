@@ -26,7 +26,6 @@ class MagicList{
             request.onload =  function(){
                 let status_string = request.response;
                 let status_list = JSON.parse(status_string);
-                console.log(status_list);
                 resolve(status_list);
             };
             request.onerror = function(){

@@ -97,7 +97,7 @@ class DrawMagicListProperty{
             if (i === magic_row_count - 1 && magic_row_remainder != 0){
                 for(let j = 0; j < magic_row_remainder; j++){
                     coordinate_list.push({
-                        x: 140 + (j * 70),
+                        x: 140 + (j * 80),
                         y: 290 + (i * 30)
                     })
                 }
@@ -105,7 +105,7 @@ class DrawMagicListProperty{
             else{
                 for(let j = 0; j < 3; j++){
                     coordinate_list.push({
-                        x: 140 + (j * 70),
+                        x: 140 + (j * 80),
                         y: 290 + (i * 30)
                     })
                 }

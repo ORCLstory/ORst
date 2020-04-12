@@ -17,13 +17,13 @@ const wp = new WindowProperty(480, 360);
 const battlelog = new BattleLog();
 const cursor = new Cursor();
 const dmlp = new DrawMagicListProperty();
-const magic_list = new MagicList();
+//const magic_list = new MagicList();
+const key_config = new KeyConfig();
 
 let g_draw_character_instance;
 
 let allyList = [];
 let enemyList = [];
-var iterator = battleSystem();
-
+var iterator = battleProcess();
 
 startBattleSystem();

@@ -11,14 +11,17 @@ class Character{
         this.max_hp = status_list.max_hp;
         this.max_mp = status_list.max_mp;
         this.pad    = status_list.pad;
-        this.par    = status_list.par;
         this.mad    = status_list.mad;
-        this.mar    = status_list.mar;
-        this.hmp    = status_list.hmp;
+        this.spd    = status_list.spd;
+        this.def    = status_list.def;
 
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;
         return;
+    }
+    async setCharacterMagicList(){
+        let magic_list = await this.getStatusForGoogleSpreadSheet(this.name, this.lv, 'character_magic_list');
+        this.characterMagicList = magic_list.map(x => new Magic(x));
     }
 
     getStatusForGoogleSpreadSheet(name, lv, category){
@@ -28,7 +31,6 @@ class Character{
             request.onload =  function(){
                 let status_string = request.response;
                 let status_list = JSON.parse(status_string);
-                console.log(status_list);
                 resolve(status_list);
             };
             request.onerror = function(){
@@ -53,5 +55,9 @@ class Character{
             this.now_hp = 0;
             this.status = ['dead'];
         }
+    }
+    get isDead(){
+        // statusの中に'dead'が見つかれば死亡判定を行う
+        return this.status.some(s => s ==='dead');
     }
 }
