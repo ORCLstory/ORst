@@ -93,15 +93,15 @@ function* battleProcess(){
 
         // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
-            // 攻撃側が行動不能な場合、処理を行わず次のプレイヤーに行動させる
-            if (commandQueue[i].player.isDead){
-                continue;
-            // 対象が選択不能な場合、対象を変える
-            }else if (commandQueue[i].target.isDead){
-                system.refreshActionableList();
-                commandQueue[i].reselectTarget(system);
-            }
             for (let j = 0; j < 1; j++) {
+                // 攻撃側が行動不能な場合、処理を行わず次のプレイヤーに行動させる
+                if (commandQueue[i].player.isDead){
+                    continue;
+                // 対象が選択不能な場合、対象を変える
+                }else if (commandQueue[i].target.isDead){
+                    system.refreshActionableList();
+                    commandQueue[i].reselectTarget(system);
+                }
                 // ダメージ計算
                 commandQueue[i].calcurateDamage();
                 if (commandQueue[i].isCritical && commandQueue[i].action instanceof Magic){
