@@ -41,7 +41,7 @@ function viewMagicList(first, last){
     let magic_list_length = last - first;
     let magic_list_coordinate = dmlp.drawMagicListCoordinate(magic_list_length);
     for(let i = 0; i < magic_list_length; i++){
-        txt_context.fillText(magic_list.allMagicList[i + first].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 300);
+        txt_context.fillText(magic_list.allMagicList[i + first].name,magic_list_coordinate[i]["x"], magic_list_coordinate[i]["y"], 70);
     }
 }
 
