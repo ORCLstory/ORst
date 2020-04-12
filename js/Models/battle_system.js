@@ -51,12 +51,21 @@ class BattleSystem{
         // もし増えてたら決定してます。
         if (current_select_character < cursor.current_select_character){
             if (cursor.current_command_number === 1){
-                commandQueue.push({'player':this.actionableAllyList[current_select_character],'target':this.enemyList[cursor.choice_current_enemy],'action':magic_list.allMagicList[cursor.current_magic_cursor()]});
+                let player_action = new PlayerAction({
+                    'player':this.actionableAllyList[current_select_character],
+                    'target':this.enemyList[cursor.choice_current_enemy],
+                    'action':magic_list.allMagicList[cursor.current_magic_cursor()]
+                });
+                commandQueue.push(player_action);
             }
             else {
-                commandQueue.push({'player':this.actionableAllyList[current_select_character],'target':this.enemyList[cursor.choice_current_enemy],'action':null});
+                let player_action = new PlayerAction({
+                    'player':this.actionableAllyList[current_select_character],
+                    'target':this.enemyList[cursor.choice_current_enemy],
+                    'action':null
+                });
+                commandQueue.push(player_action);
             }
-            console.log(commandQueue[commandQueue.length-1]);
         }
         // もし減っていたらキャンセルしたとみなします。
         else if (current_select_character > cursor.current_select_character) {
@@ -66,7 +75,12 @@ class BattleSystem{
 
     enemySelectTarget(commandQueue){
         for (let i = 0; i < this.actionableEnemyList.length; i++){
-            commandQueue.push({'player':this.actionableEnemyList[i],'target':this.actionableAllyList[selectTarget(this.actionableAllyList)], 'action':null});
+            let player_action = new PlayerAction({
+                'player':this.actionableEnemyList[i],
+                'target':this.actionableAllyList[selectTarget(this.actionableAllyList)],
+                'action':null
+            });
+            commandQueue.push(player_action);
         }
     }
 }

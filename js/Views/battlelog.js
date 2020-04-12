@@ -33,25 +33,37 @@ class BattleLog{
     cast_a_magic(){
     }
 
-    normalAttack(attacker, target, damage, status_event){
-        this.addBattleLogList(attacker.individual_name + 'が' + target.individual_name + 'を攻撃した！');
+    normalAttack(player_action, status_event){
+        let player = player_action.player;
+        let target = player_action.target;
+        let action = player_action.action;
+        let damage = player_action.damage;
+
+        this.addBattleLogList(player.individual_name + 'が' + target.individual_name + 'を攻撃した！');
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
-        this.isStatusEffect(attacker, target, status_event);
+        this.isStatusEffect(player, target, status_event);
         this.createBattleLog();
         this.deleteBattleLogList();
     }
 
-    magicalAttack(attacker, target, action, damage, status_event){
-        this.addBattleLogList(attacker.individual_name + 'は' + action.name + 'を唱えた！');
+    magicalAttack(player_action, status_event){
+        let player = player_action.player;
+        let target = player_action.target;
+        let action = player_action.action;
+        let damage = player_action.damage;
+
+        this.addBattleLogList(player.individual_name + 'は' + action.name + 'を唱えた！');
         this.addBattleLogList(target.individual_name + 'に' + damage + 'ダメージ！');
-        this.isStatusEffect(attacker, target, status_event);
+        this.isStatusEffect(player, target, status_event);
         this.createBattleLog();
         this.deleteBattleLogList();
     }
 
-    isStatusEffect(attacker, target, status_event){
+    isStatusEffect(player_action, status_event){
+        let player = player_action.player;
+        let target = player_action.target;
         if (status_event === 'dead'){
-            if (attacker.team === 'ally'){
+            if (player.team === 'ally'){
                 this.addBattleLogList(target.individual_name + 'を倒した！');
             }
             else {
@@ -72,5 +84,16 @@ class BattleLog{
         this.addBattleLogList('もう一度挑戦する場合はF5キーを押してね！');
         this.createBattleLog();
         this.deleteBattleLogList();
+    }
+    actionLog(player_action, status_event){
+        let action = player_action.action;
+        let target = player_action.target;
+        if (action === null){
+            this.normalAttack(player_action, status_event);
+        }
+        else if (action instanceof Magic){
+            this.magicalAttack(player_action, status_event);
+        }
+
     }
 }
