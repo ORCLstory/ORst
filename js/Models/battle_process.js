@@ -20,17 +20,14 @@ async function startBattleSystem(){
     enemyList.push(slime3);
 
     let promise_results = [];
-    for(let i = 0; i < allyList.length; i++){
-        // AllyStatus.setStatusの引数はレベル
-        promise_results.push(allyList[i].setStatus(1));
-    }
-
-    for(let i = 0; i < enemyList.length; i++){
-        promise_results.push(enemyList[i].setStatus(1));
-    }
-    promise_results.push(magic_list.setAllMagicList());
+    allyList.forEach(element => promise_results.push(element.setStatus(1)));
+    enemyList.forEach(element => promise_results.push(element.setStatus(1)));
+    allyList.forEach(element => promise_results.push(element.setCharacterMagicList()));
+    //promise_results.push(magic_list.setAllMagicList());
     // スプレッドシートから情報を非同期で取得するため、全部ステータスを取得するまで待つ
     await Promise.all(promise_results);
+
+    console.log(allyList);
 
 
     iterator.next();
