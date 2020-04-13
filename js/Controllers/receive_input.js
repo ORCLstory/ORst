@@ -105,18 +105,22 @@ function selectMagic(e){
     // 下キー
     if (e.keyCode === key_config.down){
         console.log("開始行:" + cursor.first_line_displayed_for_magic);
-        if (cursor.current_select_magic['y'] < 2){
-            cursor.current_select_magic['y']++;
-            // xy座標を返す
-            let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
-            drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
-            console.log(points_coordinate);
-        }
-        // 下まで矢印が来た場合
-        else if(cursor.current_select_magic['y'] >= 2 && NUMBER_OF_MAGIC / 3 - 2 > cursor.first_line_displayed_for_magic){
-            cursor.first_line_displayed_for_magic++;
-            let start_magic_num = cursor.first_line_displayed_for_magic * 3;
-            viewMagicList(start_magic_num, start_magic_num + 9);
+        // 次の位置にカーソルを合わせた時に魔法の配列は何番目を参照しないといけないか
+        let next_magic_point = cursor.current_magic_cursor + 3;
+        if (next_magic_point < NUMBER_OF_MAGIC){
+            if (cursor.current_select_magic['y'] < 2){
+                cursor.current_select_magic['y']++;
+                // xy座標を返す
+                let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
+                drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
+                console.log(points_coordinate);
+            }
+            // 下まで矢印が来た場合
+            else if(cursor.current_select_magic['y'] >= 2 && NUMBER_OF_MAGIC / 3 - 2 > cursor.first_line_displayed_for_magic){
+                cursor.first_line_displayed_for_magic++;
+                let start_magic_num = cursor.first_line_displayed_for_magic * 3;
+                viewMagicList(start_magic_num, start_magic_num + 9);
+            }
         }
     }
     // 上キー
@@ -147,11 +151,14 @@ function selectMagic(e){
     }
     // 右キー
     if (cursor.current_select_magic['x'] < 2 && e.keyCode === key_config.right){
-        cursor.current_select_magic['x']++;
-        // xy座標を返す
-        console.log(cursor, points_data);
-        let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
-        drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
+        let next_magic_point = cursor.current_magic_cursor + 1;
+        if (next_magic_point < NUMBER_OF_MAGIC){
+            cursor.current_select_magic['x']++;
+            // xy座標を返す
+            console.log(cursor, points_data);
+            let points_coordinate = points_data[cursor.current_select_magic['x']][cursor.current_select_magic['y']];
+            drawMagicArrow(points_coordinate['x'],points_coordinate['y']);
+        }
     }
     // キャンセルキー
     if (e.keyCode === key_config.back){
