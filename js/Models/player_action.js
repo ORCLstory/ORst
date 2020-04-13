@@ -3,7 +3,7 @@ class PlayerAction{
         this.player = player;
         this.target = target;
         this.action = action;
-        this.criticalRate = 64;
+        this.criticalRate = 2;
     }
 
     reselectTarget(system){
@@ -32,16 +32,22 @@ class PlayerAction{
         }
         // 魔法を選択したなら
         else if (this.action instanceof Magic){
-            let randomDamage = Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
-            randomDamage -= Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
-            let damage = Math.ceil((this.player.mad * this.action.damageMagnification) + this.action.guaranteeDamage + randomDamage) * ((100 - this.target.def) / 100);
-            this.target.dealDamage = damage;
-            this.damage = damage;
-            console.log(damage);
-            if (this.calcurateCritical()){
-                this.isCritical = true;
+            if (arguments[0] === 'shortage'){
+                let damage = 0;
+                this.damage = damage;
             }
-            else this.isCritical = false;
+            else{
+                let randomDamage = Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
+                randomDamage -= Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
+                let damage = Math.ceil((this.player.mad * this.action.damageMagnification) + this.action.guaranteeDamage + randomDamage) * ((100 - this.target.def) / 100);
+                this.target.dealDamage = damage;
+                this.damage = damage;
+                console.log(damage);
+                if (this.calcurateCritical()){
+                    this.isCritical = true;
+                }
+                else this.isCritical = false;
+            }
         }
     }
 

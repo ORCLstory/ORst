@@ -56,8 +56,19 @@ class Character{
             this.status = ['dead'];
         }
     }
+
     get isDead(){
         // statusの中に'dead'が見つかれば死亡判定を行う
         return this.status.some(s => s ==='dead');
+    }
+
+    dedicateMP(costMP){
+        if (this.now_mp >= costMP){
+            this.now_mp -= costMP;
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
