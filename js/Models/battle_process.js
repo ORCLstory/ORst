@@ -94,6 +94,7 @@ function* battleProcess(){
         // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
             for (let j = 0; j < 1; j++) {
+
                 // 攻撃側が行動不能な場合、処理を行わず次のプレイヤーに行動させる
                 if (commandQueue[i].player.isDead){
                     continue;
@@ -102,14 +103,36 @@ function* battleProcess(){
                     system.refreshActionableList();
                     commandQueue[i].reselectTarget(system);
                 }
+
+                // MPコストが足りているかの確認
+                let shortage = null;
+                if (commandQueue[i].action instanceof Magic){
+                    if (commandQueue[i].isCritical){
+                        if (commandQueue[i].player.dedicateMP(0)){
+                            shortage = 'shortage';
+                        }
+                        else{
+                            shortage = null;
+                        }
+                    }
+                    else{
+                        if (commandQueue[i].player.dedicateMP(commandQueue[i].action.mpCost)){
+                            shortage = 'shortage';
+                        }
+                        else{
+                            shortage = null;
+                        }
+                    }
+                }
+
                 // ダメージ計算
-                commandQueue[i].calcurateDamage();
+                commandQueue[i].calcurateDamage(shortage);
                 if (commandQueue[i].isCritical && commandQueue[i].action instanceof Magic){
                     if (commandQueue[i].target.isDead){
-                        battlelog.actionLog(commandQueue[i], 'dead');
+                        battlelog.actionLog(commandQueue[i], 'dead', shortage);
                     }
                     else {
-                        battlelog.actionLog(commandQueue[i], null);
+                        battlelog.actionLog(commandQueue[i], null, shortage);
                     }
                     showStatus(allyList);
                     system.refreshActionableList();
@@ -120,10 +143,10 @@ function* battleProcess(){
                 }
                 else {
                     if (commandQueue[i].target.isDead){
-                        battlelog.actionLog(commandQueue[i], 'dead');
+                        battlelog.actionLog(commandQueue[i], 'dead', shortage);
                     }
                     else {
-                        battlelog.actionLog(commandQueue[i], null);
+                        battlelog.actionLog(commandQueue[i], null, shortage);
                     }
                     showStatus(allyList);
                     system.refreshActionableList();

@@ -61,6 +61,16 @@ class BattleLog{
         this.deleteBattleLogList();
     }
 
+    failedMagicalAttack(player_action){
+        let player = player_action.player;
+        let action = player_action.action;
+
+        this.addBattleLogList(player.individual_name + 'は' + action.name + 'を唱えた！');
+        this.addBattleLogList('しかし、MPが足りなかった！');
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
+
     isStatusEffect(player_action, status_event){
         let player = player_action.player;
         let target = player_action.target;
@@ -78,8 +88,6 @@ class BattleLog{
         let player = player_action.player;
         let isCritical = player_action.isCritical;
         let action = player_action.action;
-
-        console.log(isCritical);
 
         if (action === null && isCritical){
             if (player.team === 'ally'){
@@ -108,15 +116,19 @@ class BattleLog{
         this.createBattleLog();
         this.deleteBattleLogList();
     }
+
     actionLog(player_action, status_event){
         let action = player_action.action;
         let target = player_action.target;
-        if (action === null){
+        
+        if (arguments[2] === 'shortage'){
+            this.failedMagicalAttack(player_action);
+        }
+        else if (action === null){
             this.normalAttack(player_action, status_event);
         }
         else if (action instanceof Magic){
             this.magicalAttack(player_action, status_event);
         }
-
     }
 }
