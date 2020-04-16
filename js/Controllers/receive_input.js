@@ -9,6 +9,9 @@ function controller(e){
     else if (cursor.current_cursor === 'select_enemy'){
         selectEnemy(e);
     }
+    else if (cursor.current_cursor === 'select_ally'){
+        selectAlly(e);
+    }
 
     else if (cursor.current_cursor === 'select_magic') {
         selectMagic(e);
@@ -84,6 +87,38 @@ function selectEnemy(e){
     // 決定キー
     if (e.keyCode === key_config.enter){
         cursor.current_cursor = 'first_decision_place';
+        cursor.choice_instance = system.actionableEnemyList[cursor.choice_current_enemy];
+        gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+        drawFirstDicisionPlaceArrow(0);
+        cursor.current_select_character++;
+        iterator.next();
+    }
+    // キャンセルキー
+    if (e.keyCode === key_config.back){
+        cursor.current_cursor = 'first_decision_place';
+        gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+        drawFirstDicisionPlaceArrow(0);
+        battlelog.decision(allyList[cursor.current_select_character]);
+    }
+}
+
+function selectAlly(e){
+    let NUMBER_OF_ALLYS = g_draw_character_instance.ally_points.length;
+    if (cursor.choice_current_ally < NUMBER_OF_ALLYS -1 && e.keyCode === key_config.down){
+        cursor.choice_current_ally++;
+        let current_ally_points = g_draw_character_instance.ally_points[cursor.choice_current_ally];
+        drawAllyArrow(current_ally_points.x, current_ally_points.y);
+    }
+    // 上キー
+    if (cursor.choice_current_ally > 0 && e.keyCode === key_config.up){
+        cursor.choice_current_ally--;
+        let current_ally_points = g_draw_character_instance.ally_points[cursor.choice_current_ally];
+        drawAllyArrow(current_ally_points.x,current_ally_points.y);
+    }
+    // 決定キー
+    if (e.keyCode === key_config.enter){
+        cursor.current_cursor = 'first_decision_place';
+        cursor.choice_instance = system.allyList[cursor.choice_current_ally];
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         drawFirstDicisionPlaceArrow(0);
         cursor.current_select_character++;
@@ -170,9 +205,17 @@ function selectMagic(e){
     // 決定キー
     if (e.keyCode === key_config.enter){
         let magic_num = cursor.current_select_magic.x + (cursor.current_select_magic.y * 3);
-        cursor.current_cursor = 'select_enemy';
-        let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
-        drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
+        let cast_spell = allyList[cursor.current_select_character].characterMagicList[cursor.current_magic_cursor];
+        if(cast_spell.categoryMagic === '攻撃'){
+            cursor.current_cursor = 'select_enemy';
+            let current_enemy_points = g_draw_character_instance.enemy_points[cursor.choice_current_enemy];
+            drawEnemyArrow(current_enemy_points.x,current_enemy_points.y);
+        }
+        else if(cast_spell.categoryMagic === '回復'){
+            cursor.current_cursor = 'select_ally';
+            let current_ally_points = g_draw_character_instance.ally_points[cursor.choice_current_ally];
+            drawAllyArrow(current_ally_points.x,current_ally_points.y);
+        }
     }
 }
 function readMessage(e){

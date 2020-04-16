@@ -20,6 +20,8 @@ const dmlp = new DrawMagicListProperty();
 //const magic_list = new MagicList();
 const key_config = new KeyConfig();
 
+let system;
+
 let g_draw_character_instance;
 
 let allyList = [];

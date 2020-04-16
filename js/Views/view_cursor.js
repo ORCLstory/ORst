@@ -13,6 +13,11 @@ function drawMagicArrow(width, height){
     createTriangle(width, height, 10, 'right');
 }
 
+function drawAllyArrow(width, height){
+    gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    createTriangle(width - 30, height - 5, 10, 'right');
+}
+
 function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,angle){
     gc_context.beginPath();
     gc_context.moveTo(start_arrow_width, start_arrow_height);

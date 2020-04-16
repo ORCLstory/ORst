@@ -53,7 +53,7 @@ class BattleSystem{
             if (cursor.current_command_number === 1){
                 let player_action = new PlayerAction({
                     'player':this.actionableAllyList[current_select_character],
-                    'target':this.enemyList[cursor.choice_current_enemy],
+                    'target':cursor.choice_instance,
                     'action':this.actionableAllyList[current_select_character].characterMagicList[cursor.current_magic_cursor]
                 });
                 commandQueue.push(player_action);
@@ -62,7 +62,7 @@ class BattleSystem{
             else {
                 let player_action = new PlayerAction({
                     'player':this.actionableAllyList[current_select_character],
-                    'target':this.enemyList[cursor.choice_current_enemy],
+                    'target':cursor.choice_instance,
                     'action':null
                 });
                 commandQueue.push(player_action);

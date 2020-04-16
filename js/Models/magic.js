@@ -1,11 +1,13 @@
 class Magic{
     constructor(magic_dict){
         this.name                = magic_dict.name;
+        this.requireLevel        = magic_dict.requireLevel;
         this.mpCost              = magic_dict.mpCost;
         this.damageMagnification = magic_dict.damageMagnification;
         this.guaranteeDamage     = magic_dict.guaranteeDamage;
         this.randomDamageWidth   = magic_dict.randomDamageWidth;
         this.element             = magic_dict.element;
+        this.categoryMagic       = magic_dict.categoryMagic;
     }
 }
 

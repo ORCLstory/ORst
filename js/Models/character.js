@@ -56,6 +56,12 @@ class Character{
             this.status = ['dead'];
         }
     }
+    set healHP(heal){
+        this.now_hp += heal;
+        if (this.now_hp > this.max_hp){
+            this.now_hp = this.max_hp;
+        }
+    }
 
     get isDead(){
         // statusの中に'dead'が見つかれば死亡判定を行う

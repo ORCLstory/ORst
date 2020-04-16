@@ -93,6 +93,7 @@ function* battleProcess(){
 
         // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
+            // 魔力暴走用のカウント
             for (let j = 0; j < 1; j++) {
 
                 // 攻撃側が行動不能な場合、処理を行わず次のプレイヤーに行動させる
