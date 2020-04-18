@@ -18,6 +18,11 @@ function drawFightScene(){
     bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
     image = new Image();
     image.src = 'img/bg_combat.png';
+    teo_image = new Image();
+    teo_image.src = 'img/teo_kao.png'
+    teo_image.onload = function(e){
+        character_context.drawImage(teo_image, 0, 0, 50, 80);
+    };
     image.onload = function(e) {
         bg_context.drawImage(image, 0, 0, wp.width, wp.height);
         createWindow(0,0, wp.width,wp.height);
