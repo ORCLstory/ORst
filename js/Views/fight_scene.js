@@ -1,6 +1,10 @@
 function createWindow(x,y,w,h){
     bg_context.beginPath();
     bg_context.rect(x, y, w, h);
+    if ( arguments[4] === 'white'){
+        bg_context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        bg_context.fill();
+    }
     bg_context.stroke();
 }
 
@@ -12,21 +16,27 @@ function createCircle(x, y, radius){
 
 function drawFightScene(){
     bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
-    createWindow(0,0, wp.width,wp.height);
-    // ステータスの枠の生成
-    for(let i = 0; i < 4; i++){
-    createWindow(wp.status_window.x + (wp.status_window.w * i), wp.status_window.y, wp.status_window.w, wp.status_window.h);
-    }
+    image = new Image();
+    image.src = 'img/bg_combat.png';
+    image.onload = function(e) {
+        bg_context.drawImage(image, 0, 0, wp.width, wp.height);
+        createWindow(0,0, wp.width,wp.height);
+        // ステータスの枠の生成
+        for(let i = 0; i < 4; i++){
+        createWindow(wp.status_window.x + (wp.status_window.w * i), wp.status_window.y, wp.status_window.w, wp.status_window.h, 'white');
+        }
 
-    // コマンドラインの枠全体の描画
-    createWindow(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
-    // fightコマンドの枠の描画
-    createWindow(wp.fight_command_window.x,wp.fight_command_window.y,wp.fight_command_window.w, wp.fight_command_window.h);
-    let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
+        // コマンドラインの枠全体の描画
+        createWindow(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h, 'white');
+        // fightコマンドの枠の描画
+        createWindow(wp.fight_command_window.x,wp.fight_command_window.y,wp.fight_command_window.w, wp.fight_command_window.h);
+        let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
 
-    // 戦闘コマンド表示
-    for(let i = 0; i < 4; i++){
-        bg_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
+        // 戦闘コマンド表示
+        for(let i = 0; i < 4; i++){
+            command_txt_context.font = "12px 'normal'";
+            command_txt_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
+        }
     }
 }
 

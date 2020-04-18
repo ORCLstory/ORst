@@ -11,6 +11,9 @@ let txt_canvas = document.getElementById('text-layer'),
 let character_canvas = document.getElementById('character-layer'),
     character_context = character_canvas.getContext('2d');
 
+let command_txt_canvas = document.getElementById('command-text-layer'),
+    command_txt_context = command_txt_canvas.getContext('2d');
+
 // 今回は画面を4:3として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 const wp = new WindowProperty(480, 360);
