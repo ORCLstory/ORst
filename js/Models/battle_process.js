@@ -1,16 +1,21 @@
 async function startBattleSystem(){
     // 味方の情報を定義
-    const teo    = new AllyStatus('テオ');
-    const graal  = new AllyStatus('グラール');
-    const lin    = new AllyStatus('リン');
-    const alycia = new AllyStatus('アリシア');
 
-    allyList.push(teo);
-    allyList.push(graal);
-    allyList.push(lin);
-    allyList.push(alycia);
+    if(allyList.length === 0){
+        const teo    = new AllyStatus('テオ');
+        const graal  = new AllyStatus('グラール');
+        const lin    = new AllyStatus('リン');
+        const alycia = new AllyStatus('アリシア');
+
+        allyList.push(teo);
+        allyList.push(graal);
+        allyList.push(lin);
+        allyList.push(alycia);
+    }
 
     // 敵の情報を定義
+
+    enemyList = [];
     const slime1 = new EnemyStatus('スライム');
     const slime2 = new EnemyStatus('スライム');
     const slime3 = new EnemyStatus('スライム');

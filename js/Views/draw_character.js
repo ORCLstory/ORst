@@ -5,6 +5,7 @@ class DrawCharacter{
     }
 
     enemy(enemyList){
+        console.log(enemyList);
         const dcp = new DrawCharacterProperty();
         character_context.clearRect(0, 0, character_canvas.width, character_canvas.height);
         this.enemy_points = dcp.drawEnemyCoordinate(enemyList.length);
@@ -14,6 +15,7 @@ class DrawCharacter{
     }
 
     ally(allyList){
+        console.log(allyList);
         const dcp = new DrawCharacterProperty();
         this.ally_points = dcp.drawAllyCoordinate(allyList.length);
         for(let i = 0; i < allyList.length; i++){
