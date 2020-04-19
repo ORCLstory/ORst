@@ -1,7 +1,7 @@
 class Cursor{
     // インスタンスを生成した際に呼ぶ
     constructor(){
-        this.current_cursor = 'first_decision_place';
+        this.current_cursor = 'title_menu';
         this.choice_current_enemy  = 0;
         this.choice_current_ally = 0;
         this.current_command_number = 0;

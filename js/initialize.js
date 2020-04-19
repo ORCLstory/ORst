@@ -14,6 +14,9 @@ let character_canvas = document.getElementById('character-layer'),
 let command_txt_canvas = document.getElementById('command-text-layer'),
     command_txt_context = command_txt_canvas.getContext('2d');
 
+let icon_canvas = document.getElementById('icon-layer'),
+    icon_context = icon_canvas.getContext('2d');
+
 // 今回は画面を4:3として生成する
 const WINDOW_WIDTH = 480,WINDOW_HEIGHT = 360;
 const wp = new WindowProperty(480, 360);
@@ -22,6 +25,7 @@ const cursor = new Cursor();
 const dmlp = new DrawMagicListProperty();
 //const magic_list = new MagicList();
 const key_config = new KeyConfig();
+const view = new View();
 
 let system;
 
@@ -31,4 +35,4 @@ let allyList = [];
 let enemyList = [];
 var iterator = battleProcess();
 
-startBattleSystem();
+view.titleScene();

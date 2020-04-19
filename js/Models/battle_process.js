@@ -36,6 +36,7 @@ async function startBattleSystem(){
 
 function* battleProcess(){
     // BattleSystemクラスを呼び出し
+    console.log("battleProcessの先頭が処理されたよ");
     system = new BattleSystem(allyList, enemyList);
 
     showStatus(allyList);
@@ -43,7 +44,7 @@ function* battleProcess(){
     enemyNumbering(enemyList);
 
     // エンカウント時の処理
-    drawFightScene();
+    view.fightScene();
     battlelog.encount();
 
     //敵と味方を描画する
@@ -160,7 +161,10 @@ function* battleProcess(){
             // 全滅しているかどうかを判定
             if (system.isWipe) break;
         }
-        if (system.isWipe) break;
+        if (system.isWipe) {
+            cursor.current_cursor = 'end_of_battle';
+            break;
+        }
         cursor.initialize();
         drawFirstDicisionPlaceArrow(0);
     }

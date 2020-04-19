@@ -20,6 +20,29 @@ function controller(e){
     else if (cursor.current_cursor === 'read_message'){
         readMessage(e);
     }
+    else if (cursor.current_cursor === 'title_menu'){
+        titleMenu(e);
+    }
+    else if (cursor.current_cursor === 'end_of_battle'){
+        endOfBattle(e);
+    }
+}
+
+function titleMenu(e){
+    if(e.keyCode === key_config.enter){
+        cursor.current_cursor = 'first_decision_place';
+        view.initialize();
+        startBattleSystem();
+    }
+}
+
+function endOfBattle(e){
+    if(e.keyCode === key_config.enter){
+        cursor.current_cursor = 'title_menu';
+        iterator = battleProcess();
+        view.initialize();
+        view.titleScene();
+    }
 }
 
 

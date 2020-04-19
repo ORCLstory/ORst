@@ -12,19 +12,20 @@ canvas{
 #background-layer{
     z-index:1;
 }
-
-#game-cursor-layer{
-    z-index:3;
-}
 #text-layer{
-    z-index:2;
-}
-
-#character-layer{
     z-index:2;
 }
 #command-text-layer{
     z-index:2;
+}
+#character-layer{
+    z-index:3;
+}
+#icon-layer{
+    z-index:3;
+}
+#game-cursor-layer{
+    z-index:4;
 }
 
 #go-to-debug-mode{
