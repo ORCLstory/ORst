@@ -2,6 +2,9 @@
 let bg_canvas = document.getElementById('background-layer'),
     bg_context = bg_canvas.getContext('2d');
 
+let animation_canvas = document.getElementById('animation-layer'),
+    animation_context = animation_canvas.getContext('2d');
+
 let gc_canvas = document.getElementById('game-cursor-layer'),
     gc_context = gc_canvas.getContext('2d');
 
@@ -37,6 +40,7 @@ let enemyList = [];
 let request = null;
 
 let waitingFrames;
+let loadingFrames;
 
 function start(){
     mode = 'normal';
@@ -45,6 +49,7 @@ function start(){
     let frame = 0;
 
     waitingFrames = 0;
+    loadingFrames = 0;
 
     function update(){
         request = null;
@@ -55,7 +60,9 @@ function start(){
                 break;
 
             case 'loading':
-                view.loading();
+                loadingFrames++;
+                view.blackScreen();
+                view.loadingScene();
                 break;
 
             case 'require_loading':

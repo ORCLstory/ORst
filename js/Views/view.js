@@ -4,16 +4,57 @@ class View{
     initialize(){
         // すべてのcanvasを初期化する。バルス！
         bg_context.clearRect(0, 0, wp.width, wp.height);
+        animation_context.clearRect(0, 0, wp.width, wp.height);
         gc_context.clearRect(0, 0, wp.width, wp.height);
         txt_context.clearRect(0, 0, wp.width, wp.height);
         command_txt_context.clearRect(0, 0, wp.width, wp.height);
         icon_context.clearRect(0, 0, wp.width, wp.height);
         character_context.clearRect(0, 0, wp.width, wp.height);
     }
-    loading(){
+    blackScreen(){
         this.initialize();
-        command_txt_context.font = "12px 'normal'";
-        command_txt_context.fillText("ロード中！",200,200,200);
+        bg_context.rect(0, 0, wp.width, wp.height);
+        bg_context.fill();
+    }
+    loadingScene(){
+        let radius = 100;
+        //for(let i = 18; i > 0; i--){
+        for(let i = 0; i < 18; i++){
+            let angle = 20 * i;
+            let x = radius * Math.sin(Math.PI * angle / 180);
+            let y = radius * Math.cos(Math.PI * angle / 180);
+            let opacity;
+            if((loadingFrames/1) % 18 === 18 - i){
+                opacity = 1;
+            }
+            else if((loadingFrames/1) % 18 === 17 - i){
+                opacity = 0.9;
+            }
+            else if((loadingFrames/1) % 18 === 16 - i){
+                opacity = 0.8;
+            }
+            else if((loadingFrames/1) % 18 === 15 - i){
+                opacity = 0.7;
+            }
+            else if((loadingFrames/3) % 18 === i + 4){
+                opacity = 0.6;
+            }
+            else{
+                opacity = 0.5;
+            }
+            this.createCircleWithOpacity(x + wp.width / 2, y + wp.height /2, opacity);
+        }
+        animation_context.font = "24px 'normal'";
+        animation_context.fillText("now loading",wp.width * 0.36 , wp.height * 0.52, 200);
+
+    }
+    createCircleWithOpacity(x, y, opacity){
+        animation_context.beginPath();
+        animation_context.moveTo(x,y);
+        animation_context.arc(x, y, 10, 0, 360/180 * Math.PI, false);
+        animation_context.fillStyle = 'rgba(255, 255, 255, ' + opacity + ')';
+        animation_context.strokeStyle = 'rgba(255, 255, 255, ' + opacity + ')';
+        animation_context.fill();
     }
 
     fightScene(){
