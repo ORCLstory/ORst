@@ -1,4 +1,4 @@
-async function startBattleSystem(){
+async function loadAsyncDataFromGoogleSpreadsheet(){
     // 味方の情報を定義
 
     if(allyList.length === 0){
@@ -43,11 +43,8 @@ function* battleProcess(){
     // ジェネレータ関数であるgameProcessから呼び出されています。
     // BattleSystemクラスを呼び出し
     console.log("battleProcessの先頭が処理されたよ");
-    view.initialize();
-    drawFirstDicisionPlaceArrow(0);
     system = new BattleSystem(allyList, enemyList);
 
-    showStatus(allyList);
     // モブの名前の末尾にABCDEFGがつくようになる
     enemyNumbering(enemyList);
 

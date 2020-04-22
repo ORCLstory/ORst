@@ -40,7 +40,6 @@ let waitingFrames;
 
 function start(){
     mode = 'normal';
-    //mode = 'require_loading';
 
     let iterator = gameProcess();
     let frame = 0;
@@ -48,7 +47,6 @@ function start(){
     waitingFrames = 0;
 
     function update(){
-        console.log(mode);
         request = null;
         let r;
         switch (mode) {
@@ -57,10 +55,11 @@ function start(){
                 break;
 
             case 'loading':
+                view.loading();
                 break;
 
             case 'require_loading':
-                startBattleSystem();
+                loadAsyncDataFromGoogleSpreadsheet();
                 mode = 'loading';
                 break;
 
