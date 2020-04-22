@@ -12,10 +12,14 @@ class View{
     }
     loading(){
         this.initialize();
+        command_txt_context.font = "12px 'normal'";
+        command_txt_context.fillText("ロード中！",200,200,200);
     }
 
     fightScene(){
-        bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
+        this.initialize();
+        drawFirstDicisionPlaceArrow(0);
+        showStatus(allyList);
         let image = new Image();
         image.src = 'img/bg_combat.png';
         let teo_image = new Image();

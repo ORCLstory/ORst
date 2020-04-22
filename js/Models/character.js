@@ -4,6 +4,7 @@ class Character{
         this.name = name;
         this.category ='';
         this.individual_name = this.name;
+        this.does_get_status = false;
     }
     async setStatus(lv){
         this.lv = lv;
@@ -17,6 +18,7 @@ class Character{
 
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;
+        this.does_get_status = true;
         return;
     }
     async setCharacterMagicList(){

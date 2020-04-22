@@ -36,6 +36,8 @@ class BattleSystem{
         // 全滅しているかどうかを判定するメソッド
         if (this.actionableAllyList.length === 0){
             battlelog.defeat();
+            console.log("負けた");
+            mode = 'defeat';
             return true;
         }
         else if (this.actionableEnemyList.length === 0){

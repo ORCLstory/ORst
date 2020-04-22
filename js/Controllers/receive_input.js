@@ -1,3 +1,4 @@
+// modeがwaitKey時の条件分けを処理する
 document.addEventListener('keydown',controller);
 
 
@@ -31,17 +32,17 @@ function controller(e){
 function titleMenu(e){
     if(e.keyCode === key_config.enter){
         cursor.current_cursor = 'first_decision_place';
-        view.initialize();
-        startBattleSystem();
+        mode = 'normal';
     }
 }
 
 function endOfBattle(e){
     if(e.keyCode === key_config.enter){
-        cursor.current_cursor = 'title_menu';
-        iterator = battleProcess();
-        view.initialize();
-        view.titleScene();
+        if(mode !== "defeat"){
+            cursor.current_cursor = 'title_menu';
+            view.initialize();
+            view.titleScene();
+        }
     }
 }
 
@@ -87,7 +88,7 @@ function firstDecisionPlace(e){
         if (cursor.current_select_character > 0){
             cursor.current_select_character--;
         }
-        iterator.next();
+        mode = 'normal';
     }
 }
 
@@ -114,7 +115,7 @@ function selectEnemy(e){
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         drawFirstDicisionPlaceArrow(0);
         cursor.current_select_character++;
-        iterator.next();
+        mode = 'normal';
     }
     // キャンセルキー
     if (e.keyCode === key_config.back){
@@ -145,7 +146,7 @@ function selectAlly(e){
         gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         drawFirstDicisionPlaceArrow(0);
         cursor.current_select_character++;
-        iterator.next();
+        mode = 'normal';
     }
     // キャンセルキー
     if (e.keyCode === key_config.back){
@@ -243,6 +244,6 @@ function selectMagic(e){
 }
 function readMessage(e){
     if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
-        iterator.next();
+        mode = 'normal';
     }
 }
