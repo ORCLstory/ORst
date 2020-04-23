@@ -28,24 +28,7 @@ class View{
             let x = radius * Math.sin(Math.PI * angle / 180);
             let y = radius * Math.cos(Math.PI * angle / 180);
             let opacity;
-            if((loadingFrames/1) % 18 === 18 - i){
-                opacity = Math.abs(Math.sin(loadingFrames/30));
-            }
-            else if((loadingFrames/1) % 18 === 17 - i){
-                opacity = Math.abs(Math.sin(loadingFrames/20));
-            }
-            else if((loadingFrames/1) % 18 === 16 - i){
-                opacity = Math.abs(Math.sin(loadingFrames/10));
-            }
-            else if((loadingFrames/1) % 18 === 15 - i){
-                opacity = Math.abs(Math.sin(loadingFrames));
-            }
-            else if((loadingFrames/3) % 18 === i + 4){
-                opacity = Math.abs(Math.sin(0));
-            }
-            else{
-                opacity = Math.abs(Math.sin(loadingFrames/30));
-            }
+            opacity = Math.abs(Math.sin(loadingFrames/30));
             this.createCircleWithOpacity(x + wp.width / 2, y + wp.height / 2, opacity);
         }
         animation_context.font = "24px 'normal'";
