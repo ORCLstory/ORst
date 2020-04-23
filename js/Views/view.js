@@ -1,6 +1,7 @@
 class View{
     constructor(){
     }
+
     initialize(){
         // すべてのcanvasを初期化する。バルス！
         bg_context.clearRect(0, 0, wp.width, wp.height);
@@ -11,43 +12,46 @@ class View{
         icon_context.clearRect(0, 0, wp.width, wp.height);
         character_context.clearRect(0, 0, wp.width, wp.height);
     }
+
     blackScreen(){
         this.initialize();
         bg_context.rect(0, 0, wp.width, wp.height);
         bg_context.fill();
     }
+
     loadingScene(){
         let radius = 100;
-        //for(let i = 18; i > 0; i--){
+        console.log(Math.abs(Math.sin(loadingFrames/10)));
+
         for(let i = 0; i < 18; i++){
             let angle = 20 * i;
             let x = radius * Math.sin(Math.PI * angle / 180);
             let y = radius * Math.cos(Math.PI * angle / 180);
             let opacity;
             if((loadingFrames/1) % 18 === 18 - i){
-                opacity = 1;
+                opacity = Math.abs(Math.sin(loadingFrames/30));
             }
             else if((loadingFrames/1) % 18 === 17 - i){
-                opacity = 0.9;
+                opacity = Math.abs(Math.sin(loadingFrames/20));
             }
             else if((loadingFrames/1) % 18 === 16 - i){
-                opacity = 0.8;
+                opacity = Math.abs(Math.sin(loadingFrames/10));
             }
             else if((loadingFrames/1) % 18 === 15 - i){
-                opacity = 0.7;
+                opacity = Math.abs(Math.sin(loadingFrames));
             }
             else if((loadingFrames/3) % 18 === i + 4){
-                opacity = 0.6;
+                opacity = Math.abs(Math.sin(0));
             }
             else{
-                opacity = 0.5;
+                opacity = Math.abs(Math.sin(loadingFrames/30));
             }
-            this.createCircleWithOpacity(x + wp.width / 2, y + wp.height /2, opacity);
+            this.createCircleWithOpacity(x + wp.width / 2, y + wp.height / 2, opacity);
         }
         animation_context.font = "24px 'normal'";
         animation_context.fillText("now loading",wp.width * 0.36 , wp.height * 0.52, 200);
-
     }
+
     createCircleWithOpacity(x, y, opacity){
         animation_context.beginPath();
         animation_context.moveTo(x,y);
@@ -96,6 +100,7 @@ class View{
         command_txt_context.fillText("おらすとだよー",200,200,200);
     }
 }
+
 function createWindow(x,y,w,h){
     bg_context.beginPath();
     bg_context.rect(x, y, w, h);
