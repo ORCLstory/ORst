@@ -14,8 +14,8 @@ class View{
     }
 
     blackScreen(){
-        this.initialize();
         bg_context.rect(0, 0, wp.width, wp.height);
+        bg_context.fillStyle = 'rgba(0, 0, 0, 1)';
         bg_context.fill();
     }
 

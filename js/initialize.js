@@ -61,6 +61,7 @@ function start(){
 
             case 'loading':
                 loadingFrames++;
+                view.initialize();
                 view.blackScreen();
                 view.loadingScene();
                 break;
