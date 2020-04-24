@@ -21,7 +21,7 @@ class View{
 
     loadingScene(){
         let radius = 100;
-        console.log(Math.abs(Math.sin(loadingFrames/10)));
+        //console.log(Math.abs(Math.sin(loadingFrames/10)));
 
         for(let i = 0; i < 18; i++){
             let angle = 20 * i;
