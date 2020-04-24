@@ -21,16 +21,60 @@ class View{
 
     loadingScene(){
         let radius = 100;
-        //console.log(Math.abs(Math.sin(loadingFrames/10)));
-
-        for(let i = 0; i < 18; i++){
+        // 表示する光る球体の数
+        let light_circle_count = 18;
+        let interval_of_light_circle_angle = 360 / light_circle_count;
+        for(let i = 0; i < light_circle_count; i++){
             let angle = 20 * i;
             let x = radius * Math.sin(Math.PI * angle / 180);
             let y = radius * Math.cos(Math.PI * angle / 180);
             let opacity;
-            opacity = Math.abs(Math.sin(loadingFrames/30));
-            this.createCircleWithOpacity(x + wp.width / 2, y + wp.height / 2, opacity);
+
+            // 光る球体が一周する周期をframe単位で指定します。
+            // let cycle = 30なら、30frameで一周します。
+            let cycle = 30;
+
+            let point_x =  loadingFrames % cycle;
+            let light_angle;
+            let angle_per_frame = 360 / cycle;
+            // sin関数は90度の時に1の頂点を持ち、270度の時に-1の頂点をもつ。
+            // 増加関数の際は、そのまま適応し、減少関数の際は反転させて180を足したいため、
+            // sin関数が90度から270度までの間は、数字を反転させた上で180度を足している。
+            //light_angleが180 ~ 359度
+            if(loadingFrames % cycle >= (cycle * 0.25) && loadingFrames % cycle < (cycle * 0.75)){
+                light_angle = 180 + 180 - (Math.sin(Math.PI * (angle_per_frame * loadingFrames) / 180) + 1) * 90;
+            }
+            //light_angleが0 ~ 179度
+            else{
+                light_angle = (Math.sin(Math.PI * (angle_per_frame * loadingFrames) / 180) + 1) * 90;
+            }
+            // 回す方向を反転させます
+            light_angle = 360 - light_angle;
+
+            // 光る円の数が18であれば、0-17までを返す
+            let light_angle_element = Math.floor(light_angle / interval_of_light_circle_angle);
+
+            if(light_angle_element === i % 18){
+                opacity = 1;
+            }
+            else if(light_angle_element === (i - 1) % 18){
+                opacity = 0.9;
+            }
+            else if(light_angle_element === (i - 2) % 18){
+                opacity = 0.8;
+            }
+            else if(light_angle_element === (i - 3) % 18){
+                opacity = 0.7;
+            }
+            else if(light_angle_element === (i - 4) % 18){
+                opacity = 0.6;
+            }
+            else{
+                opacity = 0.5;
+            }
+            this.createCircleWithOpacity(x + wp.width / 2, y + wp.height /2, opacity);
         }
+        animation_context.fillStyle = 'rgba(255, 255, 255, 1)';
         animation_context.font = "24px 'normal'";
         animation_context.fillText("now loading",wp.width * 0.36 , wp.height * 0.52, 200);
     }
