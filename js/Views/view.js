@@ -118,9 +118,9 @@ class View{
 
     fightScene(){
         this.initialize();
+        this.showAllImage();
         drawFirstDicisionPlaceArrow(0);
         showStatus(allyList);
-        this.showAllImage();
         createWindow(0,0, wp.width,wp.height);
         // ステータスの枠の生成
         for(let i = 0; i < 4; i++){
