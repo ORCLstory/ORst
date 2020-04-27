@@ -60,6 +60,18 @@ class BattleLog{
         this.createBattleLog();
         this.deleteBattleLogList();
     }
+    magicalHeal(player_action, status_event){
+        let player = player_action.player;
+        let target = player_action.target;
+        let action = player_action.action;
+        let heal= player_action.heal;
+
+        this.addBattleLogList(player.individual_name + 'は' + action.name + 'を唱えた！');
+        this.addBattleLogList(target.individual_name + 'は' + heal + '回復した！');
+        this.isHappenCritical(player_action);
+        this.createBattleLog();
+        this.deleteBattleLogList();
+    }
 
     failedMagicalAttack(player_action){
         let player = player_action.player;
@@ -128,7 +140,12 @@ class BattleLog{
             this.normalAttack(player_action, status_event);
         }
         else if (action instanceof Magic){
-            this.magicalAttack(player_action, status_event);
+            if(action.categoryMagic === '攻撃'){
+                this.magicalAttack(player_action, status_event);
+            }
+            else if(action.categoryMagic === '回復'){
+                this.magicalHeal(player_action, status_event);
+            }
         }
     }
 }

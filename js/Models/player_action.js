@@ -40,13 +40,19 @@ class PlayerAction{
                 let randomDamage = Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
                 randomDamage -= Math.ceil(Math.random() * this.action.randomDamageWidth + 1);
                 let damage = Math.ceil((this.player.mad * this.action.damageMagnification) + this.action.guaranteeDamage + randomDamage) * ((100 - this.target.def) / 100);
-                this.target.dealDamage = damage;
-                this.damage = damage;
-                console.log(damage);
-                if (this.calcurateCritical()){
-                    this.isCritical = true;
+                if(this.action.categoryMagic === '攻撃'){
+                    this.target.dealDamage = damage;
+                    this.damage = damage;
+                    if (this.calcurateCritical()){
+                        this.isCritical = true;
+                    }
+                    else this.isCritical = false;
+                    }
+                else if(this.action.categoryMagic === '回復'){
+                    this.target.healHP = damage;
+                    this.heal = damage;
                 }
-                else this.isCritical = false;
+                console.log(damage);
             }
         }
     }

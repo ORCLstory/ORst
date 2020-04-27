@@ -4,6 +4,7 @@ class Character{
         this.name = name;
         this.category ='';
         this.individual_name = this.name;
+        this.does_get_status = false;
     }
     async setStatus(lv){
         this.lv = lv;
@@ -17,6 +18,7 @@ class Character{
 
         this.now_hp = this.max_hp;
         this.now_mp = this.max_mp;
+        this.does_get_status = true;
         return;
     }
     async setCharacterMagicList(){
@@ -54,6 +56,12 @@ class Character{
         if (this.now_hp <= 0){
             this.now_hp = 0;
             this.status = ['dead'];
+        }
+    }
+    set healHP(heal){
+        this.now_hp += heal;
+        if (this.now_hp > this.max_hp){
+            this.now_hp = this.max_hp;
         }
     }
 

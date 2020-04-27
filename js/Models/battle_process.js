@@ -1,16 +1,20 @@
-async function startBattleSystem(){
+async function loadAsyncDataFromGoogleSpreadsheet(){
     // 味方の情報を定義
-    const teo    = new AllyStatus('テオ');
-    const graal  = new AllyStatus('グラール');
-    const lin    = new AllyStatus('リン');
-    const alycia = new AllyStatus('アリシア');
 
-    allyList.push(teo);
-    allyList.push(graal);
-    allyList.push(lin);
-    allyList.push(alycia);
+    if(allyList.length === 0){
+        const teo    = new AllyStatus('テオ');
+        const graal  = new AllyStatus('グラール');
+        const lin    = new AllyStatus('リン');
+        const alycia = new AllyStatus('アリシア');
+
+        allyList.push(teo);
+        allyList.push(graal);
+        allyList.push(lin);
+        allyList.push(alycia);
+    }
 
     // 敵の情報を定義
+    enemyList = [];
     const slime1 = new EnemyStatus('スライム');
     const slime2 = new EnemyStatus('スライム');
     const slime3 = new EnemyStatus('スライム');
@@ -20,7 +24,10 @@ async function startBattleSystem(){
     enemyList.push(slime3);
 
     let promise_results = [];
-    allyList.forEach(element => promise_results.push(element.setStatus(1)));
+    if(!allyList[0].does_get_status){
+        console.log("ステータス取ってくるよ");
+        allyList.forEach(element => promise_results.push(element.setStatus(1)));
+    }
     enemyList.forEach(element => promise_results.push(element.setStatus(1)));
     allyList.forEach(element => promise_results.push(element.setCharacterMagicList()));
     //promise_results.push(magic_list.setAllMagicList());
@@ -28,22 +35,21 @@ async function startBattleSystem(){
     await Promise.all(promise_results);
 
     console.log(allyList);
-
-
-    iterator.next();
-    drawFirstDicisionPlaceArrow(0);
+    mode = 'normal';
 }
 
 function* battleProcess(){
+    // 戦闘の進行を担当するジェネレータ関数。必ず先にstartBattleSystem関数を完了させてください。
+    // ジェネレータ関数であるgameProcessから呼び出されています。
     // BattleSystemクラスを呼び出し
+    console.log("battleProcessの先頭が処理されたよ");
     system = new BattleSystem(allyList, enemyList);
 
-    showStatus(allyList);
     // モブの名前の末尾にABCDEFGがつくようになる
     enemyNumbering(enemyList);
 
     // エンカウント時の処理
-    drawFightScene();
+    view.fightScene();
     battlelog.encount();
 
     //敵と味方を描画する
@@ -66,7 +72,7 @@ function* battleProcess(){
             battlelog.decision(system.current_select_character);
             // yieldで処理を一時中断する前に現在のキャラクター選択を保存しておく
             let current_select_character = cursor.current_select_character;
-            yield 0;
+            yield 'waitKey';
 
             // 味方の行動を選択
             system.decisionCommand(current_select_character, commandQueue);
@@ -93,6 +99,7 @@ function* battleProcess(){
 
         // commandQueueに追加された行動を順番に処理していく
         for (let i = 0; i < commandQueue.length; i++){
+            // 魔力暴走用のカウント
             for (let j = 0; j < 1; j++) {
 
                 // 攻撃側が行動不能な場合、処理を行わず次のプレイヤーに行動させる
@@ -137,7 +144,7 @@ function* battleProcess(){
                     showStatus(allyList);
                     system.refreshActionableList();
                     system.drawAllCharacter();
-                    yield 0;
+                    yield 'waitKey';
                     j--;
                     console.log(j);
                 }
@@ -151,7 +158,7 @@ function* battleProcess(){
                     showStatus(allyList);
                     system.refreshActionableList();
                     system.drawAllCharacter();
-                    yield 0;
+                    yield 'waitKey';
                     console.log(j);
                 }
             }
@@ -159,7 +166,10 @@ function* battleProcess(){
             // 全滅しているかどうかを判定
             if (system.isWipe) break;
         }
-        if (system.isWipe) break;
+        if (system.isWipe) {
+            cursor.current_cursor = 'end_of_battle';
+            break;
+        }
         cursor.initialize();
         drawFirstDicisionPlaceArrow(0);
     }

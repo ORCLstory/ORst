@@ -5,4 +5,3 @@ class AllyStatus extends Character{
         this.category = 'ally_status';
     }
 }
-
