@@ -1,5 +1,6 @@
 class View{
     constructor(){
+        this.img_src = [];
     }
 
     initialize(){
@@ -17,6 +18,33 @@ class View{
         bg_context.rect(0, 0, wp.width, wp.height);
         bg_context.fillStyle = 'rgba(0, 0, 0, 1)';
         bg_context.fill();
+    }
+
+    loadImage(src, context, x, y, w, h){
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                this.img_src.push({
+                    obj:img,
+                    context:context,
+                    x:x,
+                    y:y,
+                    w:w,
+                    h:h
+                });
+                resolve(img);
+            }
+            img.onerror = (e) => reject(e);
+            img.src = src;
+        })
+    }
+
+    showAllImage(){
+        for(let i = 0; i < this.img_src.length; i++){
+            let img_dict = this.img_src[i];
+            img_dict.context.drawImage(img_dict.obj, img_dict.x, img_dict.y, img_dict.w, img_dict.h);
+        }
+        this.img_src = [];
     }
 
     loadingScene(){
@@ -92,32 +120,23 @@ class View{
         this.initialize();
         drawFirstDicisionPlaceArrow(0);
         showStatus(allyList);
-        let image = new Image();
-        image.src = 'img/bg_combat.png';
-        let teo_image = new Image();
-        teo_image.src = 'img/teo_kao.png'
-        teo_image.onload = function(e){
-            icon_context.drawImage(teo_image, 0, 0, 50, 80);
-        };
-        image.onload = function(e) {
-            bg_context.drawImage(image, 0, 0, wp.width, wp.height);
-            createWindow(0,0, wp.width,wp.height);
-            // ステータスの枠の生成
-            for(let i = 0; i < 4; i++){
-            createWindow(wp.status_window.x + (wp.status_window.w * i), wp.status_window.y, wp.status_window.w, wp.status_window.h, 'white');
-            }
+        this.showAllImage();
+        createWindow(0,0, wp.width,wp.height);
+        // ステータスの枠の生成
+        for(let i = 0; i < 4; i++){
+        createWindow(wp.status_window.x + (wp.status_window.w * i), wp.status_window.y, wp.status_window.w, wp.status_window.h, 'white');
+        }
 
-            // コマンドラインの枠全体の描画
-            createWindow(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h, 'white');
-            // fightコマンドの枠の描画
-            createWindow(wp.fight_command_window.x,wp.fight_command_window.y,wp.fight_command_window.w, wp.fight_command_window.h);
-            let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
+        // コマンドラインの枠全体の描画
+        createWindow(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h, 'white');
+        // fightコマンドの枠の描画
+        createWindow(wp.fight_command_window.x,wp.fight_command_window.y,wp.fight_command_window.w, wp.fight_command_window.h);
+        let fight_command = ['たたかう', 'まほう' , 'どうぐ', 'にげる'];
 
-            // 戦闘コマンド表示
-            for(let i = 0; i < 4; i++){
-                command_txt_context.font = "12px 'normal'";
-                command_txt_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
-            }
+        // 戦闘コマンド表示
+        for(let i = 0; i < 4; i++){
+            command_txt_context.font = "12px 'normal'";
+            command_txt_context.fillText(fight_command[i],wp.fight_command_txt.x,wp.fight_command_txt.y + (wp.fight_command_txt.intervals *i) , wp.fight_command_window.w);
         }
     }
 

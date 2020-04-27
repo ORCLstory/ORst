@@ -30,6 +30,9 @@ async function loadAsyncDataFromGoogleSpreadsheet(){
     }
     enemyList.forEach(element => promise_results.push(element.setStatus(1)));
     allyList.forEach(element => promise_results.push(element.setCharacterMagicList()));
+    promise_results.push(view.loadImage("img/teo_kao.png", icon_context, 0, 0, 50, 80));
+    promise_results.push(view.loadImage("img/bg_combat.png", bg_context, 0, 0, wp.width, wp.height));
+    
     //promise_results.push(magic_list.setAllMagicList());
     // スプレッドシートから情報を非同期で取得するため、全部ステータスを取得するまで待つ
     await Promise.all(promise_results);
