@@ -2,9 +2,12 @@ function* gameProcess(){
     while(true){
         console.log("gameProcess Start");
         view.initialize();
+        view.next_scene = 'title_scene';
+        yield 'require_loading';
         view.titleScene();
         console.log("view.titleScene finished");
         yield 'waitKey';
+        view.next_scene = 'fight_scene';
         console.log("waitKey finished");
         yield 'require_loading';
         console.log("require_loading finished");
