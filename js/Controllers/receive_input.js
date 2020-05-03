@@ -40,8 +40,6 @@ function endOfBattle(e){
     if(e.keyCode === key_config.enter){
         if(mode !== "defeat"){
             cursor.current_cursor = 'title_menu';
-            view.initialize();
-            view.titleScene();
         }
     }
 }
