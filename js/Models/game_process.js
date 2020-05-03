@@ -4,6 +4,7 @@ function* gameProcess(){
         view.initialize();
         view.next_scene = 'title_scene';
         yield 'require_loading';
+        view.initialize();
         view.titleScene();
         console.log("view.titleScene finished");
         yield 'waitKey';
