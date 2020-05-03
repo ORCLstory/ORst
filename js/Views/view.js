@@ -1,6 +1,7 @@
 class View{
     constructor(){
         this.img_src = [];
+        this.next_scene;
     }
 
     initialize(){
@@ -18,6 +19,14 @@ class View{
         bg_context.rect(0, 0, wp.width, wp.height);
         bg_context.fillStyle = 'rgba(0, 0, 0, 1)';
         bg_context.fill();
+    }
+    loadAsyncData(){
+        if(this.next_scene === 'fight_scene'){
+            loadAsyncDataFromGoogleSpreadsheet();
+        }
+        else if(this.next_scene === 'title_scene'){
+            loadTitleImage();
+        }
     }
 
     loadImage(src, context, x, y, w, h){
@@ -142,6 +151,7 @@ class View{
 
     titleScene(){
         bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
+        this.showAllImage();
         createWindow(0,0, wp.width,wp.height);
         createWindow(wp.width * 0.3, wp.height * 0.6, wp.width * 0.4, wp.height * 0.3);
         let command_list = ['はじめから','つづきから','こんふぃぐ'];
@@ -209,4 +219,11 @@ function showStatus(ally_status_list){
             }
         }
     }
+}
+
+async function loadTitleImage(){
+    await view.loadImage("img/title_bg.png", bg_context, 0, 0, wp.width, wp.height);
+    console.log("呼ばれた？");
+    mode = 'normal';
+
 }

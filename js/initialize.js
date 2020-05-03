@@ -67,7 +67,8 @@ function start(){
                 break;
 
             case 'require_loading':
-                loadAsyncDataFromGoogleSpreadsheet();
+                //loadAsyncDataFromGoogleSpreadsheet();
+                view.loadAsyncData();
                 mode = 'loading';
                 break;
 
