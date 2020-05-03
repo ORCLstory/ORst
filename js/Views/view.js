@@ -142,8 +142,13 @@ class View{
 
     titleScene(){
         bg_context.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
-        command_txt_context.font = "12px 'normal'";
-        command_txt_context.fillText("おらすとだよー",200,200,200);
+        createWindow(0,0, wp.width,wp.height);
+        createWindow(wp.width * 0.3, wp.height * 0.6, wp.width * 0.4, wp.height * 0.3);
+        let command_list = ['はじめから','つづきから','こんふぃぐ'];
+        command_txt_context.font = "15px 'normal'";
+        for(let i = 0; i < command_list.length; i++){
+            command_txt_context.fillText(command_list[i],wp.width * 0.4,wp.height * 0.7 + (i * 20),200);
+        }
     }
 }
 
