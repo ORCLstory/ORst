@@ -31,6 +31,14 @@ class Cursor{
         this.first_line_displayed_for_magic = 0;
         this.current_select_magic = {x:0, y:0};
     }
+    initialize_when_view_title_menu(){
+        this.current_cursor = 'title_menu';
+        this.choice_current_enemy  = 0;
+        this.current_command_number = 0;
+        this.first_line_displayed_for_magic = 0;
+        this.current_select_magic = {x:0, y:0};
+        drawTitleArrow(0,0);
+    }
 
     get current_magic_cursor(){
         return (this.first_line_displayed_for_magic + this.current_select_magic.y) * 3 + this.current_select_magic.x;

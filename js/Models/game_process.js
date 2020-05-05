@@ -6,6 +6,7 @@ function* gameProcess(){
         yield 'require_loading';
         view.initialize();
         view.titleScene();
+        cursor.initialize_when_view_title_menu();
         console.log("view.titleScene finished");
         yield 'waitKey';
         view.next_scene = 'fight_scene';

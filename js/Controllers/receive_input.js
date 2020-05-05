@@ -29,20 +29,6 @@ function controller(e){
     }
 }
 
-function titleMenu(e){
-    if(e.keyCode === key_config.enter){
-        cursor.current_cursor = 'first_decision_place';
-        mode = 'normal';
-    }
-}
-
-function endOfBattle(e){
-    if(e.keyCode === key_config.enter){
-        if(mode !== "defeat"){
-            cursor.current_cursor = 'title_menu';
-        }
-    }
-}
 
 
 function firstDecisionPlace(e){
@@ -240,8 +226,31 @@ function selectMagic(e){
         }
     }
 }
+
 function readMessage(e){
     if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
         mode = 'normal';
+    }
+}
+
+function titleMenu(e){
+    if(e.keyCode === key_config.enter){
+        cursor.current_cursor = 'first_decision_place';
+        mode = 'normal';
+    }
+    else if(cursor.current_command_number < 2 && e.keyCode === key_config.down){
+        cursor.current_command_number++;
+    }
+    else if(cursor.current_command_number > 0 && e.keyCode === key_config.up){
+        cursor.current_command_number--;
+    }
+    drawTitleArrow(0, cursor.current_command_number * (wp.height * 0.06));
+}
+
+function endOfBattle(e){
+    if(e.keyCode === key_config.enter){
+        if(mode !== "defeat"){
+            cursor.current_cursor = 'title_menu';
+        }
     }
 }

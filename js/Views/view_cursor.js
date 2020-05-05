@@ -18,6 +18,11 @@ function drawAllyArrow(width, height){
     createTriangle(width - 30, height - 5, 10, 'right');
 }
 
+function drawTitleArrow(width, height){
+    gc_context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+    createTriangle(wp.width * 0.37 + width , wp.height * 0.67 + height, 10, 'right');
+}
+
 function createTriangle(start_arrow_width,start_arrow_height,length_of_a_side,angle){
     gc_context.beginPath();
     gc_context.moveTo(start_arrow_width, start_arrow_height);
