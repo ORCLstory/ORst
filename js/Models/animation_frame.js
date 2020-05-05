@@ -22,6 +22,12 @@ function animationStart(){
                 view.loadingScene();
                 break;
 
+            case 'pressEnter':
+                loadingFrames++;
+                view.initialize();
+                view.pressEnter();
+                break;
+
             case 'require_loading':
                 //loadAsyncDataFromGoogleSpreadsheet();
                 view.loadAsyncData();

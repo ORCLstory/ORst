@@ -2,6 +2,8 @@ function* gameProcess(){
     while(true){
         console.log("gameProcess Start");
         view.initialize();
+        view.next_scene = 'pressenter_scene';
+        yield 'pressEnter';
         view.next_scene = 'title_scene';
         yield 'require_loading';
         view.initialize();

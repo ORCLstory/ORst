@@ -160,6 +160,11 @@ class View{
             command_txt_context.fillText(command_list[i],wp.width * 0.4,wp.height * 0.7 + (i * 20),200);
         }
     }
+
+    pressEnter(){
+        console.log(cursor.current_cursor);
+        txt_context.fillText("PRESS ENTER", wp.width * 0.4, wp.height * 0.7);
+    }
 }
 
 function createWindow(x,y,w,h){
@@ -225,5 +230,4 @@ async function loadTitleImage(){
     await view.loadImage("img/title_bg.png", bg_context, 0, 0, wp.width, wp.height);
     console.log("呼ばれた？");
     mode = 'normal';
-
 }

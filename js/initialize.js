@@ -26,7 +26,6 @@ const wp = new WindowProperty(480, 360);
 const battlelog = new BattleLog();
 const cursor = new Cursor();
 const dmlp = new DrawMagicListProperty();
-//const magic_list = new MagicList();
 const key_config = new KeyConfig();
 const view = new View();
 

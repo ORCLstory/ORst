@@ -24,12 +24,13 @@ function controller(e){
     else if (cursor.current_cursor === 'title_menu'){
         titleMenu(e);
     }
+    else if (cursor.current_cursor === 'press_enter'){
+        pressEnter(e);
+    }
     else if (cursor.current_cursor === 'end_of_battle'){
         endOfBattle(e);
     }
 }
-
-
 
 function firstDecisionPlace(e){
     const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
@@ -237,6 +238,7 @@ function titleMenu(e){
     if(e.keyCode === key_config.enter){
         cursor.current_cursor = 'first_decision_place';
         mode = 'normal';
+        cursor.current_command_number = 0;
     }
     else if(cursor.current_command_number < 2 && e.keyCode === key_config.down){
         cursor.current_command_number++;
@@ -245,6 +247,15 @@ function titleMenu(e){
         cursor.current_command_number--;
     }
     drawTitleArrow(0, cursor.current_command_number * (wp.height * 0.06));
+}
+
+function pressEnter(e){
+    if (e.keyCode === key_config.enter){
+        cursor.current_cursor = 'title_menu';
+        mode = 'normal';
+        document.getElementById('bgm').play();
+        document.getElementById('bgm').volume = 0.1;
+    }
 }
 
 function endOfBattle(e){
