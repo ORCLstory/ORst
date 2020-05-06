@@ -1,7 +1,7 @@
 class Cursor{
     // インスタンスを生成した際に呼ぶ
     constructor(){
-        this.current_cursor = 'title_menu';
+        this.current_cursor = 'press_enter';
         this.choice_current_enemy  = 0;
         this.choice_current_ally = 0;
         this.current_command_number = 0;
@@ -30,6 +30,14 @@ class Cursor{
         this.current_command_number = 0;
         this.first_line_displayed_for_magic = 0;
         this.current_select_magic = {x:0, y:0};
+    }
+    initialize_when_view_title_menu(){
+        this.current_cursor = 'title_menu';
+        this.choice_current_enemy  = 0;
+        this.current_command_number = 0;
+        this.first_line_displayed_for_magic = 0;
+        this.current_select_magic = {x:0, y:0};
+        drawTitleArrow(0,0);
     }
 
     get current_magic_cursor(){

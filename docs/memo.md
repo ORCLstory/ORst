@@ -67,3 +67,31 @@
 ↕
 戦闘画面
 
+
+## もっときれいに
+- Sceneクラスを作る？
+    - マップ
+    - 音楽
+    - カーソルの初期化
+    - Viewの初期化
+    - ロジック
+- コードを書く時にこのコードはどこに書くか悩むのが面倒くさい
+
+## memomemo
+- next_sceneはくそ
+- now_situationとか、
+- 戦闘に入る時にどんな戦闘か属性を渡す
+
+scene = new Scene();
+
+class Scene(){
+    constractor{
+    }
+}
+
+### sceneの粒度
+- titleProcess()
+- battleProcess()
+    - ボス戦
+    - ノーマル
+    - イベント戦

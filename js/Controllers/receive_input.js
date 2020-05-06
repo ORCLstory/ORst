@@ -24,26 +24,13 @@ function controller(e){
     else if (cursor.current_cursor === 'title_menu'){
         titleMenu(e);
     }
+    else if (cursor.current_cursor === 'press_enter'){
+        pressEnter(e);
+     }
     else if (cursor.current_cursor === 'end_of_battle'){
         endOfBattle(e);
     }
 }
-
-function titleMenu(e){
-    if(e.keyCode === key_config.enter){
-        cursor.current_cursor = 'first_decision_place';
-        mode = 'normal';
-    }
-}
-
-function endOfBattle(e){
-    if(e.keyCode === key_config.enter){
-        if(mode !== "defeat"){
-            cursor.current_cursor = 'title_menu';
-        }
-    }
-}
-
 
 function firstDecisionPlace(e){
     const INTERVALS_OF_ARROW_ROW_HEIGHT = Math.ceil(WINDOW_HEIGHT * 0.04);
@@ -240,8 +227,44 @@ function selectMagic(e){
         }
     }
 }
+
 function readMessage(e){
     if (e.keyCode === key_config.down || e.keyCode === key_config.enter){
         mode = 'normal';
+    }
+}
+
+function titleMenu(e){
+    if(e.keyCode === key_config.enter){
+        cursor.current_cursor = 'first_decision_place';
+        mode = 'normal';
+        cursor.current_command_number = 0;
+    }
+    else if(cursor.current_command_number < 2 && e.keyCode === key_config.down){
+        cursor.current_command_number++;
+    }
+    else if(cursor.current_command_number > 0 && e.keyCode === key_config.up){
+        cursor.current_command_number--;
+    }
+    drawTitleArrow(0, cursor.current_command_number * (wp.height * 0.06));
+}
+
+function pressEnter(e){
+    if (e.keyCode === key_config.enter){
+        cursor.current_cursor = 'title_menu';
+        mode = 'normal';
+        // googlechromeの自動再生に関するポリシー回避(いらないかも)
+        // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+        //audio.src = 'audio/250-milliseconds-of-silence.mp3';
+        //audio.play();
+        //audio.pause();
+    }
+}
+
+function endOfBattle(e){
+    if(e.keyCode === key_config.enter){
+        if(mode !== "defeat"){
+            cursor.current_cursor = 'title_menu';
+        }
     }
 }
