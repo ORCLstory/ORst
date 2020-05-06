@@ -29,6 +29,7 @@ const dmlp = new DrawMagicListProperty();
 const key_config = new KeyConfig();
 const view = new View();
 const audio = document.getElementById('bgm');
+audio.volume = 0.1;
 const scene = new Scene();
 
 let system;
