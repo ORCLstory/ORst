@@ -26,7 +26,7 @@ function controller(e){
     }
     else if (cursor.current_cursor === 'press_enter'){
         pressEnter(e);
-    }
+     }
     else if (cursor.current_cursor === 'end_of_battle'){
         endOfBattle(e);
     }
@@ -253,8 +253,11 @@ function pressEnter(e){
     if (e.keyCode === key_config.enter){
         cursor.current_cursor = 'title_menu';
         mode = 'normal';
-        document.getElementById('bgm').play();
-        document.getElementById('bgm').volume = 0.1;
+        // googlechromeの自動再生に関するポリシー回避(いらないかも)
+        // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+        //audio.src = 'audio/250-milliseconds-of-silence.mp3';
+        //audio.play();
+        //audio.pause();
     }
 }
 

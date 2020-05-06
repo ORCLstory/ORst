@@ -47,6 +47,8 @@ function* battleProcess(){
     // BattleSystemクラスを呼び出し
     console.log("battleProcessの先頭が処理されたよ");
     system = new BattleSystem(allyList, enemyList);
+    audio.src = 'audio/bgm_maoudamashii_fantasy15.mp3';
+    audio.play();
 
     // モブの名前の末尾にABCDEFGがつくようになる
     enemyNumbering(enemyList);
@@ -170,7 +172,11 @@ function* battleProcess(){
             if (system.isWipe) break;
         }
         if (system.isWipe) {
+            // 戦闘終了
             cursor.current_cursor = 'end_of_battle';
+            audio.pause();
+            scene.process = 'title';
+            view.next_scene = 'title_scene';
             break;
         }
         cursor.initialize();

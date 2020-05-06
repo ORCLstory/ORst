@@ -29,7 +29,6 @@ function animationStart(){
                 break;
 
             case 'require_loading':
-                //loadAsyncDataFromGoogleSpreadsheet();
                 view.loadAsyncData();
                 mode = 'loading';
                 break;
