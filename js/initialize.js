@@ -31,7 +31,7 @@ const view = new View();
 const audio = document.getElementById('bgm');
 audio.volume = 0.1;
 const scene = new Scene();
-const map = new Map();
+const map = new MapClass();
 
 let system;
 

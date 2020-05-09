@@ -1,4 +1,11 @@
 function* mapProcess(){
+    console.log(map);
     view.mapScene();
-    yield 'waitKey';
+    createCircle(map.position.x, map.position.y, 50);
+    while (true){
+        console.log('a');
+        yield 'waitKey';
+    }
+    let x;
+    let y;
 }

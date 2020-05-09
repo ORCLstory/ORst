@@ -27,6 +27,9 @@ function controller(e){
     else if (cursor.current_cursor === 'press_enter'){
         pressEnter(e);
      }
+     else if (cursor.current_cursor === 'move_map'){
+         moveMap(e);
+     }
     else if (cursor.current_cursor === 'end_of_battle'){
         endOfBattle(e);
     }
@@ -236,7 +239,7 @@ function readMessage(e){
 
 function titleMenu(e){
     if(e.keyCode === key_config.enter){
-        cursor.current_cursor = 'first_decision_place';
+        cursor.current_cursor = 'move_map';
         mode = 'normal';
         cursor.current_command_number = 0;
     }
@@ -253,11 +256,16 @@ function pressEnter(e){
     if (e.keyCode === key_config.enter){
         cursor.current_cursor = 'title_menu';
         mode = 'normal';
-        // googlechromeの自動再生に関するポリシー回避(いらないかも)
-        // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-        //audio.src = 'audio/250-milliseconds-of-silence.mp3';
-        //audio.play();
-        //audio.pause();
+    }
+}
+
+function moveMap(e){
+    console.log(view);
+    if (e.keyCode === key_config.up){
+        map.position.y += 1;
+        console.log(map);
+        createCircle(map.position.x, map.position.y, 50);
+        mode = 'normal';
     }
 }
 

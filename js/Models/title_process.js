@@ -10,4 +10,5 @@ function* titleProcess(){
     scene.process = 'map';
     view.next_scene = 'map_scene';
     console.log("waitKey finished");
+    view.deleteSourceImage();
 }

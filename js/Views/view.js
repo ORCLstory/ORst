@@ -56,6 +56,9 @@ class View{
             let img_dict = this.img_src[i];
             img_dict.context.drawImage(img_dict.obj, img_dict.x, img_dict.y, img_dict.w, img_dict.h);
         }
+    }
+
+    deleteSourceImage(){
         this.img_src = [];
     }
 
@@ -129,9 +132,7 @@ class View{
     }
     mapScene(){
         map.create();
-        this.showAllImage();
     }
-
 
     fightScene(){
         this.initialize();
@@ -191,7 +192,6 @@ function createCircle(x, y, radius){
     character_context.stroke();
 }
 
-
 function viewMagicList(first, last){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
@@ -233,4 +233,3 @@ function showStatus(ally_status_list){
         }
     }
 }
-

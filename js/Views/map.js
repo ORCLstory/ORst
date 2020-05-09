@@ -1,5 +1,7 @@
-class Map{
-    constractor(){
+class MapClass{
+    constructor(){
+        this.position = {x: 100, y:100};
+        this.scale = {w:32, y:48};
     }
 
     create(){
