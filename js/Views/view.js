@@ -57,6 +57,10 @@ class View{
             img_dict.context.drawImage(img_dict.obj, img_dict.x, img_dict.y, img_dict.w, img_dict.h);
         }
     }
+    showImage(width, height){
+            let img_dict = this.img_src[0];
+            img_dict.context.drawImage(img_dict.obj, width, height, img_dict.w, img_dict.h);
+    }
 
     deleteSourceImage(){
         this.img_src = [];

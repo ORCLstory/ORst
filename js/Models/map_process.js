@@ -1,8 +1,8 @@
 function* mapProcess(){
     console.log(map);
     view.mapScene();
-    createCircle(map.position.x, map.position.y, 50);
     while (true){
+        //view.showImage(map.position.x, map.position.y);
         console.log('a');
         yield 'waitKey';
     }

@@ -261,12 +261,24 @@ function pressEnter(e){
 
 function moveMap(e){
     console.log(view);
+    character_context.clearRect(0,0,wp.width, wp.height);
     if (e.keyCode === key_config.up){
-        map.position.y += 1;
-        console.log(map);
-        createCircle(map.position.x, map.position.y, 50);
-        mode = 'normal';
+        map.position.y -= 10;
     }
+
+    else if (e.keyCode === key_config.down){
+        map.position.y += 10;
+    }
+
+    else if (e.keyCode === key_config.right){
+        map.position.x += 10;
+    }
+
+    else if (e.keyCode === key_config.left){
+        map.position.x -= 10;
+    }
+    character_context.drawImage(view.img_src[0].obj, map.position.x, map.position.y, map.scale.w, map.scale.h);
+    mode = 'normal';
 }
 
 function endOfBattle(e){

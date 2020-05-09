@@ -1,7 +1,7 @@
 class MapClass{
     constructor(){
         this.position = {x: 100, y:100};
-        this.scale = {w:32, y:48};
+        this.scale = {w:32, h:48};
     }
 
     create(){
