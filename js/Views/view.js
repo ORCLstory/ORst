@@ -27,6 +27,9 @@ class View{
         else if(this.next_scene === 'title_scene'){
             loadTitleImage();
         }
+        else if(this.next_scene === 'map_scene'){
+            loadMapImage();
+        }
     }
 
     loadImage(src, context, x, y, w, h){
@@ -124,6 +127,11 @@ class View{
         animation_context.strokeStyle = 'rgba(255, 255, 255, ' + opacity + ')';
         animation_context.fill();
     }
+    mapScene(){
+        map.create();
+        this.showAllImage();
+    }
+
 
     fightScene(){
         this.initialize();
@@ -226,8 +234,3 @@ function showStatus(ally_status_list){
     }
 }
 
-async function loadTitleImage(){
-    await view.loadImage("img/title_bg.png", bg_context, 0, 0, wp.width, wp.height);
-    console.log("呼ばれた？");
-    mode = 'normal';
-}
