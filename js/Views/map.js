@@ -6,16 +6,43 @@ class MapClass{
 
     create(){
         view.initialize();
-        this.drawGrid(bg_context, 'lightgray', 40, 40);
+        //this.drawGrid(bg_context, 'lightgray', 40, 40);
+        this.read();
+        this.createMapTile();
     }
 
+
     read(){
-        let map_data = [
-            [0,1,1],
-            [0,0,0],
-            [1,1,0]
+        this.map_data = [
+            [0,0,1,0,0,1,1,0],
+            [0,0,0,0,0,1,1,0],
+            [0,1,1,0,0,1,1,0],
+            [0,1,1,0,0,1,1,0],
+            [0,0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1,0],
+            [1,1,0,1,0,1,1,0]
         ]
     }
+    createMapTile(){
+        bg_context.beginPath();
+        for(let i = 0; i < this.map_data.length; i++){
+            for(let j = 0; j < this.map_data[i].length; j++){
+                bg_context.beginPath();
+                bg_context.rect(map_config.stepx * j, map_config.stepy * i, map_config.stepx, map_config.stepy);
+                if(this.map_data[i][j] === 1){
+                    bg_context.fillStyle = "rgb(0, 0, 0)";
+                }
+                else if(this.map_data[i][j] === 0){
+                    bg_context.fillStyle = "rgb(255, 255, 255)";
+                }
+                bg_context.fill();
+            }
+        }
+
+    }
+    readMapTile(){
+    }
+
     drawGrid(context, color, stepx, stepy){
         context.strokeStyle = color;
         context.lineWidth = 0.5;

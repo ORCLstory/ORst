@@ -125,3 +125,9 @@ class KeyConfig{
         this.back = 88;
     }
 }
+class MapConfig{
+    constructor(){
+        this.stepx = 40;
+        this.stepy = 40;
+    }
+}

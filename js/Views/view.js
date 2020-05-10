@@ -39,6 +39,7 @@ class View{
                 this.img_src.push({
                     obj:img,
                     context:context,
+                    src:src,
                     x:x,
                     y:y,
                     w:w,
@@ -49,6 +50,10 @@ class View{
             img.onerror = (e) => reject(e);
             img.src = src;
         })
+    }
+    getLoadedImageInstanceByUrl(url){
+        for(let i = 0; i < this.img_src.length; i++){
+        }
     }
 
     showAllImage(){
