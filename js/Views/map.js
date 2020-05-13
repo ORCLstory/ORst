@@ -6,7 +6,6 @@ class MapClass{
 
     create(){
         view.initialize();
-        //this.drawGrid(bg_context, 'lightgray', 40, 40);
         this.read();
         this.createMapTile();
     }
@@ -15,8 +14,8 @@ class MapClass{
     read(){
         this.map_data = [
             [0,0,1,0,0,1,1,0],
-            [0,0,0,0,0,1,1,0],
-            [0,1,1,0,0,1,1,0],
+            [0,0,1,0,0,1,1,0],
+            [0,1,1,1,1,1,1,0],
             [0,1,1,0,0,1,1,0],
             [0,0,0,0,0,1,1,0],
             [0,0,0,0,0,1,1,0],
@@ -24,18 +23,14 @@ class MapClass{
         ]
     }
     createMapTile(){
-        bg_context.beginPath();
         for(let i = 0; i < this.map_data.length; i++){
             for(let j = 0; j < this.map_data[i].length; j++){
-                bg_context.beginPath();
-                bg_context.rect(map_config.stepx * j, map_config.stepy * i, map_config.stepx, map_config.stepy);
                 if(this.map_data[i][j] === 1){
-                    bg_context.fillStyle = "rgb(0, 0, 0)";
+                    bg_context.drawImage(view.getLoadedImageInstanceBySource("img/pipo-map001.png"),0,0,40,40,map_config.stepx * j, map_config.stepy * i, map_config.stepx, map_config.stepy);
                 }
                 else if(this.map_data[i][j] === 0){
-                    bg_context.fillStyle = "rgb(255, 255, 255)";
+                    bg_context.drawImage(view.getLoadedImageInstanceBySource("img/pipo-map001.png"),160,40,40,40,map_config.stepx * j, map_config.stepy * i, map_config.stepx, map_config.stepy);
                 }
-                bg_context.fill();
             }
         }
 

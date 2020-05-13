@@ -264,20 +264,24 @@ function moveMap(e){
     character_context.clearRect(0,0,wp.width, wp.height);
     if (e.keyCode === key_config.up && map.position.y > 0){
         map.position.y -= 10;
+        src = 'img/move11.png';
     }
 
     else if (e.keyCode === key_config.down && map.position.y + map.scale.h + 10 < wp.height){
         map.position.y += 10;
+        src = 'img/move2.png';
     }
 
     else if (e.keyCode === key_config.right && map.position.x + map.scale.w + 10< wp.width){
         map.position.x += 10;
+        src = 'img/move8.png';
     }
 
     else if (e.keyCode === key_config.left && map.position.x > 0){
         map.position.x -= 10;
+        src = 'img/move5.png';
     }
-    character_context.drawImage(view.img_src[0].obj, map.position.x, map.position.y, map.scale.w, map.scale.h);
+    character_context.drawImage(view.getLoadedImageInstanceBySource(src), map.position.x, map.position.y, map.scale.w, map.scale.h);
     mode = 'normal';
 }
 

@@ -51,8 +51,11 @@ class View{
             img.src = src;
         })
     }
-    getLoadedImageInstanceByUrl(url){
+    getLoadedImageInstanceBySource(source){
         for(let i = 0; i < this.img_src.length; i++){
+            if(this.img_src[i].src === source){
+                return this.img_src[i].obj;
+            }
         }
     }
 
