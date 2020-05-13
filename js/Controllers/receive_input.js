@@ -281,6 +281,9 @@ function moveMap(e){
         map.position.x -= 10;
         src = 'img/move5.png';
     }
+    else{
+        return;
+    }
     character_context.drawImage(view.getLoadedImageInstanceBySource(src), map.position.x, map.position.y, map.scale.w, map.scale.h);
     mode = 'normal';
 }
