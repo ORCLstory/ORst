@@ -133,4 +133,13 @@ mapProcessを動かす
     - マップを引く(動いているように見える)
 - 
 
-## サブキーほしい
+## わかりづらい理由
+- 同時並行でプログラムが３つぐらい動いてる
+    - animation_frame.js view
+    - receive_input.js controller
+    - game_process.js models
+これはしょうがないんだけど、キチンと住み分けをしないとバグるよね
+
+## バグ
+- enemy_pointsをローディング中に読むのはだめ
+- Viewに関しては毎フレームanimation_frame.jsが呼ぶ
