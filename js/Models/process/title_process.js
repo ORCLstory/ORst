@@ -7,7 +7,8 @@ function* titleProcess(){
     console.log("view.titleScene finished");
     yield 'waitKey';
     audio.pause();
-    scene.process = 'battle';
-    view.next_scene = 'fight_scene';
+    scene.process = 'map';
+    view.next_scene = 'map_scene';
     console.log("waitKey finished");
+    view.deleteSourceImage();
 }

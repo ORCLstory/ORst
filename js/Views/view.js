@@ -27,6 +27,9 @@ class View{
         else if(this.next_scene === 'title_scene'){
             loadTitleImage();
         }
+        else if(this.next_scene === 'map_scene'){
+            loadMapImage();
+        }
     }
 
     loadImage(src, context, x, y, w, h){
@@ -36,6 +39,7 @@ class View{
                 this.img_src.push({
                     obj:img,
                     context:context,
+                    src:src,
                     x:x,
                     y:y,
                     w:w,
@@ -47,12 +51,26 @@ class View{
             img.src = src;
         })
     }
+    getLoadedImageInstanceBySource(source){
+        for(let i = 0; i < this.img_src.length; i++){
+            if(this.img_src[i].src === source){
+                return this.img_src[i].obj;
+            }
+        }
+    }
 
     showAllImage(){
         for(let i = 0; i < this.img_src.length; i++){
             let img_dict = this.img_src[i];
             img_dict.context.drawImage(img_dict.obj, img_dict.x, img_dict.y, img_dict.w, img_dict.h);
         }
+    }
+    showImage(width, height){
+            let img_dict = this.img_src[0];
+            img_dict.context.drawImage(img_dict.obj, width, height, img_dict.w, img_dict.h);
+    }
+
+    deleteSourceImage(){
         this.img_src = [];
     }
 
@@ -124,6 +142,9 @@ class View{
         animation_context.strokeStyle = 'rgba(255, 255, 255, ' + opacity + ')';
         animation_context.fill();
     }
+    mapScene(){
+        map.create();
+    }
 
     fightScene(){
         this.initialize();
@@ -183,7 +204,6 @@ function createCircle(x, y, radius){
     character_context.stroke();
 }
 
-
 function viewMagicList(first, last){
     txt_context.clearRect(wp.command_line_window.x, wp.command_line_window.y, wp.command_line_window.w, wp.command_line_window.h);
     txt_context.font = "15px 'MS ゴシック'";
@@ -224,10 +244,4 @@ function showStatus(ally_status_list){
             }
         }
     }
-}
-
-async function loadTitleImage(){
-    await view.loadImage("img/title_bg.png", bg_context, 0, 0, wp.width, wp.height);
-    console.log("呼ばれた？");
-    mode = 'normal';
 }

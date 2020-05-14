@@ -20,5 +20,6 @@ function* gameProcess(){
         else if(scene.process === 'title'){
             yield* titleProcess();
         }
+        view.deleteSourceImage();
     }
 }

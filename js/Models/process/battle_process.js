@@ -45,6 +45,7 @@ function* battleProcess(){
     // 戦闘の進行を担当するジェネレータ関数。必ず先にstartBattleSystem関数を完了させてください。
     // ジェネレータ関数であるgameProcessから呼び出されています。
     // BattleSystemクラスを呼び出し
+    cursor.initialize();
     console.log("battleProcessの先頭が処理されたよ");
     system = new BattleSystem(allyList, enemyList);
     audio.src = 'audio/bgm_maoudamashii_fantasy15.mp3';
@@ -175,8 +176,8 @@ function* battleProcess(){
             // 戦闘終了
             cursor.current_cursor = 'end_of_battle';
             audio.pause();
-            scene.process = 'title';
-            view.next_scene = 'title_scene';
+            scene.process = 'map';
+            view.next_scene = 'map_scene';
             break;
         }
         cursor.initialize();
